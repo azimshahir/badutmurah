@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  /* Palette — docs/design-brief.md */
+  --color-cream: #FFFBF5;
+  --color-navy: #1D3557;
+  --color-coral: #EF476F;
+  --color-coral-dark: #d63a60;
+  --color-sunny: #FFD166;
+  --color-mint: #06D6A0;
+
+  --font-display: "Fredoka", "Baloo 2", sans-serif;
+  --font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-navy);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+}
+
+/* Visible focus for keyboard users on every interactive element */
+:focus-visible {
+  outline: 3px solid var(--color-coral);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* Playful lift on buttons/cards */
+.lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.lift:hover {
+  transform: translateY(-3px);
+}
+
+/* Subtle card tilt (design-brief: "kad tilt halus") */
+.tilt {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.tilt:hover {
+  transform: translateY(-4px) rotate(-0.6deg);
+}
+
+/* Decorative wavy underline for section headings */
+.squiggle {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='10' viewBox='0 0 120 10'%3E%3Cpath d='M0 6 Q 15 0, 30 6 T 60 6 T 90 6 T 120 6' fill='none' stroke='%23FFD166' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: 120px 10px;
+  padding-bottom: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .lift, .lift:hover, .tilt, .tilt:hover { transition: none; transform: none; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

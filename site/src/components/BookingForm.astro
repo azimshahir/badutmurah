@@ -1,0 +1,217 @@
+---
+// Booking form — fields & validation per docs/booking-spec.md
+import pricing from '../../docs/pricing.json';
+import { WHATSAPP_LINK } from '../lib/site.js';
+
+const { pakej, currency } = pricing;
+const slotMasa = ['10am', '11am', '12pm', '2pm', '3pm', '4pm', '5pm', 'Lain-lain (nyatakan di nota)'];
+const bilKanak = ['<10', '10-20', '20-30', '30+'];
+---
+
+<section id="booking" class="scroll-mt-8 bg-white py-16 md:py-24">
+  <div class="mx-auto max-w-[640px] px-5">
+    <div class="relative mx-auto w-fit">
+      <!-- confetti doodle accent (design-brief: satu-dua doodle kecil) -->
+      <svg viewBox="0 0 48 32" class="absolute -top-6 -right-10 h-8 w-12" aria-hidden="true">
+        <circle cx="8" cy="20" r="3" fill="#FFD166"></circle>
+        <circle cx="24" cy="8" r="2.5" fill="#06D6A0"></circle>
+        <rect x="36" y="16" width="6" height="6" rx="1.5" fill="#EF476F" transform="rotate(20 39 19)"></rect>
+      </svg>
+      <h2 class="squiggle text-center text-3xl font-bold md:text-4xl">Book Sekarang</h2>
+    </div>
+    <p class="mx-auto mt-4 max-w-lg text-center opacity-90">
+      Isi maklumat di bawah. Kami confirm dalam 1 jam. Belum bayar apa-apa lagi — deposit hanya
+      selepas kami confirm availability.
+    </p>
+
+    <form id="booking-form" class="mt-10 space-y-5" novalidate>
+      <div>
+        <label for="nama" class="mb-1.5 block font-semibold">Nama anda</label>
+        <input
+          type="text"
+          id="nama"
+          name="nama"
+          required
+          autocomplete="name"
+          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
+        />
+      </div>
+
+      <div>
+        <label for="phone" class="mb-1.5 block font-semibold">No. WhatsApp</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          required
+          inputmode="tel"
+          autocomplete="tel"
+          placeholder="01X-XXXXXXX"
+          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
+        />
+      </div>
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label for="tarikh" class="mb-1.5 block font-semibold">Tarikh majlis</label>
+          <input
+            type="date"
+            id="tarikh"
+            name="tarikh"
+            required
+            class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
+          />
+        </div>
+        <div>
+          <label for="masa" class="mb-1.5 block font-semibold">Masa</label>
+          <select
+            id="masa"
+            name="masa"
+            required
+            class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
+          >
+            <option value="" disabled selected>Pilih slot masa</option>
+            {slotMasa.map((s) => <option value={s}>{s}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <fieldset>
+        <legend class="mb-2 font-semibold">Pilih pakej</legend>
+        <div class="grid gap-3 sm:grid-cols-3">
+          {
+            pakej.map((p) => (
+              <label class="cursor-pointer rounded-2xl border-2 border-navy/15 bg-cream p-4 text-center transition-colors hover:border-coral/50 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
+                <input type="radio" name="pakej" value={p.id} required class="sr-only" />
+                <span class="block font-display font-semibold">{p.nama}</span>
+                <span class="block text-sm opacity-70">{p.durasi}</span>
+                <span class="block font-display text-xl font-bold">
+                  {currency}
+                  {p.harga}
+                </span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <div>
+        <label for="lokasi" class="mb-1.5 block font-semibold">
+          Kawasan majlis <span class="font-normal opacity-75">(cth: Puchong, Bukit Jalil)</span>
+        </label>
+        <input
+          type="text"
+          id="lokasi"
+          name="lokasi"
+          required
+          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
+        />
+      </div>
+
+      <div>
+        <label for="bil_kanak" class="mb-1.5 block font-semibold">
+          Bilangan kanak-kanak <span class="font-normal opacity-75">(optional)</span>
+        </label>
+        <select
+          id="bil_kanak"
+          name="bil_kanak"
+          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
+        >
+          <option value="">Pilih anggaran</option>
+          {bilKanak.map((b) => <option value={b}>{b}</option>)}
+        </select>
+      </div>
+
+      <div>
+        <label for="nota" class="mb-1.5 block font-semibold">
+          Nota tambahan <span class="font-normal opacity-75">(tema party, permintaan khas...)</span>
+        </label>
+        <textarea
+          id="nota"
+          name="nota"
+          rows="3"
+          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
+        ></textarea>
+      </div>
+
+      <!-- Honeypot — hidden from humans, bots fill it in -->
+      <div class="absolute -left-[9999px]" aria-hidden="true">
+        <label for="website">Website</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <p id="form-error" hidden class="rounded-2xl bg-coral/10 p-4 text-[15px] font-semibold text-coral-dark"></p>
+
+      <button
+        type="submit"
+        id="submit-btn"
+        class="lift w-full rounded-2xl bg-coral px-7 py-4 font-display text-xl font-bold text-white shadow-lg shadow-coral/30 hover:bg-coral-dark disabled:opacity-60"
+      >
+        Hantar Booking
+      </button>
+    </form>
+
+    <div id="booking-success" hidden class="mt-10 rounded-3xl bg-mint/15 p-8 text-center">
+      <p class="text-xl font-semibold">
+        Booking diterima! 🎈 Kami akan WhatsApp anda dalam masa 1 jam untuk confirm. Terima kasih!
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('booking-form') as HTMLFormElement;
+  const errorBox = document.getElementById('form-error') as HTMLParagraphElement;
+  const successBox = document.getElementById('booking-success') as HTMLDivElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const waLink = (document.getElementById('wa-float') as HTMLAnchorElement | null)?.href ?? '#';
+
+  // Min date: today + 2 days (booking-spec.md)
+  const tarikh = document.getElementById('tarikh') as HTMLInputElement;
+  const min = new Date();
+  min.setDate(min.getDate() + 2);
+  tarikh.min = min.toISOString().slice(0, 10);
+
+  function showError(msg: string) {
+    errorBox.innerHTML = `${msg} Sila cuba lagi atau <a href="${waLink}" target="_blank" rel="noopener" class="underline">WhatsApp kami terus</a>.`;
+    errorBox.hidden = false;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBox.hidden = true;
+
+    if (!form.reportValidity()) return;
+
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+
+    // Malaysian mobile: 01X-XXXXXXX — strip spaces/dashes before validating
+    const phone = data.phone.replace(/[\s-]/g, '');
+    if (!/^01[0-9]{8,9}$/.test(phone)) {
+      showError('No. WhatsApp tak sah. Guna format Malaysia, cth: 012-3456789.');
+      return;
+    }
+    data.phone = phone;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Menghantar...';
+
+    try {
+      const res = await fetch('/api/booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (!json.ok) throw new Error(json.error || 'unknown');
+      form.hidden = true;
+      successBox.hidden = false;
+      successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch {
+      showError('Alamak, ada masalah teknikal.');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Hantar Booking';
+    }
+  });
+</script>

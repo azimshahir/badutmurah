@@ -1,0 +1,79 @@
+---
+// Package cards — data imported from docs/pricing.json (never hardcoded)
+import pricing from '../../docs/pricing.json';
+
+const { pakej, deposit, currency } = pricing;
+---
+
+<section id="pakej" class="scroll-mt-8 bg-white py-16 md:py-24">
+  <div class="mx-auto max-w-[1100px] px-5">
+    <h2 class="squiggle mx-auto w-fit text-center text-3xl font-bold md:text-4xl">
+      Pilih Pakej Anda
+    </h2>
+    <p class="mx-auto mt-4 max-w-xl text-center opacity-90">
+      Harga jelas, takde hidden charges. Semua pakej termasuk perjalanan dalam KL &amp; Selangor.
+    </p>
+
+    <div class="mt-14 grid items-stretch gap-6 md:grid-cols-3 md:gap-5">
+      {
+        pakej.map((p) => (
+          <article
+            class:list={[
+              'tilt relative flex flex-col rounded-3xl p-7',
+              p.popular
+                ? 'border-[3px] border-sunny bg-white shadow-xl shadow-sunny/40 md:-my-3 md:py-10'
+                : 'border-2 border-navy/10 bg-cream',
+            ]}
+          >
+            {p.popular && (
+              <span class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-sunny px-5 py-1.5 font-display text-sm font-bold whitespace-nowrap shadow-md">
+                ⭐ {p.label}
+              </span>
+            )}
+            <h3 class="text-2xl font-semibold">{p.nama}</h3>
+            <p class="text-sm font-semibold opacity-70">{p.durasi}</p>
+            <p class="mt-4 font-display text-[2.75rem] leading-none font-bold">
+              {currency}{p.harga}
+            </p>
+            <ul class="mt-6 flex-1 space-y-2.5 text-[15px]">
+              {p.termasuk.map((item) => (
+                <li class="flex gap-2">
+                  <span class="mt-0.5 shrink-0 font-bold text-mint">✓</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <a
+              href="#booking"
+              data-pakej={p.id}
+              class:list={[
+                'pakej-cta lift mt-7 rounded-2xl py-3.5 text-center font-display text-xl font-bold',
+                p.popular
+                  ? 'bg-coral text-white shadow-lg shadow-coral/30 hover:bg-coral-dark'
+                  : 'border-2 border-coral text-coral-dark hover:bg-coral hover:text-white',
+              ]}
+            >
+              Book Pakej Ini
+            </a>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="mt-8 text-center text-sm opacity-80">
+      Deposit {currency}{deposit.jumlah} untuk kunci tarikh. Baki selepas persembahan. Luar
+      KL/Selangor? Rujuk caj perjalanan di FAQ.
+    </p>
+  </div>
+</section>
+
+<script>
+  // Pre-select the chosen package in the booking form
+  document.querySelectorAll('.pakej-cta').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-pakej');
+      const radio = document.querySelector(`input[name="pakej"][value="${id}"]`);
+      if (radio instanceof HTMLInputElement) radio.checked = true;
+    });
+  });
+</script>

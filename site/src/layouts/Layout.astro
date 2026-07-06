@@ -1,0 +1,39 @@
+---
+// Base layout — meta/SEO from docs/content.md
+import '../styles/global.css';
+
+const title = 'Badut Murah KL & Selangor | Badut Jim — Book Online dari RM250';
+const description =
+  'Servis badut profesional untuk birthday party & event di KL dan Selangor. 9 tahun pengalaman. Harga transparent dari RM250. Semak pakej & book online sekarang.';
+const site = 'https://badutmurah.my';
+---
+
+<html lang="ms">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={site + '/'} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={site + '/'} />
+    <meta property="og:image" content={site + '/images/og.jpg'} />
+    <meta property="og:locale" content="ms_MY" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

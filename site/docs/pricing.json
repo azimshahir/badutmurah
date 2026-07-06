@@ -1,0 +1,57 @@
+{
+  "currency": "RM",
+  "pakej": [
+    {
+      "id": "biasa-1jam",
+      "nama": "Pakej Biasa",
+      "durasi": "1 jam",
+      "harga": 250,
+      "popular": false,
+      "termasuk": [
+        "Badut profesional (9 tahun pengalaman)",
+        "Balloon twisting untuk semua kanak-kanak",
+        "Interaksi & lawak jenaka sepanjang sesi"
+      ]
+    },
+    {
+      "id": "biasa-2jam",
+      "nama": "Pakej Biasa",
+      "durasi": "2 jam",
+      "harga": 400,
+      "popular": false,
+      "termasuk": [
+        "Badut profesional (9 tahun pengalaman)",
+        "Balloon twisting untuk semua kanak-kanak",
+        "Interaksi & lawak jenaka sepanjang sesi",
+        "Masa lebih panjang — sesuai untuk majlis besar"
+      ]
+    },
+    {
+      "id": "meriah",
+      "nama": "Pakej Meriah",
+      "durasi": "1 jam 30 minit",
+      "harga": 400,
+      "popular": true,
+      "label": "Paling Popular",
+      "termasuk": [
+        "Badut profesional (9 tahun pengalaman)",
+        "Balloon twisting untuk semua kanak-kanak",
+        "Games & aktiviti interaktif (musical chair & banyak lagi)",
+        "Sesi paling rancak — kanak-kanak takkan duduk diam!"
+      ]
+    }
+  ],
+  "travel": {
+    "nota": "Harga pakej termasuk perjalanan ke seluruh KL & Selangor.",
+    "zon": [
+      { "kawasan": "Kuala Lumpur & Selangor", "caj": 0, "label": "Percuma" },
+      { "kawasan": "Nilai, Seremban, Putrajaya-Sepang", "caj": 80, "label": "+RM80" },
+      { "kawasan": "Negeri lain", "caj": null, "label": "RM2/km dari Bukit Jalil (min. RM150) — confirm masa booking" }
+    ]
+  },
+  "deposit": {
+    "jumlah": 100,
+    "nota": "Deposit RM100 untuk kunci tarikh. Baki dibayar selepas persembahan (cash / transfer / DuitNow).",
+    "polisi_reschedule": "Tukar tarikh percuma jika dimaklumkan 3 hari awal. Deposit tidak dikembalikan untuk pembatalan saat akhir."
+  }
+}
