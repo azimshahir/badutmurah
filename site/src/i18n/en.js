@@ -15,7 +15,9 @@ export default {
     home: 'Home',
     ourClown: 'Our Clown',
     pakej: 'Package',
-    edutainment: 'Click here to see cool things!',
+    edutainment: 'Edutainment Project',
+    edutainmentTag: 'Click here to see cool things!',
+    jimClown: 'Jim The Clown',
     book: 'Book Now',
     langLabel: 'BM',
     langHref: true,
@@ -154,7 +156,7 @@ export default {
     aria: 'Ask us on WhatsApp',
   },
   ourClown: {
-    heading: 'Our Clown',
+    heading: 'Jim The Clown',
     intro:
       'Behind badutmurah.my is one clown: Jim. Starting in 2011, Jim has brightened up hundreds of events across KL & Selangor with 10 years of experience.',
     draftNote: '',

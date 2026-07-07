@@ -15,7 +15,9 @@ export default {
     home: 'Home',
     ourClown: 'Badut Kami',
     pakej: 'Pakej',
-    edutainment: 'Klik sini tengok benda best!',
+    edutainment: 'Projek Edutainment',
+    edutainmentTag: 'Klik sini tengok benda best!',
+    jimClown: 'Jim The Clown',
     book: 'Book Sekarang',
     langLabel: 'EN',
     langHref: true, // toggle target computed in component
@@ -154,7 +156,7 @@ export default {
     aria: 'Tanya kami di WhatsApp',
   },
   ourClown: {
-    heading: 'Badut Kami',
+    heading: 'Jim The Clown',
     intro:
       'Di sebalik badutmurah.my ada seorang badut: Jim. Bermula pada 2011, Jim dah menceriakan ratusan majlis di seluruh KL & Selangor dengan 10 tahun pengalaman.',
     draftNote: '',
