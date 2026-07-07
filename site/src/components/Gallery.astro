@@ -1,39 +1,42 @@
 ---
+// Polaroid-style gallery
+import { getT } from '../i18n/index.js';
+
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
+
 const gambar = [
-  { src: '/images/gallery-1.webp', alt: 'Badut Jim buat balloon twisting untuk kanak-kanak di event' },
-  { src: '/images/gallery-2.webp', alt: 'Badut Jim menghiburkan keluarga dengan belon' },
-  { src: '/images/gallery-3.webp', alt: 'Kanak-kanak gembira dengan belon bersama Badut Jim' },
-  { src: '/images/gallery-4.webp', alt: 'Badut Jim dalam kostum penuh di majlis' },
-  { src: '/images/gallery-5.webp', alt: 'Badut Jim di majlis korporat dengan belon dan confetti' },
-  { src: '/images/gallery-6.webp', alt: 'Bouncing castle di birthday party' },
-  { src: '/images/gallery-7.webp', alt: 'Kanak-kanak menonton puppet show' },
+  { src: '/images/gallery-1.webp', alt: 'Badut Jim doing balloon twisting for kids at an event', frame: 'bg-white', rot: '-rotate-2' },
+  { src: '/images/gallery-2.webp', alt: 'Badut Jim entertaining a family with balloons', frame: 'bg-sunny/30', rot: 'rotate-1' },
+  { src: '/images/gallery-3.webp', alt: 'Happy kids with balloons next to Badut Jim', frame: 'bg-mint/20', rot: 'rotate-2' },
+  { src: '/images/gallery-4.webp', alt: 'Badut Jim in full costume at an event', frame: 'bg-coral/10', rot: '-rotate-1' },
+  { src: '/images/gallery-5.webp', alt: 'Badut Jim at a corporate event with balloons and confetti', frame: 'bg-white', rot: 'rotate-2' },
+  { src: '/images/gallery-6.webp', alt: 'Bouncing castle at a birthday party', frame: 'bg-sunny/30', rot: '-rotate-2' },
+  { src: '/images/gallery-7.webp', alt: 'Kids watching a puppet show', frame: 'bg-mint/20', rot: 'rotate-1' },
 ];
 ---
 
-<section class="bg-white py-16 md:py-24">
+<section id="gallery" class="scroll-mt-28 py-16 md:py-24">
   <div class="mx-auto max-w-[1100px] px-5">
     <h2 class="squiggle mx-auto w-fit text-center text-3xl font-bold md:text-4xl">
-      Detik-Detik Ceria
+      {t.gallery.heading}
     </h2>
-    <p class="mx-auto mt-4 max-w-xl text-center opacity-90">
-      Sebahagian daripada majlis yang pernah kami serikan.
-    </p>
+    <p class="mx-auto mt-4 max-w-xl text-center opacity-90">{t.gallery.sub}</p>
 
-    <div class="mt-14 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+    <div class="mt-14 flex flex-wrap items-center justify-center gap-5 md:gap-7">
       {
-        gambar.map((g, i) => (
-          <img
-            src={g.src}
-            alt={g.alt}
-            loading="lazy"
-            decoding="async"
-            width="400"
-            height="300"
-            class:list={[
-              'aspect-[4/3] w-full rounded-2xl object-cover transition-transform duration-300 hover:scale-[1.02] motion-reduce:transition-none motion-reduce:hover:scale-100',
-              i === 0 && 'col-span-2 row-span-2 aspect-square md:aspect-[4/3] h-full',
-            ]}
-          />
+        gambar.map((g) => (
+          <figure class:list={['tilt w-[46%] rounded-xl p-2.5 pb-4 shadow-lg sm:w-56', g.frame, g.rot]}>
+            <img
+              src={g.src}
+              alt={g.alt}
+              loading="lazy"
+              decoding="async"
+              width="400"
+              height="300"
+              class="aspect-[4/3] w-full rounded-lg object-cover"
+            />
+          </figure>
         ))
       }
     </div>

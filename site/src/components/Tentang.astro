@@ -1,0 +1,36 @@
+---
+// "About Our Clown" section. Clown pose images: SVG fallbacks until owner
+// provides generated PNGs (drop in public/images/ with the same filenames).
+import { getT, localePath } from '../i18n/index.js';
+
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
+const poses = ['/images/clown-pose-1.svg', '/images/clown-pose-2.svg', '/images/clown-pose-3.svg'];
+---
+
+<section class="py-16 md:py-24">
+  <div class="mx-auto max-w-[1100px] px-5">
+    <h2 class="squiggle mx-auto w-fit text-center text-3xl font-bold md:text-4xl">
+      {t.tentang.heading}
+    </h2>
+    <p class="mx-auto mt-4 max-w-xl text-center opacity-90">{t.tentang.sub}</p>
+
+    <div class="mt-14 grid gap-10 text-center md:grid-cols-3 md:gap-6">
+      {
+        t.tentang.cards.map((s, i) => (
+          <div class="flex flex-col items-center">
+            <img src={poses[i]} alt="" width="120" height="140" loading="lazy" class="h-32 w-auto" aria-hidden="true" />
+            <h3 class="mt-4 text-xl font-semibold">{s.tajuk}</h3>
+            <p class="mt-2 max-w-xs text-[15px] opacity-90">{s.isi}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="mt-10 text-center">
+      <a href={localePath(locale, '/our-clown')} class="font-display font-bold text-coral-dark underline underline-offset-4 hover:text-coral">
+        {t.tentang.more} →
+      </a>
+    </p>
+  </div>
+</section>

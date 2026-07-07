@@ -1,0 +1,58 @@
+---
+// Sticky navbar: logo + Book pill, page links, Edutainment highlight, language toggle
+import { getT, localePath, altLocalePath } from '../i18n/index.js';
+
+const { locale = 'en', pathname = '/' } = Astro.props;
+const t = getT(locale);
+const p = (path) => localePath(locale, path);
+const altHref = altLocalePath(locale, pathname);
+---
+
+<nav class="sticky top-0 z-40 border-b border-navy/5 bg-cream/90 backdrop-blur">
+  <div class="mx-auto flex max-w-[1100px] items-center justify-between gap-3 px-4 py-3 md:px-5">
+    <div class="flex items-center gap-3">
+      <a href={p('/')} class="flex items-center gap-1.5 font-display text-lg font-bold md:text-xl">
+        <span aria-hidden="true">🤡</span> badutmurah.my
+      </a>
+      <a
+        href={p('/') + '#booking'}
+        class="lift rounded-full bg-coral px-4 py-1.5 font-display text-sm font-bold text-white shadow-md shadow-coral/30 hover:bg-coral-dark md:px-5 md:py-2 md:text-base"
+      >
+        {t.nav.book}
+      </a>
+    </div>
+
+    <div class="hidden items-center gap-5 font-semibold lg:flex">
+      <a href={p('/')} class="hover:text-coral-dark">{t.nav.home}</a>
+      <a href={p('/our-clown')} class="hover:text-coral-dark">{t.nav.ourClown}</a>
+      <a href={p('/') + '#pakej'} class="hover:text-coral-dark">{t.nav.pakej}</a>
+      <a
+        href={p('/edutainment')}
+        class="wiggle rounded-full bg-gradient-to-r from-sunny to-coral/70 px-4 py-1.5 font-display text-sm font-bold text-navy shadow-md"
+      >
+        ✨ {t.nav.edutainment}
+      </a>
+    </div>
+
+    <a
+      href={altHref}
+      class="shrink-0 rounded-full border-2 border-navy/15 px-3 py-1.5 font-display text-sm font-bold hover:border-navy/40"
+      aria-label={locale === 'en' ? 'Tukar ke Bahasa Malaysia' : 'Switch to English'}
+    >
+      🌐 {t.nav.langLabel}
+    </a>
+  </div>
+
+  <!-- mobile page links row -->
+  <div class="flex items-center justify-center gap-4 border-t border-navy/5 px-4 py-2 text-sm font-semibold lg:hidden">
+    <a href={p('/')} class="hover:text-coral-dark">{t.nav.home}</a>
+    <a href={p('/our-clown')} class="hover:text-coral-dark">{t.nav.ourClown}</a>
+    <a href={p('/') + '#pakej'} class="hover:text-coral-dark">{t.nav.pakej}</a>
+    <a
+      href={p('/edutainment')}
+      class="wiggle rounded-full bg-gradient-to-r from-sunny to-coral/70 px-3 py-1 font-display font-bold text-navy"
+    >
+      ✨ {locale === 'en' ? 'Cool things!' : 'Benda best!'}
+    </a>
+  </div>
+</nav>

@@ -1,0 +1,59 @@
+---
+// "Our Clown" story page. Draft content: owner to review before final.
+import Layout from '../layouts/Layout.astro';
+import Navbar from './Navbar.astro';
+import Footer from './Footer.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+import { getT, localePath } from '../i18n/index.js';
+
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
+const pathname = localePath(locale, '/our-clown');
+
+const photos = ['/images/gallery-4.webp', '/images/gallery-1.webp', '/images/gallery-5.webp'];
+---
+
+<Layout locale={locale} title={t.meta.titleOurClown} description={t.meta.descriptionOurClown} pathname={pathname}>
+  <Navbar locale={locale} pathname={pathname} />
+  <main class="mx-auto max-w-[860px] px-5 py-14 md:py-20">
+    <h1 class="squiggle mx-auto w-fit text-center text-4xl font-bold md:text-5xl">
+      {t.ourClown.heading}
+    </h1>
+    <p class="mx-auto mt-6 max-w-2xl text-center text-lg opacity-90">{t.ourClown.intro}</p>
+
+    <div class="mt-14 space-y-14">
+      {
+        t.ourClown.sections.map((s, i) => (
+          <div class:list={['flex flex-col items-center gap-8 md:flex-row', i % 2 === 1 && 'md:flex-row-reverse']}>
+            <figure class:list={['tilt w-full shrink-0 rounded-xl bg-white p-2.5 pb-4 shadow-lg md:w-80', i % 2 ? 'rotate-2' : '-rotate-2']}>
+              <img
+                src={photos[i]}
+                alt={s.tajuk}
+                loading="lazy"
+                decoding="async"
+                width="400"
+                height="300"
+                class="aspect-[4/3] w-full rounded-lg object-cover"
+              />
+            </figure>
+            <div>
+              <h2 class="text-2xl font-semibold">{s.tajuk}</h2>
+              <p class="mt-3 opacity-90">{s.isi}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="mt-16 text-center">
+      <a
+        href={localePath(locale, '/') + '#booking'}
+        class="lift inline-block rounded-full bg-coral px-9 py-4 font-display text-xl font-bold text-white shadow-lg shadow-coral/40 hover:bg-coral-dark"
+      >
+        {t.ourClown.cta}
+      </a>
+    </p>
+  </main>
+  <Footer locale={locale} />
+  <WhatsAppButton locale={locale} />
+</Layout>

@@ -48,12 +48,12 @@ export async function onRequestPost({ request, env }) {
 
   const [y, m, d] = data.tarikh.split('-');
   const lines = [
-    '🎈 BOOKING BARU — badutmurah.my',
+    '🎈 BOOKING BARU: badutmurah.my',
     '',
     `📅 ${d}/${m}/${y}, ${data.masa}`,
     `📦 ${pakej.nama} ${pakej.durasi} (${pricing.currency}${pakej.harga})`,
     `📍 ${data.lokasi.trim()}`,
-    `👤 ${data.nama.trim()} — ${phone}`,
+    `👤 ${data.nama.trim()} - ${phone}`,
   ];
   if (data.bil_kanak) lines.push(`👶 ${data.bil_kanak} kanak-kanak`);
   if (data.nota && data.nota.trim()) lines.push(`📝 ${data.nota.trim()}`);

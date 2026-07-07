@@ -1,0 +1,50 @@
+---
+// Edutainment Projects page. Draft: owner to confirm which services are active in 2026.
+import Layout from '../layouts/Layout.astro';
+import Navbar from './Navbar.astro';
+import Footer from './Footer.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+import { getT, getWhatsAppLink, localePath } from '../i18n/index.js';
+
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
+const pathname = localePath(locale, '/edutainment');
+const waLink = getWhatsAppLink(locale);
+---
+
+<Layout locale={locale} title={t.meta.titleEdutainment} description={t.meta.descriptionEdutainment} pathname={pathname}>
+  <Navbar locale={locale} pathname={pathname} />
+  <main class="mx-auto max-w-[1100px] px-5 py-14 md:py-20">
+    <h1 class="squiggle mx-auto w-fit text-center text-4xl font-bold md:text-5xl">
+      {t.edutainment.heading}
+    </h1>
+    <p class="mx-auto mt-6 max-w-2xl text-center text-lg opacity-90">{t.edutainment.intro}</p>
+
+    <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        t.edutainment.projects.map((proj) => (
+          <div class="tilt rounded-3xl bg-white p-7 shadow-sm">
+            <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-sunny/30 text-3xl" aria-hidden="true">
+              {proj.emoji}
+            </div>
+            <h2 class="mt-4 text-xl font-semibold">{proj.tajuk}</h2>
+            <p class="mt-2 text-[15px] opacity-90">{proj.isi}</p>
+          </div>
+        ))
+      }
+      <div class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-navy/15 p-7 text-center">
+        <p class="opacity-80">{t.edutainment.nota}</p>
+        <a
+          href={waLink}
+          target="_blank"
+          rel="noopener"
+          class="lift mt-4 rounded-full bg-[#25D366] px-7 py-3 font-display text-lg font-bold text-white shadow-md"
+        >
+          {t.edutainment.cta}
+        </a>
+      </div>
+    </div>
+  </main>
+  <Footer locale={locale} />
+  <WhatsAppButton locale={locale} />
+</Layout>

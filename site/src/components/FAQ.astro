@@ -1,56 +1,29 @@
 ---
-// FAQ copy verbatim from docs/content.md
-const faq = [
-  {
-    q: 'Kawasan mana yang anda cover?',
-    a: 'Seluruh KL & Selangor tanpa caj tambahan. Nilai, Seremban dan Putrajaya-Sepang: +RM80. Negeri lain: RM2/km dari Bukit Jalil (minimum RM150), kami confirm masa booking.',
-  },
-  {
-    q: 'Macam mana nak confirm booking saya?',
-    a: 'Isi booking form, kami reply dalam 1 jam melalui WhatsApp untuk confirm availability. Deposit RM100 kunci tarikh anda — first come, first served.',
-  },
-  {
-    q: 'Apa yang saya perlu sediakan?',
-    a: 'Ruang untuk aktiviti (ruang tamu pun cukup) dan parking berdekatan. Selebihnya kami uruskan.',
-  },
-  {
-    q: 'Berapa ramai kanak-kanak yang sesuai?',
-    a: 'Pakej Biasa sesuai sehingga 20 kanak-kanak. Pakej Meriah sesuai untuk 15-30. Lebih ramai? WhatsApp kami untuk pakej custom.',
-  },
-  {
-    q: 'Kalau nak tukar tarikh macam mana?',
-    a: 'Percuma jika dimaklumkan sekurang-kurangnya 3 hari sebelum majlis, tertakluk kepada availability. Pembatalan saat akhir: deposit tidak dikembalikan.',
-  },
-  {
-    q: 'Balloon twisting tu untuk semua budak ke?',
-    a: 'Ya, setiap kanak-kanak dapat balloon. Untuk majlis besar, kami pastikan stok mencukupi — maklumkan anggaran bilangan dalam form.',
-  },
-  {
-    q: 'Sesuai untuk umur berapa?',
-    a: 'Paling best untuk 3-10 tahun, tapi kami sesuaikan persembahan ikut audience. Majlis campuran umur pun takde masalah.',
-  },
-  {
-    q: 'Boleh buat event selain birthday?',
-    a: 'Boleh — family day, karnival sekolah, tadika, event korporat, majlis komuniti. WhatsApp kami untuk quotation.',
-  },
-];
+// FAQ pill rows with emoji icons. Copy from i18n dicts (synced with docs/content.md)
+import { getT } from '../i18n/index.js';
+
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
 ---
 
-<section id="faq" class="scroll-mt-8 py-16 md:py-24">
+<section id="faq" class="scroll-mt-28 py-16 md:py-24">
   <div class="mx-auto max-w-[760px] px-5">
     <h2 class="squiggle mx-auto w-fit text-center text-3xl font-bold md:text-4xl">
-      Soalan Lazim
+      {t.faq.heading}
     </h2>
 
     <div class="mt-10 space-y-3">
       {
-        faq.map((item) => (
-          <details class="group rounded-2xl bg-white p-5 shadow-sm transition-shadow hover:shadow-md open:shadow-md">
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-semibold [&::-webkit-details-marker]:hidden">
-              {item.q}
-              <span class="shrink-0 text-coral transition-transform group-open:rotate-45" aria-hidden="true">＋</span>
+        t.faq.items.map((item) => (
+          <details class="group rounded-full bg-white px-5 py-3.5 shadow-sm transition-shadow open:rounded-3xl open:shadow-md hover:shadow-md">
+            <summary class="flex cursor-pointer list-none items-center gap-3 font-display text-lg font-semibold [&::-webkit-details-marker]:hidden">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cream text-lg" aria-hidden="true">
+                {item.emoji}
+              </span>
+              <span class="flex-1">{item.q}</span>
+              <span class="shrink-0 text-coral transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
             </summary>
-            <p class="mt-3 text-[15px] opacity-90">{item.a}</p>
+            <p class="mt-3 pr-2 pl-12 text-[15px] opacity-90">{item.a}</p>
           </details>
         ))
       }

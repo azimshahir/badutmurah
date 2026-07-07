@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://badutmurah.my/</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://badutmurah.my/ms/" />
+  </url>
+  <url>
+    <loc>https://badutmurah.my/our-clown</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://badutmurah.my/ms/our-clown" />
+  </url>
+  <url>
+    <loc>https://badutmurah.my/edutainment</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://badutmurah.my/ms/edutainment" />
+  </url>
+  <url>
+    <loc>https://badutmurah.my/ms/</loc>
+  </url>
+  <url>
+    <loc>https://badutmurah.my/ms/our-clown</loc>
+  </url>
+  <url>
+    <loc>https://badutmurah.my/ms/edutainment</loc>
   </url>
 </urlset>

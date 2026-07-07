@@ -1,90 +1,83 @@
 ---
-// Booking form — fields & validation per docs/booking-spec.md
+// Booking form. Fields & validation per docs/booking-spec.md.
+// Option VALUES stay identical across locales (API payload contract); labels translate.
 import pricing from '../../docs/pricing.json';
-import { WHATSAPP_LINK } from '../lib/site.js';
+import { getT, getWhatsAppLink } from '../i18n/index.js';
 
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
+const waLink = getWhatsAppLink(locale);
 const { pakej, currency } = pricing;
-const slotMasa = ['10am', '11am', '12pm', '2pm', '3pm', '4pm', '5pm', 'Lain-lain (nyatakan di nota)'];
+const nameKey = t.pakej.nameKey;
+const durasiKey = t.pakej.durasiKey;
+
+const slotMasa = ['10am', '11am', '12pm', '2pm', '3pm', '4pm', '5pm'];
+const masaLainValue = 'Lain-lain (nyatakan di nota)';
 const bilKanak = ['<10', '10-20', '20-30', '30+'];
 ---
 
-<section id="booking" class="scroll-mt-8 bg-white py-16 md:py-24">
-  <div class="mx-auto max-w-[640px] px-5">
+<section id="booking" class="scroll-mt-28 py-16 md:py-24">
+  <div class="mx-auto max-w-[680px] px-5">
     <div class="relative mx-auto w-fit">
-      <!-- confetti doodle accent (design-brief: satu-dua doodle kecil) -->
       <svg viewBox="0 0 48 32" class="absolute -top-6 -right-10 h-8 w-12" aria-hidden="true">
         <circle cx="8" cy="20" r="3" fill="#FFD166"></circle>
         <circle cx="24" cy="8" r="2.5" fill="#06D6A0"></circle>
         <rect x="36" y="16" width="6" height="6" rx="1.5" fill="#EF476F" transform="rotate(20 39 19)"></rect>
       </svg>
-      <h2 class="squiggle text-center text-3xl font-bold md:text-4xl">Book Sekarang</h2>
+      <h2 class="squiggle text-center text-3xl font-bold md:text-4xl">{t.booking.heading}</h2>
     </div>
-    <p class="mx-auto mt-4 max-w-lg text-center opacity-90">
-      Isi maklumat di bawah. Kami confirm dalam 1 jam. Belum bayar apa-apa lagi — deposit hanya
-      selepas kami confirm availability.
-    </p>
+    <p class="mx-auto mt-4 max-w-lg text-center opacity-90">{t.booking.sub}</p>
 
-    <form id="booking-form" class="mt-10 space-y-5" novalidate>
+    <form
+      id="booking-form"
+      class="mt-10 space-y-5 rounded-3xl bg-white p-6 shadow-lg md:p-10"
+      novalidate
+      data-msg-sending={t.booking.menghantar}
+      data-msg-send={t.booking.hantar}
+      data-msg-error={t.booking.errorTeknikal}
+      data-msg-error-suffix={t.booking.errorSuffix}
+      data-msg-error-wa={t.booking.errorWhatsapp}
+      data-msg-error-phone={t.booking.errorPhone}
+      data-wa-link={waLink}
+    >
       <div>
-        <label for="nama" class="mb-1.5 block font-semibold">Nama anda</label>
-        <input
-          type="text"
-          id="nama"
-          name="nama"
-          required
-          autocomplete="name"
-          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
-        />
+        <label for="nama" class="mb-1.5 block font-semibold">{t.booking.nama}</label>
+        <input type="text" id="nama" name="nama" required autocomplete="name"
+          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral" />
       </div>
 
       <div>
-        <label for="phone" class="mb-1.5 block font-semibold">No. WhatsApp</label>
-        <input
-          type="tel"
-          id="phone"
-          name="phone"
-          required
-          inputmode="tel"
-          autocomplete="tel"
-          placeholder="01X-XXXXXXX"
-          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
-        />
+        <label for="phone" class="mb-1.5 block font-semibold">{t.booking.phone}</label>
+        <input type="tel" id="phone" name="phone" required inputmode="tel" autocomplete="tel" placeholder="01X-XXXXXXX"
+          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral" />
       </div>
 
       <div class="grid gap-5 sm:grid-cols-2">
         <div>
-          <label for="tarikh" class="mb-1.5 block font-semibold">Tarikh majlis</label>
-          <input
-            type="date"
-            id="tarikh"
-            name="tarikh"
-            required
-            class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
-          />
+          <label for="tarikh" class="mb-1.5 block font-semibold">{t.booking.tarikh}</label>
+          <input type="date" id="tarikh" name="tarikh" required
+            class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral" />
         </div>
         <div>
-          <label for="masa" class="mb-1.5 block font-semibold">Masa</label>
-          <select
-            id="masa"
-            name="masa"
-            required
-            class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
-          >
-            <option value="" disabled selected>Pilih slot masa</option>
+          <label for="masa" class="mb-1.5 block font-semibold">{t.booking.masa}</label>
+          <select id="masa" name="masa" required
+            class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral">
+            <option value="" disabled selected>{t.booking.masaPlaceholder}</option>
             {slotMasa.map((s) => <option value={s}>{s}</option>)}
+            <option value={masaLainValue}>{t.booking.masaLain}</option>
           </select>
         </div>
       </div>
 
       <fieldset>
-        <legend class="mb-2 font-semibold">Pilih pakej</legend>
+        <legend class="mb-2 font-semibold">{t.booking.pilihPakej}</legend>
         <div class="grid gap-3 sm:grid-cols-3">
           {
             pakej.map((p) => (
               <label class="cursor-pointer rounded-2xl border-2 border-navy/15 bg-cream p-4 text-center transition-colors hover:border-coral/50 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
                 <input type="radio" name="pakej" value={p.id} required class="sr-only" />
-                <span class="block font-display font-semibold">{p.nama}</span>
-                <span class="block text-sm opacity-70">{p.durasi}</span>
+                <span class="block font-display font-semibold">{p[nameKey]}</span>
+                <span class="block text-sm opacity-70">{p[durasiKey]}</span>
                 <span class="block font-display text-xl font-bold">
                   {currency}
                   {p.harga}
@@ -97,44 +90,32 @@ const bilKanak = ['<10', '10-20', '20-30', '30+'];
 
       <div>
         <label for="lokasi" class="mb-1.5 block font-semibold">
-          Kawasan majlis <span class="font-normal opacity-75">(cth: Puchong, Bukit Jalil)</span>
+          {t.booking.lokasi} <span class="font-normal opacity-75">{t.booking.lokasiHint}</span>
         </label>
-        <input
-          type="text"
-          id="lokasi"
-          name="lokasi"
-          required
-          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
-        />
+        <input type="text" id="lokasi" name="lokasi" required
+          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral" />
       </div>
 
       <div>
         <label for="bil_kanak" class="mb-1.5 block font-semibold">
-          Bilangan kanak-kanak <span class="font-normal opacity-75">(optional)</span>
+          {t.booking.bilKanak} <span class="font-normal opacity-75">{t.booking.bilKanakHint}</span>
         </label>
-        <select
-          id="bil_kanak"
-          name="bil_kanak"
-          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
-        >
-          <option value="">Pilih anggaran</option>
+        <select id="bil_kanak" name="bil_kanak"
+          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral">
+          <option value="">{t.booking.bilKanakPlaceholder}</option>
           {bilKanak.map((b) => <option value={b}>{b}</option>)}
         </select>
       </div>
 
       <div>
         <label for="nota" class="mb-1.5 block font-semibold">
-          Nota tambahan <span class="font-normal opacity-75">(tema party, permintaan khas...)</span>
+          {t.booking.nota} <span class="font-normal opacity-75">{t.booking.notaHint}</span>
         </label>
-        <textarea
-          id="nota"
-          name="nota"
-          rows="3"
-          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"
-        ></textarea>
+        <textarea id="nota" name="nota" rows="3"
+          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"></textarea>
       </div>
 
-      <!-- Honeypot — hidden from humans, bots fill it in -->
+      <!-- Honeypot: hidden from humans, bots fill it in -->
       <div class="absolute -left-[9999px]" aria-hidden="true">
         <label for="website">Website</label>
         <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
@@ -147,14 +128,12 @@ const bilKanak = ['<10', '10-20', '20-30', '30+'];
         id="submit-btn"
         class="lift w-full rounded-2xl bg-coral px-7 py-4 font-display text-xl font-bold text-white shadow-lg shadow-coral/30 hover:bg-coral-dark disabled:opacity-60"
       >
-        Hantar Booking
+        {t.booking.hantar}
       </button>
     </form>
 
     <div id="booking-success" hidden class="mt-10 rounded-3xl bg-mint/15 p-8 text-center">
-      <p class="text-xl font-semibold">
-        Booking diterima! 🎈 Kami akan WhatsApp anda dalam masa 1 jam untuk confirm. Terima kasih!
-      </p>
+      <p class="text-xl font-semibold">{t.booking.success}</p>
     </div>
   </div>
 </section>
@@ -164,7 +143,7 @@ const bilKanak = ['<10', '10-20', '20-30', '30+'];
   const errorBox = document.getElementById('form-error') as HTMLParagraphElement;
   const successBox = document.getElementById('booking-success') as HTMLDivElement;
   const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
-  const waLink = (document.getElementById('wa-float') as HTMLAnchorElement | null)?.href ?? '#';
+  const msg = form.dataset;
 
   // Min date: today + 2 days (booking-spec.md)
   const tarikh = document.getElementById('tarikh') as HTMLInputElement;
@@ -172,8 +151,8 @@ const bilKanak = ['<10', '10-20', '20-30', '30+'];
   min.setDate(min.getDate() + 2);
   tarikh.min = min.toISOString().slice(0, 10);
 
-  function showError(msg: string) {
-    errorBox.innerHTML = `${msg} Sila cuba lagi atau <a href="${waLink}" target="_blank" rel="noopener" class="underline">WhatsApp kami terus</a>.`;
+  function showError(text: string) {
+    errorBox.innerHTML = `${text} ${msg.msgErrorSuffix} <a href="${msg.waLink}" target="_blank" rel="noopener" class="underline">${msg.msgErrorWa}</a>.`;
     errorBox.hidden = false;
   }
 
@@ -185,16 +164,16 @@ const bilKanak = ['<10', '10-20', '20-30', '30+'];
 
     const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
 
-    // Malaysian mobile: 01X-XXXXXXX — strip spaces/dashes before validating
+    // Malaysian mobile: 01X-XXXXXXX, strip spaces/dashes before validating
     const phone = data.phone.replace(/[\s-]/g, '');
     if (!/^01[0-9]{8,9}$/.test(phone)) {
-      showError('No. WhatsApp tak sah. Guna format Malaysia, cth: 012-3456789.');
+      showError(msg.msgErrorPhone!);
       return;
     }
     data.phone = phone;
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Menghantar...';
+    submitBtn.textContent = msg.msgSending!;
 
     try {
       const res = await fetch('/api/booking', {
@@ -208,10 +187,10 @@ const bilKanak = ['<10', '10-20', '20-30', '30+'];
       successBox.hidden = false;
       successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch {
-      showError('Alamak, ada masalah teknikal.');
+      showError(msg.msgError!);
     } finally {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Hantar Booking';
+      submitBtn.textContent = msg.msgSend!;
     }
   });
 </script>

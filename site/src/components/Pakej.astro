@@ -1,18 +1,20 @@
 ---
-// Package cards — data imported from docs/pricing.json (never hardcoded)
+// Package cards. Data from docs/pricing.json (BM + _en fields), never hardcoded.
 import pricing from '../../docs/pricing.json';
+import { getT } from '../i18n/index.js';
 
-const { pakej, deposit, currency } = pricing;
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
+const { pakej, currency } = pricing;
+const f = (p, key) => p[t.pakej[key]];
 ---
 
-<section id="pakej" class="scroll-mt-8 bg-white py-16 md:py-24">
+<section id="pakej" class="scroll-mt-28 py-16 md:py-24">
   <div class="mx-auto max-w-[1100px] px-5">
     <h2 class="squiggle mx-auto w-fit text-center text-3xl font-bold md:text-4xl">
-      Pilih Pakej Anda
+      {t.pakej.heading}
     </h2>
-    <p class="mx-auto mt-4 max-w-xl text-center opacity-90">
-      Harga jelas, takde hidden charges. Semua pakej termasuk perjalanan dalam KL &amp; Selangor.
-    </p>
+    <p class="mx-auto mt-4 max-w-xl text-center opacity-90">{t.pakej.sub}</p>
 
     <div class="mt-14 grid items-stretch gap-6 md:grid-cols-3 md:gap-5">
       {
@@ -21,22 +23,22 @@ const { pakej, deposit, currency } = pricing;
             class:list={[
               'tilt relative flex flex-col rounded-3xl p-7',
               p.popular
-                ? 'border-[3px] border-sunny bg-white shadow-xl shadow-sunny/40 md:-my-3 md:py-10'
-                : 'border-2 border-navy/10 bg-cream',
+                ? 'border-[3px] border-coral/50 bg-white shadow-xl shadow-coral/20 ring-4 ring-coral/10 md:-my-3 md:py-10'
+                : 'border-2 border-navy/10 bg-white',
             ]}
           >
             {p.popular && (
               <span class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-sunny px-5 py-1.5 font-display text-sm font-bold whitespace-nowrap shadow-md">
-                ⭐ {p.label}
+                ⭐ {f(p, 'labelKey')}
               </span>
             )}
-            <h3 class="text-2xl font-semibold">{p.nama}</h3>
-            <p class="text-sm font-semibold opacity-70">{p.durasi}</p>
+            <h3 class="text-2xl font-semibold">{f(p, 'nameKey')}</h3>
+            <p class="text-sm font-semibold opacity-70">{f(p, 'durasiKey')}</p>
             <p class="mt-4 font-display text-[2.75rem] leading-none font-bold">
               {currency}{p.harga}
             </p>
             <ul class="mt-6 flex-1 space-y-2.5 text-[15px]">
-              {p.termasuk.map((item) => (
+              {f(p, 'termasukKey').map((item) => (
                 <li class="flex gap-2">
                   <span class="mt-0.5 shrink-0 font-bold text-mint">✓</span>
                   <span>{item}</span>
@@ -53,17 +55,14 @@ const { pakej, deposit, currency } = pricing;
                   : 'border-2 border-coral text-coral-dark hover:bg-coral hover:text-white',
               ]}
             >
-              Book Pakej Ini
+              {t.pakej.book}
             </a>
           </article>
         ))
       }
     </div>
 
-    <p class="mt-8 text-center text-sm opacity-80">
-      Deposit {currency}{deposit.jumlah} untuk kunci tarikh. Baki selepas persembahan. Luar
-      KL/Selangor? Rujuk caj perjalanan di FAQ.
-    </p>
+    <p class="mt-8 text-center text-sm opacity-80">{t.pakej.nota}</p>
   </div>
 </section>
 

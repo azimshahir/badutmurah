@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140">
+  <!-- fallback flat cartoon clown, arms up (replace with owner-generated PNG) -->
+  <circle cx="45" cy="52" r="14" fill="#06D6A0"/><circle cx="75" cy="52" r="14" fill="#EF476F"/><circle cx="60" cy="44" r="15" fill="#FFD166"/>
+  <circle cx="60" cy="58" r="17" fill="#FFF5E9"/>
+  <circle cx="53" cy="55" r="3" fill="#1D3557"/><circle cx="67" cy="55" r="3" fill="#1D3557"/>
+  <circle cx="60" cy="62" r="5" fill="#EF476F"/>
+  <path d="M50 68 Q60 76 70 68" stroke="#1D3557" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M60 30 l-5 -12 h10 z" fill="#EF476F"/><circle cx="60" cy="16" r="4" fill="#FFD166"/>
+  <path d="M45 80 Q40 95 45 115 Q60 122 75 115 Q80 95 75 80 Z" fill="#EF476F"/>
+  <circle cx="54" cy="92" r="3.5" fill="#FFD166"/><circle cx="66" cy="102" r="3.5" fill="#FFD166"/>
+  <path d="M45 84 Q30 92 24 106" stroke="#EF476F" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M75 84 Q90 92 96 106" stroke="#EF476F" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <circle cx="22" cy="108" r="6" fill="#FFF5E9"/><circle cx="98" cy="108" r="6" fill="#FFF5E9"/>
+  <ellipse cx="48" cy="126" rx="11" ry="6" fill="#EF476F"/><ellipse cx="72" cy="126" rx="11" ry="6" fill="#EF476F"/>
+</svg>

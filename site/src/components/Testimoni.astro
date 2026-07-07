@@ -1,12 +1,15 @@
 ---
-// Placeholder — real testimonials pending (docs/content.md TODO).
-// Do NOT invent testimonials; replace cards once owner provides real reviews.
+// Placeholder until real testimonials exist. Do NOT invent testimonials.
+import { getT } from '../i18n/index.js';
+
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
 ---
 
-<section class="bg-white py-16 md:py-24">
+<section class="py-16 md:py-24">
   <div class="mx-auto max-w-[1100px] px-5">
     <h2 class="squiggle mx-auto w-fit text-center text-3xl font-bold md:text-4xl">
-      Apa Kata Ibu Bapa
+      {t.testimoni.heading}
     </h2>
 
     <div class="mt-14 grid gap-6 md:grid-cols-3">
@@ -14,9 +17,7 @@
         [1, 2, 3].map(() => (
           <div class="rounded-3xl border-2 border-dashed border-navy/15 p-7 text-center">
             <p class="text-4xl" aria-hidden="true">🎈</p>
-            <p class="mt-3 text-[15px] opacity-70">
-              Testimoni daripada ibu bapa akan dipaparkan di sini tidak lama lagi.
-            </p>
+            <p class="mt-3 text-[15px] opacity-70">{t.testimoni.placeholder}</p>
           </div>
         ))
       }

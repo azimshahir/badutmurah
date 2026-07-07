@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from './Navbar.astro';
+import Hero from './Hero.astro';
+import Pakej from './Pakej.astro';
+import Tentang from './Tentang.astro';
+import Gallery from './Gallery.astro';
+import Testimoni from './Testimoni.astro';
+import FAQ from './FAQ.astro';
+import BookingForm from './BookingForm.astro';
+import Footer from './Footer.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+import { getT, localePath } from '../i18n/index.js';
+
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
+const pathname = localePath(locale, '/');
+---
+
+<Layout locale={locale} title={t.meta.title} description={t.meta.description} pathname={pathname}>
+  <Navbar locale={locale} pathname={pathname} />
+  <Hero locale={locale} />
+  <main>
+    <Pakej locale={locale} />
+    <Tentang locale={locale} />
+    <Gallery locale={locale} />
+    <Testimoni locale={locale} />
+    <FAQ locale={locale} />
+    <BookingForm locale={locale} />
+  </main>
+  <Footer locale={locale} />
+  <WhatsAppButton locale={locale} />
+</Layout>

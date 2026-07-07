@@ -61,8 +61,37 @@ h1, h2, h3 {
   padding-bottom: 14px;
 }
 
+/* Photo marquee — scrolls RIGHT, seamless via duplicated track (Design.md §3) */
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-right 50s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Attention wiggle for the Edutainment nav pill */
+@keyframes wiggle {
+  0%, 88%, 100% { transform: rotate(0deg); }
+  90% { transform: rotate(-2.5deg); }
+  92% { transform: rotate(2.5deg); }
+  94% { transform: rotate(-2deg); }
+  96% { transform: rotate(1.5deg); }
+}
+.wiggle {
+  display: inline-block;
+  animation: wiggle 5s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .lift, .lift:hover, .tilt, .tilt:hover { transition: none; transform: none; }
+  .marquee-track { animation: none; }
+  .wiggle { animation: none; }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

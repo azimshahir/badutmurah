@@ -1,78 +1,96 @@
 ---
-import { WHATSAPP_LINK } from '../lib/site.js';
+// Hero: centered headline + photo marquee scrolling right + 4 pill CTAs
+import { getT, getWhatsAppLink } from '../i18n/index.js';
+
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
+const waLink = getWhatsAppLink(locale);
+
+const strip = [
+  { src: '/images/hero.webp', alt: 'Badut Jim at a birthday party with a family' },
+  { src: '/images/gallery-1.webp', alt: 'Badut Jim doing balloon twisting for kids at an event' },
+  { src: '/images/gallery-2.webp', alt: 'Badut Jim entertaining a family with balloons' },
+  { src: '/images/gallery-3.webp', alt: 'Happy kids with balloons next to Badut Jim' },
+  { src: '/images/gallery-4.webp', alt: 'Badut Jim in full costume at an event' },
+  { src: '/images/gallery-5.webp', alt: 'Badut Jim at a corporate event with balloons and confetti' },
+  { src: '/images/gallery-6.webp', alt: 'Bouncing castle at a birthday party' },
+  { src: '/images/gallery-7.webp', alt: 'Kids watching a puppet show' },
+];
 ---
 
-<header class="relative overflow-hidden">
-  <!-- soft sunny blob behind the photo -->
-  <div
-    class="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-sunny/30 blur-3xl"
-    aria-hidden="true"
-  >
+<header id="top" class="relative overflow-hidden pt-12 pb-16 md:pt-16">
+  <svg viewBox="0 0 40 64" class="pointer-events-none absolute top-24 left-[6%] hidden h-16 w-10 -rotate-12 md:block" aria-hidden="true">
+    <ellipse cx="20" cy="18" rx="14" ry="17" fill="#EF476F" opacity="0.5"></ellipse>
+    <path d="M20 40 C 18 48, 24 52, 20 62" stroke="#1D3557" stroke-width="1.5" fill="none" opacity="0.4"></path>
+  </svg>
+  <svg viewBox="0 0 40 64" class="pointer-events-none absolute top-16 right-[8%] hidden h-14 w-9 rotate-12 md:block" aria-hidden="true">
+    <ellipse cx="20" cy="18" rx="14" ry="17" fill="#FFD166" opacity="0.6"></ellipse>
+    <path d="M20 40 C 22 48, 16 52, 20 62" stroke="#1D3557" stroke-width="1.5" fill="none" opacity="0.4"></path>
+  </svg>
+  <svg viewBox="0 0 48 32" class="pointer-events-none absolute top-8 left-[30%] h-8 w-12" aria-hidden="true">
+    <circle cx="8" cy="20" r="3" fill="#FFD166" opacity="0.8"></circle>
+    <circle cx="24" cy="8" r="2.5" fill="#06D6A0" opacity="0.8"></circle>
+    <rect x="36" y="16" width="6" height="6" rx="1.5" fill="#EF476F" opacity="0.6" transform="rotate(20 39 19)"></rect>
+  </svg>
+
+  <div class="mx-auto max-w-[860px] px-5 text-center">
+    <p class="mb-4 inline-block rounded-full bg-sunny/40 px-4 py-1 font-display text-sm font-semibold">
+      {t.hero.badge}
+    </p>
+    <h1 class="text-4xl leading-tight font-bold md:text-6xl">{t.hero.headline}</h1>
+    <p class="mx-auto mt-5 max-w-2xl text-lg opacity-90">{t.hero.sub}</p>
+    <ul class="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-semibold">
+      {t.hero.trust.map((item) => (
+        <li class="flex items-center gap-1.5"><span class="text-mint">✓</span> {item}</li>
+      ))}
+    </ul>
   </div>
 
-  <div class="mx-auto max-w-[1100px] px-5 pt-10 pb-16 md:pt-16 md:pb-24">
-    <div class="grid items-center gap-10 md:grid-cols-2">
-      <div>
-        <p class="mb-3 inline-block rounded-full bg-sunny/40 px-4 py-1 font-display text-sm font-semibold">
-          Badut Jim · KL &amp; Selangor
-        </p>
-        <h1 class="text-4xl leading-tight font-bold md:text-5xl">
-          Badut Profesional Untuk Birthday Party Anak Anda
-        </h1>
-        <p class="mt-4 text-lg opacity-90">
-          9 tahun pengalaman menghiburkan kanak-kanak di seluruh KL &amp; Selangor.
-          Harga jelas, book online dalam 2 minit — macam book hotel.
-        </p>
-
-        <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-          <a
-            href="#pakej"
-            class="lift rounded-2xl bg-coral px-7 py-4 text-center font-display text-xl font-bold text-white shadow-lg shadow-coral/30 hover:bg-coral-dark"
-          >
-            Semak Pakej &amp; Book
-          </a>
-          <a
-            href={WHATSAPP_LINK}
-            target="_blank"
-            rel="noopener"
-            class="lift rounded-2xl border-2 border-navy/15 bg-white px-7 py-4 text-center font-display text-xl font-bold hover:border-navy/40 hover:bg-navy/[0.03]"
-          >
-            Tanya Dulu di WhatsApp
-          </a>
-        </div>
-
-        <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold">
-          <li class="flex items-center gap-1.5"><span class="text-mint">✓</span> 9 Tahun Pengalaman</li>
-          <li class="flex items-center gap-1.5"><span class="text-mint">✓</span> 500+ Majlis</li>
-          <li class="flex items-center gap-1.5"><span class="text-mint">✓</span> Free Travel KL &amp; Selangor</li>
-        </ul>
-      </div>
-
-      <div class="relative">
-        <!-- balloon doodle accent (design-brief: satu-dua doodle kecil) -->
-        <svg
-          viewBox="0 0 40 64"
-          class="absolute -top-8 -left-4 h-16 w-10 -rotate-12 md:-top-10 md:-left-8"
-          aria-hidden="true"
-        >
-          <ellipse cx="20" cy="18" rx="14" ry="17" fill="#EF476F" opacity="0.85"></ellipse>
-          <path d="M20 35 l-3 5 h6 z" fill="#EF476F" opacity="0.85"></path>
-          <path d="M20 40 C 18 48, 24 52, 20 62" stroke="#1D3557" stroke-width="1.5" fill="none" opacity="0.5"></path>
-        </svg>
-        <img
-          src="/images/hero.webp"
-          alt="Badut Jim bersama keluarga di birthday party"
-          width="720"
-          height="474"
-          fetchpriority="high"
-          class="w-full rounded-3xl object-cover shadow-xl"
-        />
-        <div
-          class="absolute -bottom-3 -left-3 -z-10 h-full w-full rounded-3xl bg-sunny"
-          aria-hidden="true"
-        >
-        </div>
-      </div>
+  <div class="mt-10 overflow-hidden" aria-label={t.hero.marqueeLabel}>
+    <div class="marquee-track gap-4 pr-4">
+      {
+        [...strip, ...strip].map((g, i) => (
+          <img
+            src={g.src}
+            alt={i < strip.length ? g.alt : ''}
+            aria-hidden={i >= strip.length ? 'true' : undefined}
+            loading={i < 4 ? 'eager' : 'lazy'}
+            decoding="async"
+            width="300"
+            height="225"
+            class="h-44 w-auto shrink-0 rounded-2xl object-cover shadow-md md:h-56"
+          />
+        ))
+      }
     </div>
+  </div>
+
+  <div class="mt-10 flex flex-wrap items-center justify-center gap-3 px-5 md:gap-4">
+    <a
+      href="#pakej"
+      class="lift rounded-full bg-gradient-to-r from-coral to-coral-dark px-8 py-3.5 text-center font-display text-xl font-bold text-white shadow-lg shadow-coral/40"
+    >
+      {t.hero.ctaPakej}
+    </a>
+    <a
+      href={waLink}
+      target="_blank"
+      rel="noopener"
+      class="lift rounded-full bg-[#25D366] px-8 py-3.5 text-center font-display text-xl font-bold text-white shadow-lg shadow-[#25D366]/40"
+    >
+      {t.hero.ctaWhatsapp}
+    </a>
+    <a
+      href="#gallery"
+      class="lift rounded-full border-2 border-navy/20 bg-white px-8 py-3.5 text-center font-display text-xl font-bold hover:border-navy/40"
+    >
+      {t.hero.ctaGallery}
+    </a>
+    <a
+      href="#faq"
+      class="lift rounded-full border-2 border-navy/20 bg-white px-8 py-3.5 text-center font-display text-xl font-bold hover:border-navy/40"
+    >
+      {t.hero.ctaFaq}
+    </a>
   </div>
 </header>

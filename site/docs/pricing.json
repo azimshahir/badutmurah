@@ -4,40 +4,64 @@
     {
       "id": "biasa-1jam",
       "nama": "Pakej Biasa",
+      "nama_en": "Standard Package",
       "durasi": "1 jam",
+      "durasi_en": "1 hour",
       "harga": 250,
       "popular": false,
       "termasuk": [
-        "Badut profesional (9 tahun pengalaman)",
-        "Balloon twisting untuk semua kanak-kanak",
+        "Badut profesional (10 tahun pengalaman)",
+        "Unlimited balloon twisting untuk semua kanak-kanak",
         "Interaksi & lawak jenaka sepanjang sesi"
+      ],
+      "termasuk_en": [
+        "Professional clown (10 years of experience)",
+        "Unlimited balloon twisting for all the kids",
+        "Interaction & jokes throughout the session"
       ]
     },
     {
       "id": "biasa-2jam",
       "nama": "Pakej Biasa",
+      "nama_en": "Standard Package",
       "durasi": "2 jam",
+      "durasi_en": "2 hours",
       "harga": 400,
       "popular": false,
       "termasuk": [
-        "Badut profesional (9 tahun pengalaman)",
-        "Balloon twisting untuk semua kanak-kanak",
+        "Badut profesional (10 tahun pengalaman)",
+        "Unlimited balloon twisting untuk semua kanak-kanak",
         "Interaksi & lawak jenaka sepanjang sesi",
-        "Masa lebih panjang — sesuai untuk majlis besar"
+        "Masa lebih panjang, sesuai untuk majlis besar"
+      ],
+      "termasuk_en": [
+        "Professional clown (10 years of experience)",
+        "Unlimited balloon twisting for all the kids",
+        "Interaction & jokes throughout the session",
+        "Longer session, great for bigger events"
       ]
     },
     {
       "id": "meriah",
       "nama": "Pakej Meriah",
+      "nama_en": "Meriah Package",
       "durasi": "1 jam 30 minit",
+      "durasi_en": "1 hour 30 minutes",
       "harga": 400,
       "popular": true,
       "label": "Paling Popular",
+      "label_en": "Most Popular",
       "termasuk": [
-        "Badut profesional (9 tahun pengalaman)",
-        "Balloon twisting untuk semua kanak-kanak",
+        "Badut profesional (10 tahun pengalaman)",
+        "Unlimited balloon twisting untuk semua kanak-kanak",
         "Games & aktiviti interaktif (musical chair & banyak lagi)",
-        "Sesi paling rancak — kanak-kanak takkan duduk diam!"
+        "Sesi paling rancak, kanak-kanak takkan duduk diam!"
+      ],
+      "termasuk_en": [
+        "Professional clown (10 years of experience)",
+        "Unlimited balloon twisting for all the kids",
+        "Games & interactive activities (musical chairs & more)",
+        "The liveliest session, the kids won't sit still!"
       ]
     }
   ],
@@ -45,8 +69,7 @@
     "nota": "Harga pakej termasuk perjalanan ke seluruh KL & Selangor.",
     "zon": [
       { "kawasan": "Kuala Lumpur & Selangor", "caj": 0, "label": "Percuma" },
-      { "kawasan": "Nilai, Seremban, Putrajaya-Sepang", "caj": 80, "label": "+RM80" },
-      { "kawasan": "Negeri lain", "caj": null, "label": "RM2/km dari Bukit Jalil (min. RM150) — confirm masa booking" }
+      { "kawasan": "Luar KL & Selangor", "caj": 50, "label": "+RM50 atau bincang masa booking" }
     ]
   },
   "deposit": {

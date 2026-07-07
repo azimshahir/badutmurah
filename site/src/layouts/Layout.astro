@@ -1,29 +1,34 @@
 ---
-// Base layout — meta/SEO from docs/content.md
+// Base layout. Per-locale meta + hreflang alternates (Design.md v3)
 import '../styles/global.css';
+import { altLocalePath } from '../i18n/index.js';
 
-const title = 'Badut Murah KL & Selangor | Badut Jim — Book Online dari RM250';
-const description =
-  'Servis badut profesional untuk birthday party & event di KL dan Selangor. 9 tahun pengalaman. Harga transparent dari RM250. Semak pakej & book online sekarang.';
+const { locale = 'en', title, description, pathname = '/' } = Astro.props;
 const site = 'https://badutmurah.my';
+const altPath = altLocalePath(locale, pathname);
+const enUrl = site + (locale === 'en' ? pathname : altPath);
+const msUrl = site + (locale === 'ms' ? pathname : altPath);
 ---
 
-<html lang="ms">
+<html lang={locale}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={site + '/'} />
+    <link rel="canonical" href={site + pathname} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="ms" href={msUrl} />
+    <link rel="alternate" hreflang="x-default" href={enUrl} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={site + '/'} />
+    <meta property="og:url" content={site + pathname} />
     <meta property="og:image" content={site + '/images/og.jpg'} />
-    <meta property="og:locale" content="ms_MY" />
+    <meta property="og:locale" content={locale === 'ms' ? 'ms_MY' : 'en_MY'} />
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
