@@ -1,57 +1,61 @@
 ---
-// Sticky navbar: logo + Book pill, Our Clown dropdown (more clowns coming later),
-// Edutainment Project link with arrow + callout tag, language toggle
+// Sticky navbar: logo + Book pill, Our Clown dropdown, Edutainment Project
+// with arrow + callout tag, language toggle. Hover states: .nav-link underline, .pop lift.
 import { getT, localePath, altLocalePath } from '../i18n/index.js';
 
 const { locale = 'en', pathname = '/' } = Astro.props;
 const t = getT(locale);
 const p = (path) => localePath(locale, path);
 const altHref = altLocalePath(locale, pathname);
+const isHome = pathname === '/' || pathname === '/ms/';
+const isClown = pathname.endsWith('/our-clown');
+const isEdu = pathname.endsWith('/edutainment');
 ---
 
-<nav class="sticky top-0 z-40 border-b border-navy/5 bg-cream/90 backdrop-blur">
+<nav class="sticky top-0 z-40 border-b border-navy/5 bg-cream/90 shadow-sm shadow-navy/5 backdrop-blur">
   <div class="mx-auto flex max-w-[1240px] items-center justify-between gap-3 px-4 py-3 md:px-5">
     <div class="flex items-center gap-3">
       <a href={p('/')} class="flex items-center gap-1.5 font-display text-lg font-bold md:text-xl">
-        <span aria-hidden="true">🤡</span> badutmurah.my
+        <span class="logo-emoji" aria-hidden="true">🤡</span> badutmurah.my
       </a>
       <a
         href={p('/') + '#booking'}
-        class="lift rounded-full bg-coral px-4 py-1.5 font-display text-sm font-bold whitespace-nowrap text-white shadow-md shadow-coral/30 hover:bg-coral-dark md:px-5 md:py-2 md:text-base"
+        class="pop rounded-full bg-gradient-to-r from-coral to-coral-dark px-4 py-1.5 font-display text-sm font-bold whitespace-nowrap text-white shadow-md shadow-coral/40 md:px-5 md:py-2 md:text-base"
       >
         {t.nav.book}
       </a>
     </div>
 
-    <div class="hidden items-center gap-4 text-[15px] font-semibold whitespace-nowrap lg:flex">
-      <a href={p('/')} class="hover:text-coral-dark">{t.nav.home}</a>
+    <div class="hidden items-center gap-5 text-[15px] font-semibold whitespace-nowrap lg:flex">
+      <a href={p('/')} class="nav-link hover:text-coral-dark" aria-current={isHome ? 'page' : undefined}>{t.nav.home}</a>
 
       <!-- Our Clown dropdown (ready for more clowns later) -->
       <div class="group relative">
         <button
           type="button"
-          class="flex items-center gap-1 hover:text-coral-dark"
+          class="nav-link flex items-center gap-1 hover:text-coral-dark"
           aria-haspopup="true"
+          aria-current={isClown ? 'page' : undefined}
         >
           {t.nav.ourClown}
-          <span class="text-xs transition-transform group-focus-within:rotate-180 group-hover:rotate-180" aria-hidden="true">▾</span>
+          <span class="text-xs transition-transform duration-200 group-focus-within:rotate-180 group-hover:rotate-180" aria-hidden="true">▾</span>
         </button>
         <div
-          class="invisible absolute top-full left-0 pt-2 opacity-0 transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100"
+          class="invisible absolute top-full left-0 translate-y-1 pt-2 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
         >
-          <div class="min-w-44 rounded-2xl border border-navy/10 bg-white p-2 shadow-lg">
-            <a href={p('/our-clown')} class="block rounded-xl px-4 py-2 hover:bg-cream hover:text-coral-dark">
+          <div class="min-w-44 rounded-2xl border border-navy/10 bg-white p-2 shadow-xl shadow-navy/10">
+            <a href={p('/our-clown')} class="block rounded-xl px-4 py-2.5 transition-colors hover:bg-sunny/30 hover:text-coral-dark">
               🤡 {t.nav.jimClown}
             </a>
           </div>
         </div>
       </div>
 
-      <a href={p('/') + '#pakej'} class="hover:text-coral-dark">{t.nav.pakej}</a>
+      <a href={p('/') + '#pakej'} class="nav-link hover:text-coral-dark">{t.nav.pakej}</a>
 
       <!-- Edutainment Project with arrow + callout tag -->
       <span class="flex items-center gap-1.5">
-        <a href={p('/edutainment')} class="hover:text-coral-dark">{t.nav.edutainment}</a>
+        <a href={p('/edutainment')} class="nav-link hover:text-coral-dark" aria-current={isEdu ? 'page' : undefined}>{t.nav.edutainment}</a>
         <svg viewBox="0 0 34 16" class="h-4 w-8 shrink-0 text-coral" aria-hidden="true">
           <path d="M32 8 H6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
           <path d="M12 2 L4 8 L12 14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -59,7 +63,7 @@ const altHref = altLocalePath(locale, pathname);
         <a
           href={p('/edutainment')}
           tabindex="-1"
-          class="wiggle rounded-full bg-gradient-to-r from-sunny to-coral/70 px-3.5 py-1.5 font-display text-sm font-bold whitespace-nowrap text-navy shadow-md"
+          class="wiggle pop rounded-full bg-gradient-to-r from-sunny to-coral/70 px-3.5 py-1.5 font-display text-sm font-bold whitespace-nowrap text-navy shadow-md"
         >
           ✨ {t.nav.edutainmentTag}
         </a>
@@ -68,7 +72,7 @@ const altHref = altLocalePath(locale, pathname);
 
     <a
       href={altHref}
-      class="shrink-0 rounded-full border-2 border-navy/15 px-3 py-1.5 font-display text-sm font-bold hover:border-navy/40"
+      class="pop shrink-0 rounded-full border-2 border-navy/15 px-3 py-1.5 font-display text-sm font-bold hover:border-coral hover:bg-coral/5 hover:text-coral-dark"
       aria-label={locale === 'en' ? 'Tukar ke Bahasa Malaysia' : 'Switch to English'}
     >
       🌐 {t.nav.langLabel}
@@ -77,12 +81,12 @@ const altHref = altLocalePath(locale, pathname);
 
   <!-- mobile page links row -->
   <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-navy/5 px-4 py-2 text-sm font-semibold lg:hidden">
-    <a href={p('/')} class="hover:text-coral-dark">{t.nav.home}</a>
-    <a href={p('/our-clown')} class="hover:text-coral-dark">{t.nav.jimClown}</a>
-    <a href={p('/') + '#pakej'} class="hover:text-coral-dark">{t.nav.pakej}</a>
+    <a href={p('/')} class="nav-link hover:text-coral-dark">{t.nav.home}</a>
+    <a href={p('/our-clown')} class="nav-link hover:text-coral-dark">{t.nav.jimClown}</a>
+    <a href={p('/') + '#pakej'} class="nav-link hover:text-coral-dark">{t.nav.pakej}</a>
     <a
       href={p('/edutainment')}
-      class="wiggle rounded-full bg-gradient-to-r from-sunny to-coral/70 px-3 py-1 font-display font-bold text-navy"
+      class="wiggle pop rounded-full bg-gradient-to-r from-sunny to-coral/70 px-3 py-1 font-display font-bold text-navy"
     >
       ✨ {t.nav.edutainment}
     </a>
