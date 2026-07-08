@@ -113,7 +113,7 @@ export default {
       {
         emoji: '🎭',
         q: 'Ada servis lain selain badut?',
-        a: 'Ada! Puppet show, magic show, face painting, mascot dan party games. Tengok page Projek Edutainment kami atau WhatsApp untuk tanya.',
+        a: 'Ada! Puppet show, magic show, face painting, mascot dan party games. WhatsApp kami untuk tanya.',
       },
     ],
   },
@@ -182,15 +182,12 @@ export default {
   edutainment: {
     heading: 'Projek Edutainment',
     intro:
-      'Lebih daripada badut! Sepanjang 10 tahun, kami pernah bawa pelbagai bentuk hiburan dan edutainment ke majlis, sekolah dan event korporat.',
+      'Projek interaktif yang best untuk kanak-kanak, dibina dengan penuh kasih sayang oleh team badutmurah.my. Benda best baru sentiasa dalam proses!',
+    comingSoon: 'Akan Datang',
     projects: [
-      { emoji: '🎭', tajuk: 'Puppet Show', isi: 'Persembahan boneka interaktif dengan cerita dan nilai murni. Sesuai untuk tadika, sekolah dan mall events.' },
-      { emoji: '🎩', tajuk: 'Magic Show', isi: 'Silap mata yang buat kanak-kanak terpegun dan tergelak pada masa yang sama.' },
-      { emoji: '🎨', tajuk: 'Face Painting', isi: 'Corak kegemaran kanak-kanak, dari rama-rama sampai superhero.' },
-      { emoji: '🦁', tajuk: 'Mascot', isi: 'Watak mascot untuk menyerikan majlis dan sesi bergambar.' },
-      { emoji: '🎪', tajuk: 'Party Games', isi: 'Musical chair dan banyak lagi games interaktif, dikendali penuh oleh kami.' },
+      { emoji: '🧮', tajuk: 'Interactive Math Quiz', isi: 'Game kuiz matematik yang seronok untuk kanak-kanak. Jawab, kumpul markah dan naik level. Tak payah kertas!' },
     ],
-    nota: 'Berminat dengan mana-mana projek? WhatsApp kami untuk quotation.',
+    nota: 'Ada idea projek yang best? Bagitahu kami!',
     cta: 'WhatsApp Kami',
   },
 };

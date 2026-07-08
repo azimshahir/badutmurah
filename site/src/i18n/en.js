@@ -113,7 +113,7 @@ export default {
       {
         emoji: '🎭',
         q: 'Do you offer anything besides the clown?',
-        a: 'Yes! Puppet shows, magic shows, face painting, mascots and party games. Check out our Edutainment Projects page or WhatsApp us to ask.',
+        a: 'Yes! Puppet shows, magic shows, face painting, mascots and party games. WhatsApp us to ask.',
       },
     ],
   },
@@ -182,15 +182,12 @@ export default {
   edutainment: {
     heading: 'Edutainment Projects',
     intro:
-      'More than a clown! Over 10 years, we have brought many forms of entertainment and edutainment to parties, schools and corporate events.',
+      'Fun interactive projects for kids, built with love by the badutmurah.my team. New cool things are always cooking!',
+    comingSoon: 'Coming Soon',
     projects: [
-      { emoji: '🎭', tajuk: 'Puppet Show', isi: 'Interactive puppet performances with stories and good values. Great for kindergartens, schools and mall events.' },
-      { emoji: '🎩', tajuk: 'Magic Show', isi: 'Magic tricks that leave kids amazed and laughing at the same time.' },
-      { emoji: '🎨', tajuk: 'Face Painting', isi: 'Kids’ favourite designs, from butterflies to superheroes.' },
-      { emoji: '🦁', tajuk: 'Mascot', isi: 'Mascot characters to liven up your event and photo sessions.' },
-      { emoji: '🎪', tajuk: 'Party Games', isi: 'Musical chairs and many more interactive games, fully hosted by us.' },
+      { emoji: '🧮', tajuk: 'Interactive Math Quiz', isi: 'A fun math quiz game for kids. Answer, score points and level up. No paper needed!' },
     ],
-    nota: 'Interested in any of these? WhatsApp us for a quotation.',
+    nota: 'Got an idea for a fun project? Tell us!',
     cta: 'WhatsApp Us',
   },
 };
