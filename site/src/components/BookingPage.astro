@@ -98,15 +98,17 @@ const game = pakej.find((p) => p.id === 'meriah');
         <div class="space-y-2">
           {
             basic.durasi.map((d) => (
-              <label class="durasi-radio flex cursor-pointer items-center justify-between rounded-2xl border-2 border-navy/15 bg-cream p-4 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
-                <span>
+              <label class="durasi-radio flex cursor-pointer items-center justify-between gap-3 rounded-2xl border-2 border-navy/15 bg-cream p-4 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
+                <span class="min-w-0">
                   <input type="radio" name="durasi" value={d.id} class="sr-only" />
                   <span class="font-display font-semibold">{d[durasiKey]}</span>
                   <span class="block text-xs opacity-70">{d[sesuaiKey]}</span>
                 </span>
-                <span class="font-display font-bold whitespace-nowrap">
-                  {d.harga !== null ? `${currency}${d.harga}` : t.booking.moreThan3}
-                </span>
+                {d.harga !== null && (
+                  <span class="shrink-0 font-display font-bold whitespace-nowrap">
+                    {currency}{d.harga}
+                  </span>
+                )}
               </label>
             ))
           }

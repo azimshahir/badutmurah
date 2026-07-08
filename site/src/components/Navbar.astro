@@ -1,6 +1,8 @@
 ---
 // Sticky navbar: logo + Book pill, Our Clown dropdown, Edutainment Project
 // with arrow + callout tag, language toggle. Hover states: .nav-link underline, .pop lift.
+// Mobile (< lg): hamburger opens a full-width dropdown panel — the old flex-wrap
+// link row overflowed off-screen on narrow phones, so this replaces it entirely.
 import Wordmark from './Wordmark.astro';
 import { getT, localePath, altLocalePath } from '../i18n/index.js';
 
@@ -14,19 +16,11 @@ const isEdu = pathname.endsWith('/edutainment');
 ---
 
 <nav class="sticky top-0 z-40 bg-white/80 shadow-sm backdrop-blur-md">
-  <div class="mx-auto flex max-w-[1240px] items-center justify-between gap-3 px-4 py-3 md:px-5">
-    <div class="flex items-center gap-3">
-      <a href={p('/')} class="flex items-center gap-2">
-        <img src="/images/logo-mascot.png" alt="" width="512" height="410" class="logo-emoji h-10 w-auto md:h-11" aria-hidden="true" />
-        <Wordmark class="h-7 md:h-9" />
-      </a>
-      <a
-        href={p('/booking')}
-        class="pop gradient-pink rounded-full px-4 py-1.5 font-display text-sm font-bold whitespace-nowrap text-white shadow-lg shadow-coral/30 md:px-6 md:py-2 md:text-base"
-      >
-        {t.nav.book}
-      </a>
-    </div>
+  <div class="mx-auto flex max-w-[1240px] items-center justify-between gap-2 px-4 py-3 md:px-5">
+    <a href={p('/')} class="flex min-w-0 items-center gap-1.5 md:gap-2">
+      <img src="/images/logo-mascot.png" alt="" width="512" height="410" class="logo-emoji h-7 w-auto shrink-0 sm:h-8 md:h-11" aria-hidden="true" />
+      <Wordmark class="h-5 w-auto shrink-0 sm:h-6 md:h-9" />
+    </a>
 
     <div class="hidden items-center gap-5 text-[15px] font-semibold whitespace-nowrap lg:flex">
       <a href={p('/')} class="nav-link hover:text-coral-dark" aria-current={isHome ? 'page' : undefined}>{t.nav.home}</a>
@@ -72,25 +66,82 @@ const isEdu = pathname.endsWith('/edutainment');
       </span>
     </div>
 
-    <a
-      href={altHref}
-      class="pop shrink-0 rounded-full border-2 border-navy/15 px-3 py-1.5 font-display text-sm font-bold hover:border-coral hover:bg-coral/5 hover:text-coral-dark"
-      aria-label={locale === 'en' ? 'Tukar ke Bahasa Malaysia' : 'Switch to English'}
-    >
-      🌐 {t.nav.langLabel}
-    </a>
+    <div class="flex shrink-0 items-center gap-2">
+      <a
+        href={p('/booking')}
+        class="pop gradient-pink hidden rounded-full px-4 py-1.5 font-display text-sm font-bold whitespace-nowrap text-white shadow-lg shadow-coral/30 lg:block lg:px-6 lg:py-2 lg:text-base"
+      >
+        {t.nav.book}
+      </a>
+
+      <a
+        href={altHref}
+        class="pop hidden shrink-0 rounded-full border-2 border-navy/15 px-3 py-1.5 font-display text-sm font-bold hover:border-coral hover:bg-coral/5 hover:text-coral-dark lg:block"
+        aria-label={locale === 'en' ? 'Tukar ke Bahasa Malaysia' : 'Switch to English'}
+      >
+        🌐 {t.nav.langLabel}
+      </a>
+
+      <!-- Mobile hamburger: opens the panel below, no JS framework needed -->
+      <button
+        id="nav-toggle"
+        type="button"
+        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-navy/15 lg:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label={locale === 'en' ? 'Open menu' : 'Buka menu'}
+      >
+        <svg id="nav-toggle-icon" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
   </div>
 
-  <!-- mobile page links row -->
-  <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-navy/5 px-4 py-2 text-sm font-semibold lg:hidden">
-    <a href={p('/')} class="nav-link hover:text-coral-dark">{t.nav.home}</a>
-    <a href={p('/our-clown')} class="nav-link hover:text-coral-dark">{t.nav.jimClown}</a>
-    <a href={p('/package')} class="nav-link hover:text-coral-dark">{t.nav.pakej}</a>
-    <a
-      href={p('/edutainment')}
-      class="wiggle pop rounded-full bg-gradient-to-r from-sunny to-coral/70 px-3 py-1 font-display font-bold text-navy"
-    >
-      ✨ {t.nav.edutainment}
-    </a>
+  <!-- Mobile dropdown panel: stacked full-width links, no overflow risk -->
+  <div id="mobile-menu" class="hidden border-t border-navy/5 px-4 py-3 lg:hidden">
+    <div class="flex flex-col gap-1 text-base font-semibold">
+      <a
+        href={p('/booking')}
+        class="pop gradient-pink mb-1 rounded-full px-4 py-3 text-center font-display font-bold text-white shadow-lg shadow-coral/30"
+      >
+        ⭐ {t.nav.book}
+      </a>
+      <a href={p('/')} class="rounded-xl px-3 py-2.5 hover:bg-cream hover:text-coral-dark" aria-current={isHome ? 'page' : undefined}>{t.nav.home}</a>
+      <a href={p('/our-clown')} class="rounded-xl px-3 py-2.5 hover:bg-cream hover:text-coral-dark" aria-current={isClown ? 'page' : undefined}>
+        🤡 {t.nav.jimClown}
+      </a>
+      <a href={p('/package')} class="rounded-xl px-3 py-2.5 hover:bg-cream hover:text-coral-dark">{t.nav.pakej}</a>
+      <a
+        href={p('/edutainment')}
+        class="wiggle mt-1 rounded-full bg-gradient-to-r from-sunny to-coral/70 px-4 py-2.5 text-center font-display font-bold text-navy"
+        aria-current={isEdu ? 'page' : undefined}
+      >
+        ✨ {t.nav.edutainmentTag}
+      </a>
+      <a
+        href={altHref}
+        class="mt-2 rounded-xl border-2 border-navy/15 px-3 py-2.5 text-center hover:border-coral hover:text-coral-dark"
+      >
+        🌐 {locale === 'en' ? 'Bahasa Malaysia' : 'English'}
+      </a>
+    </div>
   </div>
 </nav>
+
+<script>
+  const toggle = document.getElementById('nav-toggle') as HTMLButtonElement;
+  const menu = document.getElementById('mobile-menu') as HTMLDivElement;
+  const icon = document.getElementById('nav-toggle-icon') as SVGElement;
+  const openPath = 'M4 6h16M4 12h16M4 18h16';
+  const closePath = 'M6 6l12 12M18 6L6 18';
+
+  function setOpen(open: boolean) {
+    menu.classList.toggle('hidden', !open);
+    toggle.setAttribute('aria-expanded', String(open));
+    icon.innerHTML = `<path d="${open ? closePath : openPath}"></path>`;
+  }
+
+  toggle.addEventListener('click', () => setOpen(menu.classList.contains('hidden')));
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+</script>
