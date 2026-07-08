@@ -1,6 +1,7 @@
 ---
 // Sticky navbar: logo + Book pill, Our Clown dropdown, Edutainment Project
 // with arrow + callout tag, language toggle. Hover states: .nav-link underline, .pop lift.
+import Wordmark from './Wordmark.astro';
 import { getT, localePath, altLocalePath } from '../i18n/index.js';
 
 const { locale = 'en', pathname = '/' } = Astro.props;
@@ -17,7 +18,7 @@ const isEdu = pathname.endsWith('/edutainment');
     <div class="flex items-center gap-3">
       <a href={p('/')} class="flex items-center gap-2">
         <img src="/images/logo-mascot.png" alt="" width="512" height="410" class="logo-emoji h-10 w-auto md:h-11" aria-hidden="true" />
-        <img src="/images/logo-wordmark.png" alt="badutmurah.my" width="560" height="187" class="h-8 w-auto md:h-10" />
+        <Wordmark class="h-7 md:h-9" />
       </a>
       <a
         href={p('/') + '#booking'}

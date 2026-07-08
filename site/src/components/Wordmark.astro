@@ -1,0 +1,26 @@
+---
+// "Badutmurah.my" wordmark rebuilt as layered SVG text: straight baseline,
+// transparent background, same bubble style/colors as the owner's logo image.
+const { class: className = 'h-8 md:h-10' } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 372 56"
+  class:list={['w-auto', className]}
+  role="img"
+  aria-label="badutmurah.my"
+>
+  <g
+    font-family="'Baloo 2', 'Quicksand', sans-serif"
+    font-weight="800"
+    font-size="40"
+    style="paint-order: stroke fill;"
+  >
+    <!-- outer teal stroke layer -->
+    <text x="4" y="41" stroke="#20A4B5" stroke-width="12" stroke-linejoin="round" fill="none">Badutmurah.my</text>
+    <!-- white stroke layer -->
+    <text x="4" y="41" stroke="#ffffff" stroke-width="6" stroke-linejoin="round" fill="none">Badutmurah.my</text>
+    <!-- fills: pink word, teal .my -->
+    <text x="4" y="41" fill="#E23A7A">Badutmurah<tspan fill="#20A4B5">.my</tspan></text>
+  </g>
+</svg>
