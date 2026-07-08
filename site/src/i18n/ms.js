@@ -186,6 +186,12 @@ export default {
     comingSoon: 'Akan Datang',
     projects: [
       { emoji: '🧮', tajuk: 'Interactive Math Quiz', isi: 'Game kuiz matematik yang seronok untuk kanak-kanak. Jawab, kumpul markah dan naik level. Tak payah kertas!' },
+      { emoji: '🎈', tajuk: 'Balloon Pop Counting Game', isi: 'Pop belon ikut turutan nombor yang betul. Sesuai untuk pra-sekolah belajar mengira.' },
+      { emoji: '🃏', tajuk: 'Memory Match: Clown Edition', isi: 'Game padan kad watak badut kegemaran kami.' },
+      { emoji: '🎪', tajuk: 'Spin the Wheel Party Games', isi: 'Wheel of fortune untuk pilih game secara rawak masa event.' },
+      { emoji: '🧩', tajuk: 'Balloon Animal Builder', isi: 'Tarik dan pintal belon maya jadi pelbagai bentuk haiwan.' },
+      { emoji: '🎵', tajuk: 'Musical Chairs Timer App', isi: 'Timer dengan muzik berhenti secara rawak untuk main musical chairs masa parti.' },
+      { emoji: '📸', tajuk: 'Party Photo Booth Filter', isi: 'Filter badut dan belon untuk gambar parti yang seronok, terus dari kamera phone.' },
     ],
     nota: 'Ada idea projek yang best? Bagitahu kami!',
     cta: 'WhatsApp Kami',

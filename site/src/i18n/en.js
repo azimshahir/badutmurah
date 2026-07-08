@@ -186,6 +186,12 @@ export default {
     comingSoon: 'Coming Soon',
     projects: [
       { emoji: '🧮', tajuk: 'Interactive Math Quiz', isi: 'A fun math quiz game for kids. Answer, score points and level up. No paper needed!' },
+      { emoji: '🎈', tajuk: 'Balloon Pop Counting Game', isi: 'Pop the balloons in the right number order. Great for preschoolers learning to count.' },
+      { emoji: '🃏', tajuk: 'Memory Match: Clown Edition', isi: 'A card matching game starring our favourite clown characters.' },
+      { emoji: '🎪', tajuk: 'Spin the Wheel Party Games', isi: 'A wheel of fortune to randomly pick the next game at your event.' },
+      { emoji: '🧩', tajuk: 'Balloon Animal Builder', isi: 'Drag and twist virtual balloons into fun animal shapes.' },
+      { emoji: '🎵', tajuk: 'Musical Chairs Timer App', isi: 'A timer with random music stops to run musical chairs at your party.' },
+      { emoji: '📸', tajuk: 'Party Photo Booth Filter', isi: 'Clown and balloon filters for fun party photos, right from your phone camera.' },
     ],
     nota: 'Got an idea for a fun project? Tell us!',
     cta: 'WhatsApp Us',
