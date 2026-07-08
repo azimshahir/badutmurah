@@ -17,6 +17,9 @@ const photos = ['/images/gallery-4.webp', '/images/gallery-1.webp', '/images/gal
 <Layout locale={locale} title={t.meta.titleOurClown} description={t.meta.descriptionOurClown} pathname={pathname}>
   <Navbar locale={locale} pathname={pathname} />
   <main class="mx-auto max-w-[860px] px-5 py-14 md:py-20">
+    <p class="mx-auto mb-4 block w-fit rounded-full bg-sky px-4 py-1 text-center font-display text-sm font-bold">
+      🎈 {t.hero.expertise}
+    </p>
     <h1 class="squiggle mx-auto w-fit text-center text-4xl font-bold md:text-5xl">
       {t.ourClown.heading}
     </h1>

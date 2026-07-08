@@ -1,10 +1,9 @@
 ---
 // Hero: centered headline + photo marquee scrolling right + 4 pill CTAs
-import { getT, getWhatsAppLink, localePath } from '../i18n/index.js';
+import { getT, localePath } from '../i18n/index.js';
 
 const { locale = 'en' } = Astro.props;
 const t = getT(locale);
-const waLink = getWhatsAppLink(locale);
 const bookHref = localePath(locale, '/booking');
 const pakejHref = localePath(locale, '/package');
 
@@ -36,9 +35,6 @@ const strip = [
   </svg>
 
   <div class="mx-auto max-w-[860px] px-5 text-center">
-    <p class="mb-4 inline-block rounded-full bg-sky px-4 py-1 font-display text-sm font-bold">
-      🎈 {t.hero.expertise}
-    </p>
     <h1 class="text-4xl leading-tight font-bold md:text-6xl">{t.hero.headline}</h1>
     <p class="mx-auto mt-5 max-w-2xl text-lg opacity-90">{t.hero.sub}</p>
     <ul class="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-semibold">
@@ -80,24 +76,16 @@ const strip = [
     </svg>
 
     <a
-      href={bookHref}
-      class="pop gradient-pink relative rounded-full px-8 py-3.5 text-center font-display text-xl font-bold text-white shadow-xl shadow-coral/30 ring-4 ring-coral/15"
-    >
-      ⭐ {t.hero.ctaBook}
-    </a>
-    <a
       href={pakejHref}
       class="pop rounded-full border-2 border-coral/30 bg-white px-7 py-3.5 text-center font-display text-xl font-bold text-coral-dark shadow-md hover:border-coral"
     >
       🎁 {t.hero.ctaPakej}
     </a>
     <a
-      href={waLink}
-      target="_blank"
-      rel="noopener"
-      class="pop gradient-green rounded-full px-7 py-3.5 text-center font-display text-xl font-bold text-white shadow-xl shadow-mint/40"
+      href={bookHref}
+      class="pop gradient-pink relative rounded-full px-8 py-3.5 text-center font-display text-xl font-bold text-white shadow-xl shadow-coral/30 ring-4 ring-coral/15"
     >
-      💬 {t.hero.ctaWhatsapp}
+      ⭐ {t.hero.ctaBook}
     </a>
     <a
       href="#gallery"
