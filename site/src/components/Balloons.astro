@@ -1,0 +1,33 @@
+---
+// Decorative floating balloons layer, fixed behind all content.
+// Colors from palette, low opacity so text stays readable.
+const balloons = [
+  { x: '4%', y: '12%', size: 54, color: '#FF6B9B', op: 0.35, dur: 9, rot: -10 },
+  { x: '92%', y: '8%', size: 44, color: '#FDE047', op: 0.4, dur: 11, rot: 12 },
+  { x: '8%', y: '46%', size: 38, color: '#5CD698', op: 0.3, dur: 10, rot: 8 },
+  { x: '95%', y: '38%', size: 60, color: '#D1E5F4', op: 0.55, dur: 12, rot: -8 },
+  { x: '3%', y: '74%', size: 46, color: '#FDE047', op: 0.32, dur: 9.5, rot: 10 },
+  { x: '90%', y: '66%', size: 40, color: '#FF6B9B', op: 0.28, dur: 10.5, rot: -12 },
+  { x: '14%', y: '92%', size: 36, color: '#D1E5F4', op: 0.5, dur: 11.5, rot: 6 },
+  { x: '84%', y: '90%', size: 50, color: '#5CD698', op: 0.3, dur: 9, rot: -6 },
+  { x: '48%', y: '18%', size: 30, color: '#FF6B9B', op: 0.22, dur: 12.5, rot: 14 },
+  { x: '55%', y: '80%', size: 34, color: '#FDE047', op: 0.28, dur: 10, rot: -14 },
+];
+---
+
+<div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
+  {
+    balloons.map((b) => (
+      <svg
+        viewBox="0 0 40 64"
+        class="balloon-float absolute"
+        style={`left:${b.x}; top:${b.y}; width:${b.size}px; opacity:${b.op}; animation-duration:${b.dur}s; transform:rotate(${b.rot}deg);`}
+      >
+        <ellipse cx="20" cy="18" rx="14" ry="17" fill={b.color} />
+        <path d="M20 35 l-3 4 h6 z" fill={b.color} />
+        <path d="M20 39 C 18 47, 24 52, 20 62" stroke="#1E293B" stroke-width="1.2" fill="none" opacity="0.35" />
+        <ellipse cx="15" cy="12" rx="4" ry="6" fill="white" opacity="0.35" />
+      </svg>
+    ))
+  }
+</div>

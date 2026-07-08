@@ -65,32 +65,49 @@ const strip = [
     </div>
   </div>
 
-  <div class="mt-10 flex flex-wrap items-center justify-center gap-3 px-5 md:gap-4">
+  <div class="relative mx-auto mt-10 flex w-fit max-w-full flex-wrap items-center justify-center gap-3 px-5 md:gap-4">
+    <!-- sparkle doodles around the button row -->
+    <svg viewBox="0 0 24 24" class="pointer-events-none absolute -top-5 -left-6 h-6 w-6 text-sunny" aria-hidden="true">
+      <path d="M12 0 L14 9 L23 12 L14 15 L12 24 L10 15 L1 12 L10 9 Z" fill="currentColor"></path>
+    </svg>
+    <svg viewBox="0 0 24 24" class="pointer-events-none absolute -right-7 -bottom-4 h-5 w-5 text-coral/70" aria-hidden="true">
+      <path d="M12 0 L14 9 L23 12 L14 15 L12 24 L10 15 L1 12 L10 9 Z" fill="currentColor"></path>
+    </svg>
+    <svg viewBox="0 0 24 24" class="pointer-events-none absolute -top-4 right-10 h-4 w-4 text-mint/80" aria-hidden="true">
+      <path d="M12 0 L14 9 L23 12 L14 15 L12 24 L10 15 L1 12 L10 9 Z" fill="currentColor"></path>
+    </svg>
+
+    <a
+      href="#booking"
+      class="pop gradient-pink relative rounded-full px-8 py-3.5 text-center font-display text-xl font-bold text-white shadow-xl shadow-coral/30 ring-4 ring-coral/15"
+    >
+      ⭐ {t.hero.ctaBook}
+    </a>
     <a
       href="#pakej"
-      class="pop gradient-pink rounded-full px-8 py-3.5 text-center font-display text-xl font-bold text-white shadow-xl shadow-coral/30"
+      class="pop rounded-full border-2 border-coral/30 bg-white px-7 py-3.5 text-center font-display text-xl font-bold text-coral-dark shadow-md hover:border-coral"
     >
-      {t.hero.ctaPakej}
+      🎁 {t.hero.ctaPakej}
     </a>
     <a
       href={waLink}
       target="_blank"
       rel="noopener"
-      class="pop gradient-green rounded-full px-8 py-3.5 text-center font-display text-xl font-bold text-white shadow-xl shadow-mint/40"
+      class="pop gradient-green rounded-full px-7 py-3.5 text-center font-display text-xl font-bold text-white shadow-xl shadow-mint/40"
     >
-      {t.hero.ctaWhatsapp}
+      💬 {t.hero.ctaWhatsapp}
     </a>
     <a
       href="#gallery"
-      class="pop rounded-full border-2 border-navy/15 bg-white px-8 py-3.5 text-center font-display text-xl font-bold shadow-md hover:border-coral/50"
+      class="pop rounded-full border-2 border-navy/15 bg-white px-7 py-3.5 text-center font-display text-xl font-bold shadow-md hover:border-coral/50"
     >
-      {t.hero.ctaGallery}
+      📸 {t.hero.ctaGallery}
     </a>
     <a
       href="#faq"
-      class="pop rounded-full border-2 border-navy/15 bg-white px-8 py-3.5 text-center font-display text-xl font-bold shadow-md hover:border-coral/50"
+      class="pop rounded-full border-2 border-navy/15 bg-white px-7 py-3.5 text-center font-display text-xl font-bold shadow-md hover:border-coral/50"
     >
-      {t.hero.ctaFaq}
+      ❓ {t.hero.ctaFaq}
     </a>
   </div>
 </header>

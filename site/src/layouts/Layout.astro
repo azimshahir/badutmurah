@@ -1,6 +1,7 @@
 ---
 // Base layout. Per-locale meta + hreflang alternates (Design.md v3)
 import '../styles/global.css';
+import Balloons from '../components/Balloons.astro';
 import { altLocalePath } from '../i18n/index.js';
 
 const { locale = 'en', title, description, pathname = '/' } = Astro.props;
@@ -39,6 +40,7 @@ const msUrl = site + (locale === 'ms' ? pathname : altPath);
     />
   </head>
   <body>
+    <Balloons />
     <slot />
   </body>
 </html>

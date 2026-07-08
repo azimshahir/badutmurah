@@ -152,6 +152,15 @@ a:hover > .logo-emoji {
   animation-play-state: paused;
 }
 
+/* Floating balloons in the background gently bob up and down */
+@keyframes balloon-bob {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -18px; }
+}
+.balloon-float {
+  animation: balloon-bob 10s ease-in-out infinite;
+}
+
 /* Attention wiggle for the Edutainment nav pill */
 @keyframes wiggle {
   0%, 88%, 100% { transform: rotate(0deg); }
@@ -172,5 +181,6 @@ a:hover > .logo-emoji {
   .polaroid, .polaroid:hover { transition: none; transform: none; }
   .marquee-track { animation: none; }
   .wiggle { animation: none; }
+  .balloon-float { animation: none; }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

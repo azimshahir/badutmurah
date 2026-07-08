@@ -27,6 +27,7 @@ export default {
     headline: 'A Professional Clown For Your Kid’s Birthday Party',
     sub: '10 years of experience entertaining children across KL & Selangor. Clear prices, book online in 2 minutes, just like booking a hotel.',
     trust: ['10 Years of Experience', '500+ Events', 'Free Travel in KL & Selangor'],
+    ctaBook: 'Book Now',
     ctaPakej: 'Package',
     ctaWhatsapp: 'WhatsApp Now',
     ctaGallery: 'Gallery',
