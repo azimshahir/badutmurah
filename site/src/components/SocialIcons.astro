@@ -1,0 +1,55 @@
+---
+// Reusable brand icon links (Instagram, TikTok, Threads, optional Facebook)
+import { SOCIALS } from '../lib/site.js';
+
+const { size = 'h-11 w-11', withFacebook = false } = Astro.props;
+---
+
+{
+  withFacebook && (
+    <a
+      href={SOCIALS.facebook}
+      target="_blank"
+      rel="noopener"
+      aria-label="Facebook"
+      class:list={['pop flex items-center justify-center rounded-full bg-[#1877F2] text-white shadow-lg', size]}
+    >
+      <svg viewBox="0 0 24 24" class="h-5 w-5 fill-current" aria-hidden="true">
+        <path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.2 0-1-.1-1.9-.1-1.9 0-3.3 1.2-3.3 3.4V11H8.5v3h2.7v7h2.3z" />
+      </svg>
+    </a>
+  )
+}
+<a
+  href={SOCIALS.instagram}
+  target="_blank"
+  rel="noopener"
+  aria-label="Instagram"
+  class:list={['pop flex items-center justify-center rounded-full bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] text-white shadow-lg', size]}
+>
+  <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+    <circle cx="12" cy="12" r="4"></circle>
+    <circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"></circle>
+  </svg>
+</a>
+<a
+  href={SOCIALS.tiktok}
+  target="_blank"
+  rel="noopener"
+  aria-label="TikTok"
+  class:list={['pop flex items-center justify-center rounded-full bg-black text-white shadow-lg', size]}
+>
+  <svg viewBox="0 0 24 24" class="h-5 w-5 fill-current" aria-hidden="true">
+    <path d="M16.6 3c.3 1.7 1.4 3.1 3.4 3.4v3c-1.4 0-2.6-.4-3.6-1.1v5.9c0 3.7-2.6 6-5.8 6C7.6 20.2 5 18 5 14.9c0-3.2 2.7-5.4 5.9-5.2v3.1c-1.5-.3-2.9.6-2.9 2.1 0 1.4 1 2.3 2.4 2.3 1.5 0 2.5-1 2.5-2.8V3h3.7z" />
+  </svg>
+</a>
+<a
+  href={SOCIALS.threads}
+  target="_blank"
+  rel="noopener"
+  aria-label="Threads"
+  class:list={['pop flex items-center justify-center rounded-full bg-[#1E293B] font-display text-xl font-bold text-white shadow-lg', size]}
+>
+  @
+</a>

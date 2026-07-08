@@ -27,6 +27,7 @@ export default {
     headline: 'Badut Profesional Untuk Birthday Party Anak Anda',
     sub: '10 tahun pengalaman menghiburkan kanak-kanak di seluruh KL & Selangor. Harga jelas, book online dalam 2 minit, macam book hotel.',
     trust: ['10 Tahun Pengalaman', '500+ Majlis', 'Free Travel KL & Selangor'],
+    expertise: 'Kepakaran: Balloon Sculpture',
     ctaBook: 'Book Sekarang',
     ctaPakej: 'Pakej',
     ctaWhatsapp: 'WhatsApp Sekarang',
@@ -175,6 +176,7 @@ export default {
         isi: 'Selain birthday party, Jim berpengalaman menghiburkan majlis korporat, graduasi, kenduri kahwin, majlis berkhatan dan macam-macam lagi. Setiap majlis ada rentak sendiri, dan Jim tahu baca crowd.',
       },
     ],
+    socialHeading: 'Jim The Clown Social Media',
     cta: 'Book Badut Jim Sekarang',
   },
   edutainment: {

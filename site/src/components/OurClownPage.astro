@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from './Navbar.astro';
 import Footer from './Footer.astro';
 import WhatsAppButton from './WhatsAppButton.astro';
+import SocialIcons from './SocialIcons.astro';
 import { getT, localePath } from '../i18n/index.js';
 
 const { locale = 'en' } = Astro.props;
@@ -45,10 +46,20 @@ const photos = ['/images/gallery-4.webp', '/images/gallery-1.webp', '/images/gal
       }
     </div>
 
-    <p class="mt-16 text-center">
+    <!-- Jim The Clown Social Media -->
+    <section class="mt-16 rounded-[40px] bg-white p-8 text-center shadow-lg md:p-10">
+      <h2 class="squiggle mx-auto w-fit text-2xl font-bold md:text-3xl">
+        {t.ourClown.socialHeading}
+      </h2>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+        <SocialIcons size="h-14 w-14" withFacebook={true} />
+      </div>
+    </section>
+
+    <p class="mt-12 text-center">
       <a
         href={localePath(locale, '/') + '#booking'}
-        class="pop inline-block rounded-full bg-coral px-9 py-4 font-display text-xl font-bold text-white shadow-lg shadow-coral/40 hover:bg-coral-dark"
+        class="pop gradient-pink inline-block rounded-full px-9 py-4 font-display text-xl font-bold text-white shadow-lg shadow-coral/40"
       >
         {t.ourClown.cta}
       </a>
