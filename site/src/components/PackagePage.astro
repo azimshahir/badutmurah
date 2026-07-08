@@ -1,0 +1,26 @@
+---
+// Standalone /package page — same cards as homepage, links to /booking.
+import Layout from '../layouts/Layout.astro';
+import Navbar from './Navbar.astro';
+import Footer from './Footer.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+import Pakej from './Pakej.astro';
+import { getT, localePath } from '../i18n/index.js';
+
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
+const pathname = localePath(locale, '/package');
+---
+
+<Layout locale={locale} title={t.pakej.heading + ' | badutmurah.my'} description={t.pakej.sub} pathname={pathname}>
+  <Navbar locale={locale} pathname={pathname} />
+  <main class="py-14 md:py-20">
+    <div class="mx-auto max-w-[900px] px-5">
+      <h1 class="squiggle mx-auto w-fit text-center text-4xl font-bold md:text-5xl">{t.pakej.heading}</h1>
+      <p class="mx-auto mt-4 max-w-xl text-center text-lg opacity-90">{t.pakej.sub}</p>
+    </div>
+    <Pakej locale={locale} standalone={true} />
+  </main>
+  <Footer locale={locale} />
+  <WhatsAppButton locale={locale} />
+</Layout>

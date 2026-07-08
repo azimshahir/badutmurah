@@ -2,12 +2,9 @@
   "currency": "RM",
   "pakej": [
     {
-      "id": "biasa-1jam",
+      "id": "basic",
       "nama": "Basic Package",
       "nama_en": "Basic Package",
-      "durasi": "1 jam",
-      "durasi_en": "1 hour",
-      "harga": 250,
       "popular": false,
       "termasuk": [
         "Badut profesional (10 tahun pengalaman)",
@@ -19,42 +16,45 @@
         "Unlimited balloon twisting for all the kids",
         "Interaction & jokes throughout the session"
       ],
-      "sesuai": "Sesuai untuk birthday party, event sekolah & tadika, majlis kecil dan event syarikat.",
-      "sesuai_en": "Great for birthday parties, school events, small gatherings and company events."
-    },
-    {
-      "id": "biasa-2jam",
-      "nama": "Basic Package",
-      "nama_en": "Basic Package",
-      "durasi": "2 jam",
-      "durasi_en": "2 hours",
-      "harga": 400,
-      "popular": false,
-      "termasuk": [
-        "Badut profesional (10 tahun pengalaman)",
-        "Unlimited balloon twisting untuk semua kanak-kanak",
-        "Interaksi & lawak jenaka sepanjang sesi",
-        "Masa lebih panjang, sesuai untuk majlis besar"
-      ],
-      "termasuk_en": [
-        "Professional clown (10 years of experience)",
-        "Unlimited balloon twisting for all the kids",
-        "Interaction & jokes throughout the session",
-        "Longer session, great for bigger events"
-      ],
-      "sesuai": "Sesuai untuk mall, karnival dan event besar-besaran.",
-      "sesuai_en": "Great for malls, carnivals and bigger events."
+      "durasi": [
+        {
+          "id": "1jam",
+          "durasi": "1 jam",
+          "durasi_en": "1 hour",
+          "harga": 250,
+          "sesuai": "Sesuai untuk birthday party, event syarikat, event sekolah, majlis kecil.",
+          "sesuai_en": "Suitable for birthday parties, company events, school events, small events."
+        },
+        {
+          "id": "2jam",
+          "durasi": "2 jam",
+          "durasi_en": "2 hours",
+          "harga": 400,
+          "sesuai": "Sesuai untuk shopping mall, festival events.",
+          "sesuai_en": "Suitable for shopping malls, festival events."
+        },
+        {
+          "id": "3jam-lebih",
+          "durasi": "Lebih 3 jam",
+          "durasi_en": "More than 3 hours",
+          "harga": null,
+          "sesuai": "Harga kena bincang dulu. WhatsApp kami untuk quotation.",
+          "sesuai_en": "Price to be discussed. WhatsApp us for a quotation."
+        }
+      ]
     },
     {
       "id": "meriah",
       "nama": "Game Package",
       "nama_en": "Game Package",
-      "durasi": "1 jam 30 minit",
-      "durasi_en": "1 hour 30 minutes",
+      "durasi_tetap": "1 jam 30 minit",
+      "durasi_tetap_en": "1 hour 30 minutes",
       "harga": 400,
       "popular": true,
       "label": "Paling Popular",
       "label_en": "Most Popular",
+      "sesuai": "Pilihan paling popular untuk birthday party.",
+      "sesuai_en": "The most popular pick for birthday parties.",
       "termasuk": [
         "Badut profesional (10 tahun pengalaman)",
         "Unlimited balloon twisting untuk semua kanak-kanak",
@@ -66,24 +66,14 @@
         "Unlimited balloon twisting for all the kids",
         "Games & interactive activities (musical chairs & more)",
         "The liveliest session, the kids won't sit still!"
-      ],
-      "sesuai": "Pilihan paling popular untuk birthday party.",
-      "sesuai_en": "The most popular pick for birthday parties."
+      ]
     }
   ],
   "travel": {
     "nota": "Harga pakej termasuk perjalanan ke seluruh KL & Selangor.",
     "zon": [
-      {
-        "kawasan": "Kuala Lumpur & Selangor",
-        "caj": 0,
-        "label": "Percuma"
-      },
-      {
-        "kawasan": "Luar KL & Selangor",
-        "caj": 50,
-        "label": "+RM50 atau bincang masa booking"
-      }
+      { "kawasan": "Kuala Lumpur & Selangor", "caj": 0, "label": "Percuma" },
+      { "kawasan": "Luar KL & Selangor", "caj": 50, "label": "+RM50 atau bincang masa booking" }
     ]
   },
   "deposit": {

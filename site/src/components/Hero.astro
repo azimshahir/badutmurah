@@ -1,10 +1,12 @@
 ---
 // Hero: centered headline + photo marquee scrolling right + 4 pill CTAs
-import { getT, getWhatsAppLink } from '../i18n/index.js';
+import { getT, getWhatsAppLink, localePath } from '../i18n/index.js';
 
 const { locale = 'en' } = Astro.props;
 const t = getT(locale);
 const waLink = getWhatsAppLink(locale);
+const bookHref = localePath(locale, '/booking');
+const pakejHref = localePath(locale, '/package');
 
 const strip = [
   { src: '/images/hero.webp', alt: 'Badut Jim at a birthday party with a family' },
@@ -78,13 +80,13 @@ const strip = [
     </svg>
 
     <a
-      href="#booking"
+      href={bookHref}
       class="pop gradient-pink relative rounded-full px-8 py-3.5 text-center font-display text-xl font-bold text-white shadow-xl shadow-coral/30 ring-4 ring-coral/15"
     >
       ⭐ {t.hero.ctaBook}
     </a>
     <a
-      href="#pakej"
+      href={pakejHref}
       class="pop rounded-full border-2 border-coral/30 bg-white px-7 py-3.5 text-center font-display text-xl font-bold text-coral-dark shadow-md hover:border-coral"
     >
       🎁 {t.hero.ctaPakej}

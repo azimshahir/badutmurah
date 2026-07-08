@@ -2,8 +2,6 @@
 // Spec: docs/booking-spec.md. Secrets via Cloudflare env vars (never committed).
 import pricing from '../../docs/pricing.json';
 
-const MASA_SLOTS = ['10am', '11am', '12pm', '2pm', '3pm', '4pm', '5pm', 'Lain-lain (nyatakan di nota)'];
-
 function bad(error, status = 400) {
   return Response.json({ ok: false, error }, { status });
 }
@@ -11,6 +9,20 @@ function bad(error, status = 400) {
 // Reject non-POST methods instead of falling through to static assets
 export function onRequestGet() {
   return new Response('Method Not Allowed', { status: 405, headers: { Allow: 'POST' } });
+}
+
+// Resolve package + duration + price from pakej id and (for "basic") durasi id.
+function resolvePackage(pakejId, durasiId) {
+  const pakej = pricing.pakej.find((p) => p.id === pakejId);
+  if (!pakej) return null;
+
+  if (pakej.durasi_tetap) {
+    return { nama: pakej.nama, durasi: pakej.durasi_tetap, harga: pakej.harga };
+  }
+
+  const durasi = pakej.durasi?.find((d) => d.id === durasiId);
+  if (!durasi) return null;
+  return { nama: pakej.nama, durasi: durasi.durasi, harga: durasi.harga };
 }
 
 export async function onRequestPost({ request, env }) {
@@ -33,10 +45,12 @@ export async function onRequestPost({ request, env }) {
   const phone = data.phone.replace(/[\s-]/g, '');
   if (!/^01[0-9]{8,9}$/.test(phone)) return bad('Format no. telefon tak sah');
 
-  if (!MASA_SLOTS.includes(data.masa)) return bad('Slot masa tak sah');
+  const pakejDef = pricing.pakej.find((p) => p.id === data.pakej);
+  if (!pakejDef) return bad('Pakej tak sah');
+  if (!pakejDef.durasi_tetap && !data.durasi) return bad('Field wajib tiada: durasi');
 
-  const pakej = pricing.pakej.find((p) => p.id === data.pakej);
-  if (!pakej) return bad('Pakej tak sah');
+  const resolved = resolvePackage(data.pakej, data.durasi);
+  if (!resolved) return bad('Pakej/durasi tak sah');
 
   // Date must be >= today + 2 (Malaysia time, UTC+8)
   const minDate = new Date(Date.now() + 8 * 3600 * 1000);
@@ -46,17 +60,18 @@ export async function onRequestPost({ request, env }) {
     return bad('Tarikh mesti sekurang-kurangnya 2 hari dari sekarang');
   }
 
+  const priceLabel = resolved.harga === null ? 'Harga kena bincang' : `${pricing.currency}${resolved.harga}`;
   const [y, m, d] = data.tarikh.split('-');
   const lines = [
     '🎈 BOOKING BARU: badutmurah.my',
     '',
-    `📅 ${d}/${m}/${y}, ${data.masa}`,
-    `📦 ${pakej.nama} ${pakej.durasi} (${pricing.currency}${pakej.harga})`,
+    `🤡 Badut: Jim The Clown`,
+    `📅 ${d}/${m}/${y}, ${data.masa.trim()}`,
+    `📦 ${resolved.nama} ${resolved.durasi} (${priceLabel})`,
     `📍 ${data.lokasi.trim()}`,
     `👤 ${data.nama.trim()} - ${phone}`,
   ];
-  if (data.bil_kanak) lines.push(`👶 ${data.bil_kanak} kanak-kanak`);
-  if (data.nota && data.nota.trim()) lines.push(`📝 ${data.nota.trim()}`);
+  if (data.nota && data.nota.trim()) lines.push('', data.nota.trim());
   lines.push('', `Reply customer: wa.me/6${phone}`);
 
   const res = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {

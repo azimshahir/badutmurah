@@ -9,6 +9,14 @@
     <xhtml:link rel="alternate" hreflang="ms" href="https://badutmurah.my/ms/our-clown" />
   </url>
   <url>
+    <loc>https://badutmurah.my/package</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://badutmurah.my/ms/package" />
+  </url>
+  <url>
+    <loc>https://badutmurah.my/booking</loc>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://badutmurah.my/ms/booking" />
+  </url>
+  <url>
     <loc>https://badutmurah.my/edutainment</loc>
     <xhtml:link rel="alternate" hreflang="ms" href="https://badutmurah.my/ms/edutainment" />
   </url>
@@ -17,6 +25,12 @@
   </url>
   <url>
     <loc>https://badutmurah.my/ms/our-clown</loc>
+  </url>
+  <url>
+    <loc>https://badutmurah.my/ms/package</loc>
+  </url>
+  <url>
+    <loc>https://badutmurah.my/ms/booking</loc>
   </url>
   <url>
     <loc>https://badutmurah.my/ms/edutainment</loc>

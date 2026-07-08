@@ -21,7 +21,7 @@ const isEdu = pathname.endsWith('/edutainment');
         <Wordmark class="h-7 md:h-9" />
       </a>
       <a
-        href={p('/') + '#booking'}
+        href={p('/booking')}
         class="pop gradient-pink rounded-full px-4 py-1.5 font-display text-sm font-bold whitespace-nowrap text-white shadow-lg shadow-coral/30 md:px-6 md:py-2 md:text-base"
       >
         {t.nav.book}
@@ -53,7 +53,7 @@ const isEdu = pathname.endsWith('/edutainment');
         </div>
       </div>
 
-      <a href={p('/') + '#pakej'} class="nav-link hover:text-coral-dark">{t.nav.pakej}</a>
+      <a href={p('/package')} class="nav-link hover:text-coral-dark">{t.nav.pakej}</a>
 
       <!-- Edutainment Project with arrow + callout tag -->
       <span class="flex items-center gap-1.5">
@@ -85,7 +85,7 @@ const isEdu = pathname.endsWith('/edutainment');
   <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-navy/5 px-4 py-2 text-sm font-semibold lg:hidden">
     <a href={p('/')} class="nav-link hover:text-coral-dark">{t.nav.home}</a>
     <a href={p('/our-clown')} class="nav-link hover:text-coral-dark">{t.nav.jimClown}</a>
-    <a href={p('/') + '#pakej'} class="nav-link hover:text-coral-dark">{t.nav.pakej}</a>
+    <a href={p('/package')} class="nav-link hover:text-coral-dark">{t.nav.pakej}</a>
     <a
       href={p('/edutainment')}
       class="wiggle pop rounded-full bg-gradient-to-r from-sunny to-coral/70 px-3 py-1 font-display font-bold text-navy"

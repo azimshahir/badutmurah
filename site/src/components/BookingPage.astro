@@ -1,0 +1,257 @@
+---
+// Standalone /booking page. Fields & validation per docs/booking-spec.md.
+// Package pre-selected via sessionStorage (set by Pakej.astro CTA clicks).
+import Layout from '../layouts/Layout.astro';
+import Navbar from './Navbar.astro';
+import Footer from './Footer.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+import pricing from '../../docs/pricing.json';
+import { getT, getWhatsAppLink, localePath } from '../i18n/index.js';
+
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
+const waLink = getWhatsAppLink(locale);
+const pathname = localePath(locale, '/booking');
+const { pakej, currency } = pricing;
+const durasiKey = locale === 'en' ? 'durasi_en' : 'durasi';
+const sesuaiKey = locale === 'en' ? 'sesuai_en' : 'sesuai';
+const nameKey = t.pakej.nameKey;
+
+const basic = pakej.find((p) => p.id === 'basic');
+const game = pakej.find((p) => p.id === 'meriah');
+---
+
+<Layout locale={locale} title={t.booking.heading + ' | badutmurah.my'} description={t.booking.sub} pathname={pathname}>
+  <Navbar locale={locale} pathname={pathname} />
+  <main class="mx-auto max-w-[680px] px-5 py-14 md:py-20">
+    <h1 class="squiggle mx-auto w-fit text-center text-3xl font-bold md:text-4xl">{t.booking.heading}</h1>
+    <p class="mx-auto mt-4 max-w-lg text-center opacity-90">{t.booking.sub}</p>
+
+    <form
+      id="booking-form"
+      class="mt-10 space-y-5 rounded-[40px] border border-navy/5 bg-white p-6 shadow-2xl md:p-10"
+      novalidate
+      data-msg-sending={t.booking.menghantar}
+      data-msg-send={t.booking.hantar}
+      data-msg-error={t.booking.errorTeknikal}
+      data-msg-error-suffix={t.booking.errorSuffix}
+      data-msg-error-wa={t.booking.errorWhatsapp}
+      data-msg-error-phone={t.booking.errorPhone}
+      data-wa-link={waLink}
+      data-nota-template={t.booking.notaTemplate}
+    >
+      <!-- Clown: fixed, not a dropdown (only one clown for now) -->
+      <div class="flex items-center justify-between rounded-2xl bg-cream px-4 py-3.5">
+        <span class="font-semibold">{t.booking.clownLabel}</span>
+        <span class="flex items-center gap-2 font-display font-bold">
+          <img src="/images/logo-mascot.png" alt="" width="512" height="410" class="h-7 w-auto" aria-hidden="true" />
+          {t.booking.clownValue}
+        </span>
+      </div>
+
+      <div>
+        <label for="nama" class="mb-1.5 block font-semibold">{t.booking.nama}</label>
+        <input type="text" id="nama" name="nama" required autocomplete="name"
+          class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+      </div>
+
+      <div>
+        <label for="phone" class="mb-1.5 block font-semibold">{t.booking.phone}</label>
+        <input type="tel" id="phone" name="phone" required inputmode="tel" autocomplete="tel" placeholder="01X-XXXXXXX"
+          class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+      </div>
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label for="tarikh" class="mb-1.5 block font-semibold">{t.booking.tarikh}</label>
+          <input type="date" id="tarikh" name="tarikh" required
+            class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+        </div>
+        <div>
+          <label for="masa" class="mb-1.5 block font-semibold">{t.booking.masa}</label>
+          <input type="text" id="masa" name="masa" required placeholder={t.booking.masaPlaceholder}
+            class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+          <p class="mt-1 text-xs opacity-60">{t.booking.masaHint}</p>
+        </div>
+      </div>
+
+      <!-- Package -->
+      <fieldset>
+        <legend class="mb-2 font-semibold">{t.booking.pilihPakej}</legend>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <label class="pakej-radio cursor-pointer rounded-2xl border-2 border-navy/15 bg-cream p-4 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
+            <input type="radio" name="pakej" value="basic" required class="sr-only" />
+            <span class="block font-display font-semibold">{basic[nameKey]}</span>
+            <span class="block text-sm opacity-70">{currency}250 - {currency}400</span>
+          </label>
+          <label class="pakej-radio cursor-pointer rounded-2xl border-2 border-navy/15 bg-cream p-4 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
+            <input type="radio" name="pakej" value="meriah" required class="sr-only" />
+            <span class="block font-display font-semibold">{game[nameKey]}</span>
+            <span class="block text-sm opacity-70">{currency}{game.harga} ({game[locale === 'en' ? 'durasi_tetap_en' : 'durasi_tetap']})</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Duration: only shown/required for Basic Package -->
+      <fieldset id="durasi-fieldset" hidden>
+        <legend class="mb-2 font-semibold">{t.booking.pilihDurasi}</legend>
+        <div class="space-y-2">
+          {
+            basic.durasi.map((d) => (
+              <label class="durasi-radio flex cursor-pointer items-center justify-between rounded-2xl border-2 border-navy/15 bg-cream p-4 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
+                <span>
+                  <input type="radio" name="durasi" value={d.id} class="sr-only" />
+                  <span class="font-display font-semibold">{d[durasiKey]}</span>
+                  <span class="block text-xs opacity-70">{d[sesuaiKey]}</span>
+                </span>
+                <span class="font-display font-bold whitespace-nowrap">
+                  {d.harga !== null ? `${currency}${d.harga}` : t.booking.moreThan3}
+                </span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <div>
+        <label for="lokasi" class="mb-1.5 block font-semibold">
+          {t.booking.lokasi} <span class="font-normal opacity-75">{t.booking.lokasiHint}</span>
+        </label>
+        <input type="text" id="lokasi" name="lokasi" required
+          class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+      </div>
+
+      <div>
+        <label for="nota" class="mb-1.5 block font-semibold">
+          {t.booking.nota} <span class="font-normal opacity-75">{t.booking.notaHint}</span>
+        </label>
+        <textarea id="nota" name="nota" rows="5"
+          class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 font-bold outline-none transition focus:ring-2 focus:ring-coral"></textarea>
+      </div>
+
+      <!-- Honeypot: hidden from humans, bots fill it in -->
+      <div class="absolute -left-[9999px]" aria-hidden="true">
+        <label for="website">Website</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <p id="form-error" hidden class="rounded-2xl bg-coral/10 p-4 text-[15px] font-semibold text-coral-dark"></p>
+
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <button
+          type="submit"
+          id="submit-btn"
+          class="pop gradient-pink flex-1 rounded-full px-7 py-4 font-display text-xl font-bold text-white shadow-xl shadow-coral/30 disabled:opacity-60"
+        >
+          {t.booking.hantar}
+        </button>
+        <span class="flex items-center justify-center text-sm font-semibold opacity-60">{t.booking.orWhatsapp}</span>
+        <a
+          href={waLink}
+          target="_blank"
+          rel="noopener"
+          class="pop gradient-green flex-1 rounded-full px-7 py-4 text-center font-display text-xl font-bold text-white shadow-xl shadow-mint/40"
+        >
+          {t.booking.whatsappInstead}
+        </a>
+      </div>
+    </form>
+
+    <div id="booking-success" hidden class="mt-10 rounded-3xl bg-mint/15 p-8 text-center">
+      <p class="text-xl font-semibold">{t.booking.success}</p>
+    </div>
+  </main>
+  <Footer locale={locale} />
+  <WhatsAppButton locale={locale} />
+</Layout>
+
+<script>
+  const form = document.getElementById('booking-form') as HTMLFormElement;
+  const errorBox = document.getElementById('form-error') as HTMLParagraphElement;
+  const successBox = document.getElementById('booking-success') as HTMLDivElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const durasiFieldset = document.getElementById('durasi-fieldset') as HTMLFieldSetElement;
+  const notaField = document.getElementById('nota') as HTMLTextAreaElement;
+  const msg = form.dataset;
+
+  // Prefill notes template (customer can edit/delete)
+  if (msg.notaTemplate) notaField.value = msg.notaTemplate;
+
+  // Preselect package from sessionStorage (set by homepage/package page CTA)
+  const savedPakej = sessionStorage.getItem('badutmurah_pakej');
+  if (savedPakej) {
+    const radio = form.querySelector<HTMLInputElement>(`input[name="pakej"][value="${savedPakej}"]`);
+    if (radio) {
+      radio.checked = true;
+      radio.dispatchEvent(new Event('change'));
+    }
+  }
+
+  // Show duration options only when Basic Package is chosen; require durasi accordingly
+  const durasiInputs = form.querySelectorAll<HTMLInputElement>('input[name="durasi"]');
+  form.querySelectorAll<HTMLInputElement>('input[name="pakej"]').forEach((radio) => {
+    radio.addEventListener('change', () => {
+      const isBasic = radio.value === 'basic' && radio.checked;
+      if (isBasic) {
+        durasiFieldset.hidden = false;
+        durasiInputs.forEach((d) => (d.required = true));
+      } else if (radio.checked) {
+        durasiFieldset.hidden = true;
+        durasiInputs.forEach((d) => {
+          d.required = false;
+          d.checked = false;
+        });
+      }
+    });
+  });
+
+  // Min date: today + 2 days (booking-spec.md)
+  const tarikh = document.getElementById('tarikh') as HTMLInputElement;
+  const min = new Date();
+  min.setDate(min.getDate() + 2);
+  tarikh.min = min.toISOString().slice(0, 10);
+
+  function showError(text: string) {
+    errorBox.innerHTML = `${text} ${msg.msgErrorSuffix} <a href="${msg.waLink}" target="_blank" rel="noopener" class="underline">${msg.msgErrorWa}</a>.`;
+    errorBox.hidden = false;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBox.hidden = true;
+
+    if (!form.reportValidity()) return;
+
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+
+    // Malaysian mobile: 01X-XXXXXXX, strip spaces/dashes before validating
+    const phone = data.phone.replace(/[\s-]/g, '');
+    if (!/^01[0-9]{8,9}$/.test(phone)) {
+      showError(msg.msgErrorPhone!);
+      return;
+    }
+    data.phone = phone;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = msg.msgSending!;
+
+    try {
+      const res = await fetch('/api/booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (!json.ok) throw new Error(json.error || 'unknown');
+      sessionStorage.removeItem('badutmurah_pakej');
+      form.hidden = true;
+      successBox.hidden = false;
+      successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch {
+      showError(msg.msgError!);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = msg.msgSend!;
+    }
+  });
+</script>
