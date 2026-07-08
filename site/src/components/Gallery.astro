@@ -6,13 +6,13 @@ const { locale = 'en' } = Astro.props;
 const t = getT(locale);
 
 const gambar = [
-  { src: '/images/gallery-1.webp', alt: 'Badut Jim doing balloon twisting for kids at an event', frame: 'bg-white', rot: '-rotate-2' },
-  { src: '/images/gallery-2.webp', alt: 'Badut Jim entertaining a family with balloons', frame: 'bg-sunny/30', rot: 'rotate-1' },
-  { src: '/images/gallery-3.webp', alt: 'Happy kids with balloons next to Badut Jim', frame: 'bg-mint/20', rot: 'rotate-2' },
-  { src: '/images/gallery-4.webp', alt: 'Badut Jim in full costume at an event', frame: 'bg-coral/10', rot: '-rotate-1' },
-  { src: '/images/gallery-5.webp', alt: 'Badut Jim at a corporate event with balloons and confetti', frame: 'bg-white', rot: 'rotate-2' },
-  { src: '/images/gallery-6.webp', alt: 'Bouncing castle at a birthday party', frame: 'bg-sunny/30', rot: '-rotate-2' },
-  { src: '/images/gallery-7.webp', alt: 'Kids watching a puppet show', frame: 'bg-mint/20', rot: 'rotate-1' },
+  { src: '/images/gallery-1.webp', alt: 'Badut Jim doing balloon twisting for kids at an event' },
+  { src: '/images/gallery-2.webp', alt: 'Badut Jim entertaining a family with balloons' },
+  { src: '/images/gallery-3.webp', alt: 'Happy kids with balloons next to Badut Jim' },
+  { src: '/images/gallery-4.webp', alt: 'Badut Jim in full costume at an event' },
+  { src: '/images/gallery-5.webp', alt: 'Badut Jim at a corporate event with balloons and confetti' },
+  { src: '/images/gallery-6.webp', alt: 'Bouncing castle at a birthday party' },
+  { src: '/images/gallery-7.webp', alt: 'Kids watching a puppet show' },
 ];
 ---
 
@@ -26,7 +26,7 @@ const gambar = [
     <div class="mt-14 flex flex-wrap items-center justify-center gap-5 md:gap-7">
       {
         gambar.map((g) => (
-          <figure class:list={['tilt w-[46%] rounded-xl p-2.5 pb-4 shadow-lg sm:w-56', g.frame, g.rot]}>
+          <figure class="polaroid w-[46%] rounded-sm sm:w-56">
             <img
               src={g.src}
               alt={g.alt}
@@ -34,7 +34,7 @@ const gambar = [
               decoding="async"
               width="400"
               height="300"
-              class="aspect-[4/3] w-full rounded-lg object-cover"
+              class="aspect-[4/3] w-full object-cover"
             />
           </figure>
         ))

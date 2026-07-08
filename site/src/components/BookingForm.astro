@@ -30,7 +30,7 @@ const bilKanak = ['<10', '10-20', '20-30', '30+'];
 
     <form
       id="booking-form"
-      class="mt-10 space-y-5 rounded-3xl bg-white p-6 shadow-lg md:p-10"
+      class="mt-10 space-y-5 rounded-[40px] border border-navy/5 bg-white p-6 shadow-2xl md:p-10"
       novalidate
       data-msg-sending={t.booking.menghantar}
       data-msg-send={t.booking.hantar}
@@ -43,25 +43,25 @@ const bilKanak = ['<10', '10-20', '20-30', '30+'];
       <div>
         <label for="nama" class="mb-1.5 block font-semibold">{t.booking.nama}</label>
         <input type="text" id="nama" name="nama" required autocomplete="name"
-          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral" />
+          class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
       </div>
 
       <div>
         <label for="phone" class="mb-1.5 block font-semibold">{t.booking.phone}</label>
         <input type="tel" id="phone" name="phone" required inputmode="tel" autocomplete="tel" placeholder="01X-XXXXXXX"
-          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral" />
+          class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
       </div>
 
       <div class="grid gap-5 sm:grid-cols-2">
         <div>
           <label for="tarikh" class="mb-1.5 block font-semibold">{t.booking.tarikh}</label>
           <input type="date" id="tarikh" name="tarikh" required
-            class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral" />
+            class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
         </div>
         <div>
           <label for="masa" class="mb-1.5 block font-semibold">{t.booking.masa}</label>
           <select id="masa" name="masa" required
-            class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral">
+            class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral">
             <option value="" disabled selected>{t.booking.masaPlaceholder}</option>
             {slotMasa.map((s) => <option value={s}>{s}</option>)}
             <option value={masaLainValue}>{t.booking.masaLain}</option>
@@ -93,7 +93,7 @@ const bilKanak = ['<10', '10-20', '20-30', '30+'];
           {t.booking.lokasi} <span class="font-normal opacity-75">{t.booking.lokasiHint}</span>
         </label>
         <input type="text" id="lokasi" name="lokasi" required
-          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral" />
+          class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
       </div>
 
       <div>
@@ -101,7 +101,7 @@ const bilKanak = ['<10', '10-20', '20-30', '30+'];
           {t.booking.bilKanak} <span class="font-normal opacity-75">{t.booking.bilKanakHint}</span>
         </label>
         <select id="bil_kanak" name="bil_kanak"
-          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral">
+          class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral">
           <option value="">{t.booking.bilKanakPlaceholder}</option>
           {bilKanak.map((b) => <option value={b}>{b}</option>)}
         </select>
@@ -112,7 +112,7 @@ const bilKanak = ['<10', '10-20', '20-30', '30+'];
           {t.booking.nota} <span class="font-normal opacity-75">{t.booking.notaHint}</span>
         </label>
         <textarea id="nota" name="nota" rows="3"
-          class="w-full rounded-2xl border-2 border-navy/15 bg-cream px-4 py-3 outline-none focus:border-coral"></textarea>
+          class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral"></textarea>
       </div>
 
       <!-- Honeypot: hidden from humans, bots fill it in -->
@@ -126,7 +126,7 @@ const bilKanak = ['<10', '10-20', '20-30', '30+'];
       <button
         type="submit"
         id="submit-btn"
-        class="pop w-full rounded-2xl bg-coral px-7 py-4 font-display text-xl font-bold text-white shadow-lg shadow-coral/30 hover:bg-coral-dark disabled:opacity-60"
+        class="pop gradient-pink w-full rounded-full px-7 py-4 font-display text-xl font-bold text-white shadow-xl shadow-coral/30 disabled:opacity-60"
       >
         {t.booking.hantar}
       </button>

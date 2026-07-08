@@ -5,7 +5,11 @@ import { getT, localePath } from '../i18n/index.js';
 
 const { locale = 'en' } = Astro.props;
 const t = getT(locale);
-const poses = ['/images/clown-pose-1.svg', '/images/clown-pose-2.svg', '/images/clown-pose-3.svg'];
+const poses = [
+  { src: '/images/clown-pose-1.svg', chip: 'bg-sky' },
+  { src: '/images/clown-pose-2.svg', chip: 'bg-coral/15' },
+  { src: '/images/clown-pose-3.svg', chip: 'bg-yellow-100' },
+];
 ---
 
 <section class="py-16 md:py-24">
@@ -19,7 +23,9 @@ const poses = ['/images/clown-pose-1.svg', '/images/clown-pose-2.svg', '/images/
       {
         t.tentang.cards.map((s, i) => (
           <div class="flex flex-col items-center">
-            <img src={poses[i]} alt="" width="120" height="140" loading="lazy" class="h-32 w-auto" aria-hidden="true" />
+            <div class:list={['flex h-36 w-36 items-center justify-center rounded-full shadow-sm', poses[i].chip]}>
+              <img src={poses[i].src} alt="" width="120" height="140" loading="lazy" class="h-28 w-auto" aria-hidden="true" />
+            </div>
             <h3 class="mt-4 text-xl font-semibold">{s.tajuk}</h3>
             <p class="mt-2 max-w-xs text-[15px] opacity-90">{s.isi}</p>
           </div>

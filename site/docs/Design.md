@@ -45,6 +45,18 @@
 - FAQ 8 soalan baru (rujuk content.md), travel charge baru: luar KL/Selangor +RM50 atau bincang.
 - JANGAN guna em dash dalam copy.
 
+## v4 (2026-07-08, owner-supplied template) — PALET & STYLE SEMASA
+Owner bagi mockup HTML; design language dia diguna pakai, SEMUA content/i18n/booking kekal.
+- **Palet:** cream #FDF9F0 (bg, dengan titik confetti subtle) · pink #FF6B9B → #F04E7F (gradient CTA utama) · green #5CD698 (gradient WhatsApp) · pastel blue #D1E5F4 (kad popular) · teks slate #1E293B
+- **Font:** Quicksand (400/600/700) untuk semua
+- **Butang utama:** rounded-full, gradient-pink/gradient-green, shadow berwarna lembut
+- **Kad besar (pakej, booking form):** rounded-[40px], putih, shadow lembut; kad "Most Popular" = bg pastel blue + border putih 4px + scale
+- **Gallery:** polaroid putih (padding bawah tebal), rotate selang-seli, hover tegak + zoom
+- **Icon section:** bulatan pastel besar (blue/pink/yellow) dengan ilustrasi clown di dalam
+- **Navbar:** putih/80 blur, avatar bulat pink "BJ" + badutmurah.my
+- **Footer:** putih, teks slate lembut, social icons bulatan kecil (f/t/i)
+- Squiggle heading kini pink. Marquee, wiggle, pop, focus-visible semua kekal.
+
 ## TODO / idea akan datang (owner nak tambah)
 - Ganti clown-pose-*.svg dengan gambar generated owner
 - (owner akan isi)
