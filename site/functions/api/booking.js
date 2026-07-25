@@ -1,4 +1,4 @@
-// POST /api/booking — validate, send Telegram notification, return { ok }
+// POST /api/booking — validate, forward lead to jim-relay (VPS YAML + watcher notification), return { ok }
 // Spec: docs/booking-spec.md. Secrets via Cloudflare env vars (never committed).
 import pricing from '../../docs/pricing.json';
 
@@ -48,30 +48,14 @@ function describeHeaders(res) {
   );
 }
 
-// TEMPORARY DIAGNOSTIC — checks whether a plain unauthenticated GET from this
-// Pages Function even reaches bot.badutmurah.my, to isolate whether the
-// POST /website-lead failure is a blanket block on Workers fetches to this
-// host, or specific to that request. Remove once root cause is confirmed.
-async function probeVpsHealth() {
-  try {
-    const res = await fetch('https://bot.badutmurah.my/health', {
-      method: 'GET',
-      signal: AbortSignal.timeout(5000),
-    });
-    const body = await diagFromJson(res, 'status');
-    console.log(`vps health probe: HTTP ${res.status}${body ? `; body=${body}` : ''}${describeHeaders(res)}`);
-  } catch (err) {
-    console.error(`vps health probe failed: ${err?.name || 'unknown error'}`);
-  }
-}
-
-// Forward the validated lead to the Jim Bot VPS. Runs via waitUntil after the
-// response is sent: failures are logged (never the secret or full payload) and
-// must never affect the customer-facing result.
+// Forward the validated lead to the jim-relay Worker (feeds the VPS YAML +
+// Linux watcher pipeline). Awaited: the booking now succeeds only if this is
+// accepted. Failures are logged (never the secret or full payload) and the
+// raw error is never returned to the customer — returns true/false only.
 async function forwardToVps(env, payload) {
   if (!env.WEBSITE_WEBHOOK_SECRET) {
     console.error('website-lead forward skipped: WEBSITE_WEBHOOK_SECRET not set');
-    return;
+    return false;
   }
   try {
     const res = await env.RELAY.fetch('https://jim-relay/api/website-lead', {
@@ -86,9 +70,12 @@ async function forwardToVps(env, payload) {
     if (!res.ok) {
       const detail = await diagFromJson(res, 'error');
       console.error(`website-lead forward failed: HTTP ${res.status}${detail ? `; ${detail}` : ''}${describeHeaders(res)}`);
+      return false;
     }
+    return true;
   } catch (err) {
     console.error(`website-lead forward failed: ${err?.name || 'unknown error'}`);
+    return false;
   }
 }
 
@@ -106,8 +93,7 @@ function resolvePackage(pakejId, durasiId) {
   return { nama: pakej.nama, durasi: durasi.durasi, harga: durasi.harga };
 }
 
-export async function onRequestPost(context) {
-  const { request, env } = context;
+export async function onRequestPost({ request, env }) {
   let data;
   try {
     data = await request.json();
@@ -142,56 +128,21 @@ export async function onRequestPost(context) {
     return bad('Tarikh mesti sekurang-kurangnya 2 hari dari sekarang');
   }
 
-  // Fire-and-forget lead forward to the VPS bot; only Telegram below decides
-  // the HTTP response, so VPS latency/failure is invisible to the customer.
-  // Diagnostic health probe runs first (temporary — see probeVpsHealth).
-  context.waitUntil(
-    (async () => {
-      await forwardToVps(env, {
-        nama: data.nama.trim(),
-        phone,
-        tarikh: data.tarikh,
-        masa: data.masa.trim(),
-        pakej: data.pakej,
-        durasi: data.durasi ?? null,
-        lokasi: data.lokasi.trim(),
-        nota: data.nota?.trim() ?? '',
-        harga: resolved.harga,
-        website: '',
-      });
-    })()
-  );
+  // Booking succeeds only once jim-relay accepts the lead — it feeds the VPS
+  // YAML + Linux watcher pipeline that sends the single owner notification.
+  const relayOk = await forwardToVps(env, {
+    nama: data.nama.trim(),
+    phone,
+    tarikh: data.tarikh,
+    masa: data.masa.trim(),
+    pakej: data.pakej,
+    durasi: data.durasi ?? null,
+    lokasi: data.lokasi.trim(),
+    nota: data.nota?.trim() ?? '',
+    harga: resolved.harga,
+    website: '',
+  });
 
-  const priceLabel = resolved.harga === null ? 'Harga kena bincang' : `${pricing.currency}${resolved.harga}`;
-  const [y, m, d] = data.tarikh.split('-');
-  const lines = [
-    '🎈 BOOKING BARU: badutmurah.my',
-    '',
-    `🤡 Badut: Jim The Clown`,
-    `📅 ${d}/${m}/${y}, ${data.masa.trim()}`,
-    `📦 ${resolved.nama} ${resolved.durasi} (${priceLabel})`,
-    `📍 ${data.lokasi.trim()}`,
-    `👤 ${data.nama.trim()} - ${phone}`,
-  ];
-  if (data.nota && data.nota.trim()) lines.push('', data.nota.trim());
-  lines.push('', `Reply customer: wa.me/6${phone}`);
-
-  let res;
-  try {
-    res = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: env.TELEGRAM_CHAT_ID, text: lines.join('\n') }),
-    });
-  } catch (err) {
-    console.error(`telegram notification failed: ${err?.name || 'unknown error'}`);
-    return bad('Notifikasi gagal dihantar', 502);
-  }
-
-  if (!res.ok) {
-    const detail = await diagFromJson(res, 'description');
-    console.error(`telegram notification failed: HTTP ${res.status}${detail ? `; ${detail}` : ''}`);
-    return bad('Notifikasi gagal dihantar', 502);
-  }
+  if (!relayOk) return bad('Notifikasi gagal dihantar', 502);
   return Response.json({ ok: true });
 }
