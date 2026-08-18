@@ -1,0 +1,50 @@
+---
+// August promo banner. Renders nothing when pricing.json has promo.aktif = false,
+// so ending the promo removes it from every page in one edit.
+// Pass href to make it clickable (homepage); omit on /booking itself.
+// The wide artwork renders text at ~6px on a phone, so narrow screens get a
+// text-focused crop of the same image via <picture>.
+import pricing from '../../docs/pricing.json';
+
+const { locale = 'en', href = null, eager = false } = Astro.props;
+const promo = pricing.promo?.aktif ? pricing.promo : null;
+
+// All promo text lives inside the image, so spell it out in alt for
+// screen readers and search engines.
+const { currency } = pricing;
+const basic = pricing.pakej.find((p) => p.id === 'basic');
+const game = pricing.pakej.find((p) => p.id === 'meriah');
+const parts = promo
+  ? [
+      ...basic.durasi
+        .filter((d) => promo.harga.basic?.[d.id] != null)
+        .map((d) => `${basic.nama} ${d.durasi}: ${currency}${promo.harga.basic[d.id]} (biasa ${currency}${d.harga})`),
+      `${game.nama}: ${currency}${promo.harga.meriah} (biasa ${currency}${game.harga})`,
+    ]
+  : [];
+const alt = promo
+  ? `August Merdeka Sale — harga promosi untuk event 1-31 Ogos 2026. ${parts.join('. ')}.`
+  : '';
+---
+
+{
+  promo && (
+    <div class="promo-banner">
+      {href ? (
+        <a href={href} class="block rounded-2xl transition hover:opacity-95">
+          <picture>
+            <source media="(min-width: 640px)" srcset="/images/promo-ogos.webp" width="1600" height="397" />
+            <img src="/images/promo-ogos-mobile.webp" alt={alt} width="940" height="512"
+              loading={eager ? 'eager' : 'lazy'} decoding="async" class="w-full rounded-2xl" />
+          </picture>
+        </a>
+      ) : (
+        <picture>
+          <source media="(min-width: 640px)" srcset="/images/promo-ogos.webp" width="1600" height="397" />
+          <img src="/images/promo-ogos-mobile.webp" alt={alt} width="940" height="512"
+            loading={eager ? 'eager' : 'lazy'} decoding="async" class="w-full rounded-2xl" />
+        </picture>
+      )}
+    </div>
+  )
+}

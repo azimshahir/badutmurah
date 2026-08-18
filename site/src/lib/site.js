@@ -1,8 +1,11 @@
 // Shared site constants — values from docs/content.md
-export const WHATSAPP_NUMBER = '60179949524';
+export const WHATSAPP_NUMBER = '601167123473';
 export const WHATSAPP_PREFILL =
   'Hi Jim! Saya nak tanya pasal servis badut untuk majlis saya.';
 export const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_PREFILL)}`;
+
+// Bank details are printed into the document artwork itself
+// (public/images/doc-*.webp), so they are deliberately not stored in code.
 
 export const SOCIALS = {
   facebook: 'https://facebook.com/Badutjim',

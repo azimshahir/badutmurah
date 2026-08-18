@@ -1,0 +1,395 @@
+---
+// /documents — customer enters the phone they booked with, picks a booking, and
+// gets a quotation / invoice / receipt. All data comes from Hermes via
+// POST /api/documents. Spec: docs/documents-spec.md.
+import Layout from '../layouts/Layout.astro';
+import Navbar from './Navbar.astro';
+import Footer from './Footer.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+import DocumentSheet from './DocumentSheet.astro';
+import { getT, getWhatsAppLink, localePath } from '../i18n/index.js';
+
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
+const d = t.documents;
+const waLink = getWhatsAppLink(locale);
+const pathname = localePath(locale, '/documents');
+---
+
+<Layout
+  locale={locale}
+  title={d.heading + ' | badutmurah.my'}
+  description={d.metaDescription}
+  pathname={pathname}
+  noindex
+>
+  <Navbar locale={locale} pathname={pathname} />
+  <main
+    class="mx-auto max-w-[760px] px-5 py-14 md:py-20"
+    data-msg-searching={d.searching}
+    data-msg-search={d.search}
+    data-msg-generating={d.generating}
+    data-msg-generate={d.generate}
+    data-msg-error={d.errorGeneric}
+    data-msg-error-suffix={d.errorSuffix}
+    data-msg-error-wa={d.errorWhatsapp}
+    data-msg-error-phone={d.errorPhone}
+    data-msg-error-nama={d.errorNama}
+    data-msg-error-not-found={d.errorNotFound}
+    data-msg-error-not-available={d.errorNotAvailable}
+    data-msg-error-rate-limit={d.errorRateLimit}
+    data-msg-error-unavailable={d.errorUnavailable}
+    data-msg-no-bookings={d.noBookings}
+    data-msg-locked-invoice={d.lockedInvoice}
+    data-msg-locked-receipt={d.lockedReceipt}
+    data-label-quotation={d.quotation}
+    data-label-invoice={d.invoice}
+    data-label-receipt={d.receipt}
+    data-label-travel={d.travelFee}
+    data-label-deposit={d.paidDeposit}
+    data-label-balance={d.paidBalance}
+    data-label-outstanding={d.outstanding}
+    data-label-settled={d.settled}
+    data-wa-link={waLink}
+    data-locale={locale}
+  >
+    <h1 class="squiggle mx-auto w-fit text-center text-3xl font-bold md:text-4xl">{d.heading}</h1>
+    <p class="mx-auto mt-4 max-w-lg text-center opacity-90">{d.sub}</p>
+
+    <!-- Step 1: find bookings by phone -->
+    <form id="lookup-form" class="mt-10 rounded-[40px] border border-navy/5 bg-white p-6 shadow-2xl md:p-10" novalidate>
+      <label for="phone" class="mb-1.5 block font-semibold">{d.phoneLabel}</label>
+      <input type="tel" id="phone" name="phone" required inputmode="tel" autocomplete="tel" placeholder="01X-XXXXXXX"
+        class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+
+      <!-- Honeypot: hidden from humans, bots fill it in -->
+      <div class="absolute -left-[9999px]" aria-hidden="true">
+        <label for="website">Website</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <button type="submit" id="lookup-btn"
+        class="pop gradient-pink mt-5 w-full rounded-full px-7 py-4 font-display text-xl font-bold text-white shadow-xl shadow-coral/30 disabled:opacity-60">
+        {d.search}
+      </button>
+    </form>
+
+    <p id="form-error" hidden class="mt-5 rounded-2xl bg-coral/10 p-4 text-[15px] font-semibold text-coral-dark"></p>
+
+    <!-- Step 2: pick a booking -->
+    <section id="bookings" hidden class="mt-8">
+      <h2 class="font-display text-xl font-bold">{d.bookingsHeading}</h2>
+      <div id="bookings-list" class="mt-4 space-y-3"></div>
+    </section>
+
+    <!-- Step 3: edit the bill-to block, then the document renders below -->
+    <section id="billing" hidden class="mt-8 rounded-3xl border border-navy/5 bg-white p-6 shadow-lg md:p-8">
+      <h2 class="font-display text-xl font-bold">{d.billingHeading}</h2>
+      <p class="mt-1 text-sm opacity-70">{d.billingHint}</p>
+      <div class="mt-4 grid gap-4 sm:grid-cols-2">
+        <div>
+          <label for="b-nama" class="mb-1.5 block text-sm font-semibold">{d.billNama}</label>
+          <input type="text" id="b-nama" class="w-full rounded-xl border-none bg-navy/5 px-4 py-3 outline-none transition focus:ring-2 focus:ring-coral" />
+        </div>
+        <div>
+          <label for="b-phone" class="mb-1.5 block text-sm font-semibold">{d.billPhone}</label>
+          <input type="tel" id="b-phone" class="w-full rounded-xl border-none bg-navy/5 px-4 py-3 outline-none transition focus:ring-2 focus:ring-coral" />
+        </div>
+        <div class="sm:col-span-2">
+          <label for="b-alamat" class="mb-1.5 block text-sm font-semibold">{d.billAlamat}</label>
+          <textarea id="b-alamat" rows="2" class="w-full rounded-xl border-none bg-navy/5 px-4 py-3 outline-none transition focus:ring-2 focus:ring-coral"></textarea>
+        </div>
+        <div class="sm:col-span-2">
+          <label for="b-email" class="mb-1.5 block text-sm font-semibold">{d.billEmail}</label>
+          <input type="email" id="b-email" class="w-full rounded-xl border-none bg-navy/5 px-4 py-3 outline-none transition focus:ring-2 focus:ring-coral" />
+        </div>
+      </div>
+      <div class="mt-5 flex flex-col gap-3 sm:flex-row">
+        <button type="button" id="generate-btn"
+          class="pop gradient-pink flex-1 rounded-full px-7 py-3.5 font-display text-lg font-bold text-white shadow-lg shadow-coral/30 disabled:opacity-60">
+          {d.generate}
+        </button>
+        <button type="button" id="back-btn"
+          class="rounded-full border-2 border-navy/10 px-7 py-3.5 font-display text-lg font-bold transition hover:bg-cream">
+          {d.back}
+        </button>
+      </div>
+    </section>
+
+    <DocumentSheet locale={locale} />
+  </main>
+  <Footer locale={locale} />
+  <WhatsAppButton locale={locale} />
+</Layout>
+
+<script>
+  const root = document.querySelector('main') as HTMLElement;
+  const msg = root.dataset;
+  const form = document.getElementById('lookup-form') as HTMLFormElement;
+  const phoneInput = document.getElementById('phone') as HTMLInputElement;
+  const lookupBtn = document.getElementById('lookup-btn') as HTMLButtonElement;
+  const errorBox = document.getElementById('form-error') as HTMLParagraphElement;
+  const bookingsBox = document.getElementById('bookings') as HTMLElement;
+  const bookingsList = document.getElementById('bookings-list') as HTMLElement;
+  const billingBox = document.getElementById('billing') as HTMLElement;
+  const generateBtn = document.getElementById('generate-btn') as HTMLButtonElement;
+  const backBtn = document.getElementById('back-btn') as HTMLButtonElement;
+  const printBtn = document.getElementById('print-btn') as HTMLButtonElement;
+  const sheet = document.getElementById('doc-sheet') as HTMLElement;
+  const page = document.getElementById('doc-page') as HTMLElement;
+
+  const TYPES = ['quotation', 'invoice', 'receipt'] as const;
+  type DocType = (typeof TYPES)[number];
+
+  // Phone is kept in memory only — never in the URL, so it can't leak via
+  // browser history, referrer headers or server logs.
+  let phone = '';
+  let selected: { lead_id: string; type: DocType } | null = null;
+
+  const label = (type: DocType) =>
+    ({ quotation: msg.labelQuotation!, invoice: msg.labelInvoice!, receipt: msg.labelReceipt! })[type];
+
+  const money = (n: number) => `RM${Number(n).toFixed(2)}`;
+
+  const el = (sel: string) => sheet.querySelector<HTMLElement>(`[data-doc="${sel}"]`)!;
+
+  function showError(text: string) {
+    errorBox.innerHTML = `${text} ${msg.msgErrorSuffix} <a href="${msg.waLink}" target="_blank" rel="noopener" class="underline">${msg.msgErrorWa}</a>.`;
+    errorBox.hidden = false;
+  }
+
+  // The API returns a code, not prose, so the message matches the page language
+  const CODE_MESSAGES: Record<string, string | undefined> = {
+    bad_phone: msg.msgErrorPhone,
+    bad_name: msg.msgErrorNama,
+    not_found: msg.msgErrorNotFound,
+    not_available: msg.msgErrorNotAvailable,
+    rate_limited: msg.msgErrorRateLimit,
+    unavailable: msg.msgErrorUnavailable,
+  };
+
+  async function post(payload: Record<string, unknown>) {
+    const res = await fetch('/api/documents', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const json = await res.json();
+    if (!json.ok) throw new Error(CODE_MESSAGES[json.code] ?? msg.msgError!);
+    return json;
+  }
+
+  // ---- Step 1: look up bookings ----
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBox.hidden = true;
+    bookingsBox.hidden = true;
+    billingBox.hidden = true;
+    sheet.hidden = true;
+    printBtn.hidden = true;
+
+    const raw = phoneInput.value.replace(/[\s-]/g, '');
+    if (!/^01[0-9]{8,9}$/.test(raw)) {
+      showError(msg.msgErrorPhone!);
+      return;
+    }
+    phone = raw;
+
+    lookupBtn.disabled = true;
+    lookupBtn.textContent = msg.msgSearching!;
+    try {
+      const { bookings } = await post({
+        action: 'list',
+        phone,
+        website: (document.getElementById('website') as HTMLInputElement).value,
+      });
+      renderBookings(bookings);
+    } catch (err) {
+      showError(err instanceof Error ? err.message : msg.msgError!);
+    } finally {
+      lookupBtn.disabled = false;
+      lookupBtn.textContent = msg.msgSearch!;
+    }
+  });
+
+  function renderBookings(bookings: any[]) {
+    bookingsList.replaceChildren();
+    if (!bookings.length) {
+      const p = document.createElement('p');
+      p.className = 'rounded-2xl bg-cream p-4 text-[15px]';
+      p.textContent = msg.msgNoBookings!;
+      bookingsList.append(p);
+      bookingsBox.hidden = false;
+      return;
+    }
+
+    for (const b of bookings) {
+      const card = document.createElement('div');
+      card.className = 'rounded-2xl border border-navy/10 bg-white p-4';
+
+      const head = document.createElement('p');
+      head.className = 'font-display font-bold';
+      head.textContent = `${b.tarikh} — ${b.pakej}`;
+      card.append(head);
+
+      const row = document.createElement('div');
+      row.className = 'mt-3 flex flex-wrap gap-2';
+      for (const type of TYPES) {
+        const available = (b.available ?? []).includes(type);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = label(type);
+        if (available) {
+          btn.className =
+            'rounded-full border-2 border-coral/40 px-4 py-2 text-sm font-semibold transition hover:bg-coral/10';
+          btn.addEventListener('click', () => chooseDocument(b, type));
+        } else {
+          btn.className = 'cursor-not-allowed rounded-full border-2 border-navy/10 px-4 py-2 text-sm font-semibold opacity-40';
+          btn.disabled = true;
+          btn.title = type === 'receipt' ? msg.msgLockedReceipt! : msg.msgLockedInvoice!;
+        }
+        row.append(btn);
+      }
+      card.append(row);
+
+      // Explain why a type is unavailable — a greyed button with no reason is a dead end
+      const locked = TYPES.filter((tp) => !(b.available ?? []).includes(tp));
+      if (locked.length) {
+        const note = document.createElement('p');
+        note.className = 'mt-2 text-xs opacity-60';
+        note.textContent = locked.includes('receipt' as DocType) ? msg.msgLockedReceipt! : msg.msgLockedInvoice!;
+        card.append(note);
+      }
+
+      bookingsList.append(card);
+    }
+    bookingsBox.hidden = false;
+  }
+
+  // ---- Step 2: prefill the bill-to block, then generate ----
+  function chooseDocument(booking: any, type: DocType) {
+    selected = { lead_id: booking.lead_id, type };
+    billingBox.hidden = false;
+    sheet.hidden = true;
+    printBtn.hidden = true;
+    errorBox.hidden = true;
+    billingBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  backBtn.addEventListener('click', () => {
+    billingBox.hidden = true;
+    sheet.hidden = true;
+    printBtn.hidden = true;
+    bookingsBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  generateBtn.addEventListener('click', async () => {
+    if (!selected) return;
+    errorBox.hidden = true;
+
+    const billing = {
+      nama: (document.getElementById('b-nama') as HTMLInputElement).value,
+      alamat: (document.getElementById('b-alamat') as HTMLTextAreaElement).value,
+      phone: (document.getElementById('b-phone') as HTMLInputElement).value,
+      email: (document.getElementById('b-email') as HTMLInputElement).value,
+    };
+
+    generateBtn.disabled = true;
+    generateBtn.textContent = msg.msgGenerating!;
+    try {
+      const { document: doc } = await post({
+        action: 'issue',
+        phone,
+        lead_id: selected.lead_id,
+        type: selected.type,
+        billing,
+      });
+      // Hermes fills in anything the customer left blank — reflect that back
+      fillBilling(doc.billing);
+      renderDocument(doc);
+    } catch (err) {
+      showError(err instanceof Error ? err.message : msg.msgError!);
+    } finally {
+      generateBtn.disabled = false;
+      generateBtn.textContent = msg.msgGenerate!;
+    }
+  });
+
+  function fillBilling(billing: any) {
+    (document.getElementById('b-nama') as HTMLInputElement).value = billing?.nama ?? '';
+    (document.getElementById('b-alamat') as HTMLTextAreaElement).value = billing?.alamat ?? '';
+    (document.getElementById('b-phone') as HTMLInputElement).value = billing?.phone ?? '';
+    (document.getElementById('b-email') as HTMLInputElement).value = billing?.email ?? '';
+  }
+
+  // ---- Step 3: place values onto the artwork ----
+  function renderDocument(doc: any) {
+    const type = doc.type as DocType;
+    const ev = doc.event ?? {};
+    const b = doc.billing ?? {};
+
+    // Each type has its own artwork (the title and "… No." label are printed in it)
+    page.style.backgroundImage = `url("/images/doc-${type}.webp")`;
+
+    // The artwork has one address box and no phone/email slots, so those go in
+    // the same box on their own lines.
+    const addressLines = [b.alamat, b.phone, b.email].filter(Boolean).join('\n');
+
+    el('bill-nama').textContent = b.nama ?? '';
+    el('bill-alamat').textContent = addressLines;
+    el('no').textContent = doc.doc_no ?? '';
+
+    el('lokasi').textContent = ev.lokasi ?? '';
+    el('tarikh').textContent = ev.tarikh ?? '';
+    el('masa').textContent = ev.masa ?? '';
+
+    // One row only, per the artwork: rate is the package rate, amount folds in
+    // travel so the column still adds up to the printed Total.
+    const items = doc.items ?? [];
+    const itemsTotal = items.reduce((sum: number, i: any) => sum + (i.amount ?? 0), 0);
+    const travel = doc.travel_fee ?? 0;
+    el('rate').textContent = items[0]?.rate != null ? money(items[0].rate) : '';
+    el('amount').textContent = money(itemsTotal + travel);
+    el('total').textContent = money(doc.total ?? itemsTotal + travel);
+
+    // Free space under Time carries the travel line and any payment record
+    const notes: string[] = [];
+    if (travel) notes.push(`${msg.labelTravel}: ${money(travel)}`);
+    const p = doc.payment ?? {};
+    if (type !== 'quotation') {
+      if (p.deposit?.amount) notes.push(`${msg.labelDeposit}: ${money(p.deposit.amount)}${p.deposit.date ? ` (${p.deposit.date})` : ''}`);
+      if (p.balance?.amount) notes.push(`${msg.labelBalance}: ${money(p.balance.amount)}${p.balance.date ? ` (${p.balance.date})` : ''}`);
+      if (p.outstanding != null && p.outstanding > 0) notes.push(`${msg.labelOutstanding}: ${money(p.outstanding)}`);
+      else if (p.outstanding != null) notes.push(msg.labelSettled!);
+    }
+    el('payment').textContent = notes.join('\n');
+
+    sheet.hidden = false;
+    printBtn.hidden = false;
+    shrinkToFit();
+    sheet.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // A long company name would run past its box and over the next field. Step the
+  // font down until it fits rather than letting it collide.
+  function shrinkToFit() {
+    // 1% of the sheet width — every font size on the page is a multiple of this
+    page.style.setProperty('--u', `${page.getBoundingClientRect().width / 100}px`);
+    for (const node of page.querySelectorAll<HTMLElement>('.fit')) {
+      node.style.fontSize = '';
+      const base = parseFloat(getComputedStyle(node).fontSize);
+      let size = base;
+      while (node.scrollWidth > node.clientWidth && size > base * 0.5) {
+        size -= base * 0.05;
+        node.style.fontSize = `${size}px`;
+      }
+    }
+  }
+
+  // Re-fit after a resize, since the sheet and its type scale with the viewport
+  window.addEventListener('resize', () => {
+    if (!sheet.hidden) shrinkToFit();
+  });
+
+  printBtn.addEventListener('click', () => window.print());
+</script>

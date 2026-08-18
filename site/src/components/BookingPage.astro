@@ -5,6 +5,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from './Navbar.astro';
 import Footer from './Footer.astro';
 import WhatsAppButton from './WhatsAppButton.astro';
+import PromoBanner from './PromoBanner.astro';
 import pricing from '../../docs/pricing.json';
 import { getT, getWhatsAppLink, localePath } from '../i18n/index.js';
 
@@ -19,6 +20,21 @@ const nameKey = t.pakej.nameKey;
 
 const basic = pakej.find((p) => p.id === 'basic');
 const game = pakej.find((p) => p.id === 'meriah');
+
+// August 2026 promo. All prices come from pricing.json — never hardcode here.
+const promo = pricing.promo?.aktif ? pricing.promo : null;
+const promoHarga = (pakejId, durasiId) => {
+  const entry = promo?.harga?.[pakejId];
+  if (entry == null) return null;
+  return typeof entry === 'number' ? entry : (entry[durasiId] ?? null);
+};
+const money = (n) => `${currency}${n}`;
+const range = (nums) => `${money(Math.min(...nums))} - ${money(Math.max(...nums))}`;
+
+// Basic card shows a range across its priced durations (ignores "3jam-lebih" = null)
+const basicDurasi = basic.durasi.filter((d) => d.harga !== null);
+const basicRange = range(basicDurasi.map((d) => d.harga));
+const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic', d.id) ?? d.harga)) : null;
 ---
 
 <Layout locale={locale} title={t.booking.heading + ' | badutmurah.my'} description={t.booking.sub} pathname={pathname}>
@@ -27,9 +43,18 @@ const game = pakej.find((p) => p.id === 'meriah');
     <h1 class="squiggle mx-auto w-fit text-center text-3xl font-bold md:text-4xl">{t.booking.heading}</h1>
     <p class="mx-auto mt-4 max-w-lg text-center opacity-90">{t.booking.sub}</p>
 
+    <div class="mt-8">
+      <PromoBanner locale={locale} eager />
+    </div>
+
     <form
       id="booking-form"
-      class="mt-10 space-y-5 rounded-[40px] border border-navy/5 bg-white p-6 shadow-2xl md:p-10"
+      class:list={[
+        'mt-6 space-y-5 rounded-[40px] border border-navy/5 bg-white p-6 shadow-2xl md:p-10',
+        // Promo prices show up front; the script reverts them if a non-August
+        // date is picked. Set server-side so there's no flash of normal prices.
+        promo && 'promo-active',
+      ]}
       novalidate
       data-msg-sending={t.booking.menghantar}
       data-msg-send={t.booking.hantar}
@@ -39,6 +64,10 @@ const game = pakej.find((p) => p.id === 'meriah');
       data-msg-error-phone={t.booking.errorPhone}
       data-wa-link={waLink}
       data-nota-template={t.booking.notaTemplate}
+      data-promo-month={promo?.bulan}
+      data-promo-nota={t.booking.promoNotaLine}
+      data-promo-was={t.booking.promoWas}
+      data-currency={currency}
     >
       <!-- Clown: fixed, not a dropdown (only one clown for now) -->
       <div class="flex items-center justify-between rounded-2xl bg-cream px-4 py-3.5">
@@ -61,18 +90,24 @@ const game = pakej.find((p) => p.id === 'meriah');
           class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
       </div>
 
-      <div class="grid gap-5 sm:grid-cols-2">
-        <div>
-          <label for="tarikh" class="mb-1.5 block font-semibold">{t.booking.tarikh}</label>
-          <input type="date" id="tarikh" name="tarikh" required
-            class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+      <div>
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label for="tarikh" class="mb-1.5 block font-semibold">{t.booking.tarikh}</label>
+            <input type="date" id="tarikh" name="tarikh" required
+              class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+          </div>
+          <div>
+            <label for="masa" class="mb-1.5 block font-semibold">{t.booking.masa}</label>
+            <input type="text" id="masa" name="masa" required placeholder={t.booking.masaPlaceholder}
+              class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+            <p class="mt-1 text-xs opacity-60">{t.booking.masaHint}</p>
+          </div>
         </div>
-        <div>
-          <label for="masa" class="mb-1.5 block font-semibold">{t.booking.masa}</label>
-          <input type="text" id="masa" name="masa" required placeholder={t.booking.masaPlaceholder}
-            class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
-          <p class="mt-1 text-xs opacity-60">{t.booking.masaHint}</p>
-        </div>
+        <!-- Tip spans both columns: applies to date + time together -->
+        <p class="mt-3 flex gap-2 rounded-xl bg-coral/10 px-3 py-2.5 text-xs leading-relaxed">
+          <span aria-hidden="true">💡</span><span>{t.booking.masaTip}</span>
+        </p>
       </div>
 
       <!-- Package -->
@@ -82,14 +117,35 @@ const game = pakej.find((p) => p.id === 'meriah');
           <label class="pakej-radio cursor-pointer rounded-2xl border-2 border-navy/15 bg-cream p-4 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
             <input type="radio" name="pakej" value="basic" required class="sr-only" />
             <span class="block font-display font-semibold">{basic[nameKey]}</span>
-            <span class="block text-sm opacity-70">{currency}250 - {currency}400</span>
+            <span class="promo-off block text-sm opacity-70">{basicRange}</span>
+            {promo && (
+              <span class="promo-on block text-sm">
+                <s class="opacity-50">{basicRange}</s>
+                <span class="font-bold text-coral-dark">{basicPromoRange}</span>
+                <span class="ml-1 rounded-full bg-coral px-2 py-0.5 align-middle text-[10px] font-bold tracking-wide text-white">{t.booking.promoBadge}</span>
+              </span>
+            )}
           </label>
           <label class="pakej-radio cursor-pointer rounded-2xl border-2 border-navy/15 bg-cream p-4 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
-            <input type="radio" name="pakej" value="meriah" required class="sr-only" />
+            <input type="radio" name="pakej" value="meriah" required class="sr-only"
+              data-harga={game.harga} data-promo-harga={promoHarga('meriah')} />
             <span class="block font-display font-semibold">{game[nameKey]}</span>
-            <span class="block text-sm opacity-70">{currency}{game.harga} ({game[locale === 'en' ? 'durasi_tetap_en' : 'durasi_tetap']})</span>
+            <span class:list={['block text-sm opacity-70', promoHarga('meriah') !== null && 'promo-off']}>{money(game.harga)} ({game[locale === 'en' ? 'durasi_tetap_en' : 'durasi_tetap']})</span>
+            {promo && promoHarga('meriah') !== null && (
+              <span class="promo-on block text-sm">
+                <s class="opacity-50">{money(game.harga)}</s>
+                <span class="font-bold text-coral-dark">{money(promoHarga('meriah'))}</span>
+                <span class="opacity-70">({game[locale === 'en' ? 'durasi_tetap_en' : 'durasi_tetap']})</span>
+                <span class="ml-1 rounded-full bg-coral px-2 py-0.5 align-middle text-[10px] font-bold tracking-wide text-white">{t.booking.promoBadge}</span>
+              </span>
+            )}
           </label>
         </div>
+        {promo && (
+          <p class="promo-on mt-3 flex gap-2 rounded-xl bg-coral/10 px-3 py-2.5 text-xs leading-relaxed">
+            <span aria-hidden="true">🎉</span><span>{t.booking.promoNote}</span>
+          </p>
+        )}
       </fieldset>
 
       <!-- Duration: only shown/required for Basic Package -->
@@ -100,13 +156,20 @@ const game = pakej.find((p) => p.id === 'meriah');
             basic.durasi.map((d) => (
               <label class="durasi-radio flex cursor-pointer items-center justify-between gap-3 rounded-2xl border-2 border-navy/15 bg-cream p-4 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
                 <span class="min-w-0">
-                  <input type="radio" name="durasi" value={d.id} class="sr-only" />
+                  <input type="radio" name="durasi" value={d.id} class="sr-only"
+                    data-harga={d.harga} data-promo-harga={promoHarga('basic', d.id)} />
                   <span class="font-display font-semibold">{d[durasiKey]}</span>
                   <span class="block text-xs opacity-70">{d[sesuaiKey]}</span>
                 </span>
                 {d.harga !== null && (
                   <span class="shrink-0 font-display font-bold whitespace-nowrap">
-                    {currency}{d.harga}
+                    <span class:list={[promoHarga('basic', d.id) !== null && 'promo-off']}>{money(d.harga)}</span>
+                    {promoHarga('basic', d.id) !== null && (
+                      <span class="promo-on">
+                        <s class="font-normal opacity-50">{money(d.harga)}</s>
+                        <span class="text-coral-dark">{money(promoHarga('basic', d.id))}</span>
+                      </span>
+                    )}
                   </span>
                 )}
               </label>
@@ -116,19 +179,26 @@ const game = pakej.find((p) => p.id === 'meriah');
       </fieldset>
 
       <div>
-        <label for="lokasi" class="mb-1.5 block font-semibold">
-          {t.booking.lokasi} <span class="font-normal opacity-75">{t.booking.lokasiHint}</span>
-        </label>
-        <input type="text" id="lokasi" name="lokasi" required
+        <label for="lokasi" class="mb-1.5 block font-semibold">{t.booking.lokasi}</label>
+        <input type="text" id="lokasi" name="lokasi" required placeholder={t.booking.lokasiPlaceholder}
           class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+        <p class="mt-2 flex gap-2 rounded-xl bg-coral/10 px-3 py-2.5 text-xs leading-relaxed">
+          <span aria-hidden="true">📍</span><span>{t.booking.lokasiTip}</span>
+        </p>
       </div>
 
       <div>
         <label for="nota" class="mb-1.5 block font-semibold">
           {t.booking.nota} <span class="font-normal opacity-75">{t.booking.notaHint}</span>
         </label>
-        <textarea id="nota" name="nota" rows="5"
-          class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 font-bold outline-none transition focus:ring-2 focus:ring-coral"></textarea>
+        <div class="relative">
+          <textarea id="nota" name="nota" rows="5"
+            class="w-full rounded-xl border-none bg-navy/5 py-3.5 pr-24 pl-4 outline-none transition focus:ring-2 focus:ring-coral"></textarea>
+          <button type="button" id="nota-clear" hidden
+            class="absolute top-3 right-3 rounded-full bg-navy/10 px-3 py-1 text-xs font-semibold transition hover:bg-navy/20">
+            {t.booking.notaClear}
+          </button>
+        </div>
       </div>
 
       <!-- Honeypot: hidden from humans, bots fill it in -->
@@ -167,6 +237,13 @@ const game = pakej.find((p) => p.id === 'meriah');
   <WhatsAppButton locale={locale} />
 </Layout>
 
+<style>
+  /* Promo prices swap in when .promo-active is set on the form (see script).
+     Descendant selectors so Tailwind's display utilities can't out-specify them. */
+  form:not(.promo-active) .promo-on { display: none; }
+  form.promo-active .promo-off { display: none; }
+</style>
+
 <script>
   const form = document.getElementById('booking-form') as HTMLFormElement;
   const errorBox = document.getElementById('form-error') as HTMLParagraphElement;
@@ -176,8 +253,20 @@ const game = pakej.find((p) => p.id === 'meriah');
   const notaField = document.getElementById('nota') as HTMLTextAreaElement;
   const msg = form.dataset;
 
-  // Prefill notes template (customer can edit/delete)
-  if (msg.notaTemplate) notaField.value = msg.notaTemplate;
+  // Notes template is prefilled as a real value so the prompts stay visible while
+  // typing; the Clear button wipes it in one tap for customers who don't want it.
+  const notaClearBtn = document.getElementById('nota-clear') as HTMLButtonElement;
+  const notaTemplate = msg.notaTemplate ?? '';
+  if (notaTemplate) notaField.value = notaTemplate;
+
+  const syncNotaClear = () => (notaClearBtn.hidden = notaField.value.trim() === '');
+  notaClearBtn.addEventListener('click', () => {
+    notaField.value = '';
+    syncNotaClear();
+    notaField.focus();
+  });
+  notaField.addEventListener('input', syncNotaClear);
+  syncNotaClear();
 
   // Preselect package from sessionStorage (set by homepage/package page CTA)
   const savedPakej = sessionStorage.getItem('badutmurah_pakej');
@@ -213,6 +302,20 @@ const game = pakej.find((p) => p.id === 'meriah');
   min.setDate(min.getDate() + 2);
   tarikh.min = min.toISOString().slice(0, 10);
 
+  // August promo: swap displayed prices when the chosen date is in the promo month.
+  // Compares the "YYYY-MM" prefix directly — no Date parsing, so no timezone drift.
+  const promoMonth = msg.promoMonth;
+  const isPromoDate = (value: string) => !!promoMonth && value.startsWith(promoMonth);
+  if (promoMonth) {
+    // No date chosen yet → keep showing promo prices (that's the advertised
+    // offer); once a date is picked, the month decides.
+    const syncPromo = () =>
+      form.classList.toggle('promo-active', !tarikh.value || isPromoDate(tarikh.value));
+    tarikh.addEventListener('change', syncPromo);
+    tarikh.addEventListener('input', syncPromo);
+    syncPromo();
+  }
+
   function showError(text: string) {
     errorBox.innerHTML = `${text} ${msg.msgErrorSuffix} <a href="${msg.waLink}" target="_blank" rel="noopener" class="underline">${msg.msgErrorWa}</a>.`;
     errorBox.hidden = false;
@@ -233,6 +336,25 @@ const game = pakej.find((p) => p.id === 'meriah');
       return;
     }
     data.phone = phone;
+
+    // A template left untouched carries no information — don't send the bare skeleton
+    const squash = (s: string) => s.replace(/\s+/g, ' ').trim();
+    if (squash(data.nota ?? '') === squash(notaTemplate)) data.nota = '';
+
+    // Flag the promo in the notes so Jim sees it (and the price) when confirming.
+    // Only the submitted payload is touched — the customer's textarea stays as typed.
+    if (isPromoDate(data.tarikh)) {
+      const priced = data.pakej === 'basic'
+        ? form.querySelector<HTMLInputElement>('input[name="durasi"]:checked')
+        : form.querySelector<HTMLInputElement>('input[name="pakej"]:checked');
+      const promoPrice = priced?.dataset.promoHarga;
+      const normalPrice = priced?.dataset.harga;
+      let line = msg.promoNota!;
+      if (promoPrice && normalPrice) {
+        line += ` — ${msg.currency}${promoPrice} (${msg.promoWas}: ${msg.currency}${normalPrice})`;
+      }
+      data.nota = data.nota ? `${data.nota}\n\n${line}` : line;
+    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = msg.msgSending!;

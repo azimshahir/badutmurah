@@ -79,6 +79,16 @@ async function forwardToVps(env, payload) {
   }
 }
 
+// Promo price for a package on a given date, or null when the promo doesn't apply.
+// Re-derived here from pricing.json — the price shown by the browser is never trusted.
+function promoHarga(pakejId, durasiId, tarikh) {
+  const promo = pricing.promo;
+  if (!promo?.aktif || !tarikh.startsWith(promo.bulan)) return null;
+  const entry = promo.harga?.[pakejId];
+  if (entry == null) return null;
+  return typeof entry === 'number' ? entry : (entry[durasiId] ?? null);
+}
+
 // Resolve package + duration + price from pakej id and (for "basic") durasi id.
 function resolvePackage(pakejId, durasiId) {
   const pakej = pricing.pakej.find((p) => p.id === pakejId);
@@ -128,6 +138,11 @@ export async function onRequestPost({ request, env }) {
     return bad('Tarikh mesti sekurang-kurangnya 2 hari dari sekarang');
   }
 
+  // Apply the promo only after the date passed validation above, so the price
+  // can never be driven by a malformed date. Payload shape is unchanged — `harga`
+  // simply carries the promo price when the event falls in the promo month.
+  const harga = promoHarga(data.pakej, data.durasi, data.tarikh) ?? resolved.harga;
+
   // Booking succeeds only once jim-relay accepts the lead — it feeds the VPS
   // YAML + Linux watcher pipeline that sends the single owner notification.
   const relayOk = await forwardToVps(env, {
@@ -139,7 +154,7 @@ export async function onRequestPost({ request, env }) {
     durasi: data.durasi ?? null,
     lokasi: data.lokasi.trim(),
     nota: data.nota?.trim() ?? '',
-    harga: resolved.harga,
+    harga,
     website: '',
   });
 

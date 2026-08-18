@@ -69,6 +69,18 @@
       ]
     }
   ],
+  "promo": {
+    "id": "ogos-merdeka-2026",
+    "aktif": true,
+    "bulan": "2026-08",
+    "harga": {
+      "basic": {
+        "1jam": 180,
+        "2jam": 300
+      },
+      "meriah": 250
+    }
+  },
   "travel": {
     "nota": "Harga pakej termasuk perjalanan ke seluruh KL & Selangor.",
     "zon": [

@@ -4,7 +4,7 @@ import '../styles/global.css';
 import Balloons from '../components/Balloons.astro';
 import { altLocalePath } from '../i18n/index.js';
 
-const { locale = 'en', title, description, pathname = '/' } = Astro.props;
+const { locale = 'en', title, description, pathname = '/', noindex = false } = Astro.props;
 const site = 'https://badutmurah.my';
 const altPath = altLocalePath(locale, pathname);
 const enUrl = site + (locale === 'en' ? pathname : altPath);
@@ -18,6 +18,7 @@ const msUrl = site + (locale === 'ms' ? pathname : altPath);
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={site + pathname} />
     <link rel="alternate" hreflang="en" href={enUrl} />
     <link rel="alternate" hreflang="ms" href={msUrl} />
@@ -29,7 +30,9 @@ const msUrl = site + (locale === 'ms' ? pathname : altPath);
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={site + pathname} />
-    <meta property="og:image" content={site + '/images/og.jpg'} />
+    <meta property="og:image" content={site + '/images/og-jim.jpg'} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content={locale === 'ms' ? 'ms_MY' : 'en_MY'} />
     <meta name="twitter:card" content="summary_large_image" />
 

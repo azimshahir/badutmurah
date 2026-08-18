@@ -62,6 +62,9 @@
 - **Heading:** Book Sekarang
 - **Subheading:** Isi maklumat di bawah. Kami confirm dalam 1 jam. Belum bayar apa-apa lagi, deposit hanya selepas kami confirm availability.
 - Fields: rujuk booking-spec.md
+- **Tip masa (bubble bawah field Masa):** 💡 Tips: book slot Jim 30 minit – 1 jam lepas majlis bermula, supaya semua tetamu dah sampai dan boleh enjoy sekali.
+- **Placeholder lokasi:** cth: Seksyen 13, Shah Alam
+- **Tip lokasi (bubble bawah field Kawasan majlis):** 📍 Tulis seksyen / taman / lorong — tak perlu alamat penuh. Kami confirm lokasi tepat nanti masa WhatsApp.
 - **Butang:** Hantar Booking
 - **Success:** Booking diterima! 🎈 Kami akan WhatsApp anda dalam masa 1 jam untuk confirm. Terima kasih!
 - **Error:** Alamak, ada masalah teknikal. Sila cuba lagi atau WhatsApp kami terus.
@@ -69,13 +72,13 @@
 ## Floating WhatsApp Button
 - **wa.me prefill (BM):** "Hi Jim! Saya nak tanya pasal servis badut untuk majlis saya."
 - **wa.me prefill (EN):** "Hi Jim! I'd like to ask about your clown service for my event."
-- Nombor WhatsApp: 60179949524
+- Nombor WhatsApp: 601167123473
 
 ## Footer
 - **Tagline:** Menceriakan majlis kanak-kanak sejak 2011.
 - **Coverage:** Kuala Lumpur · Selangor · Seremban · Nilai
 - **Links:** Facebook (facebook.com/Badutjim) · TikTok (tiktok.com/@badut.jeem) · Instagram (instagram.com/badutjim)
-- **Contact:** WhatsApp 60179949524 · Email badutjim@gmail.com
+- **Contact:** WhatsApp 601167123473 · Email badutjim@gmail.com
 - **Copyright:** © 2026 badutmurah.my
 
 ## Nota gaya

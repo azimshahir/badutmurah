@@ -17,6 +17,17 @@ const durasiTetapKey = locale === 'en' ? 'durasi_tetap_en' : 'durasi_tetap';
 const basic = pakej.find((p) => p.id === 'basic');
 const game = pakej.find((p) => p.id === 'meriah');
 const bookHref = localePath(locale, '/booking');
+
+// August promo. No date picker on these cards, so promo prices show for the
+// whole promo period; flipping promo.aktif in pricing.json reverts everything.
+const promo = pricing.promo?.aktif ? pricing.promo : null;
+const promoHarga = (pakejId, durasiId) => {
+  const entry = promo?.harga?.[pakejId];
+  if (entry == null) return null;
+  return typeof entry === 'number' ? entry : (entry[durasiId] ?? null);
+};
+const promoBasicFirst = promoHarga('basic', basic.durasi[0].id);
+const promoGame = promoHarga('meriah');
 ---
 
 <section id="pakej" class:list={['scroll-mt-28', !standalone && 'py-16 md:py-24']}>
@@ -37,9 +48,17 @@ const bookHref = localePath(locale, '/booking');
       <article class="tilt relative flex flex-col rounded-[40px] border border-navy/5 bg-white p-8 shadow-lg">
         <h3 class="text-2xl font-semibold">{f(basic, 'nameKey')}</h3>
         <p class="mt-4 font-display text-[2.5rem] leading-none font-bold">
-          {currency}{basic.durasi[0].harga}
+          {promoBasicFirst !== null && <s class="mr-2 text-2xl opacity-40">{currency}{basic.durasi[0].harga}</s>}
+          <span class:list={[promoBasicFirst !== null && 'text-coral-dark']}>
+            {currency}{promoBasicFirst ?? basic.durasi[0].harga}
+          </span>
           <span class="text-base font-semibold opacity-60"> ({basic.durasi[0][durasiKey]})</span>
         </p>
+        {promo && (
+          <span class="mt-2 w-fit rounded-full bg-coral px-3 py-1 text-xs font-bold tracking-wide text-white">
+            {t.booking.promoBadge}
+          </span>
+        )}
         <ul class="mt-5 flex-1 space-y-2.5 text-[15px]">
           {f(basic, 'termasukKey').map((item) => (
             <li class="flex gap-2">
@@ -55,7 +74,16 @@ const bookHref = localePath(locale, '/booking');
             <div class="rounded-2xl bg-cream p-4">
               <p class="font-display text-lg font-bold">
                 {d[durasiKey]}
-                {d.harga !== null && `: ${currency}${d.harga}`}
+                {d.harga !== null && (
+                  promoHarga('basic', d.id) !== null ? (
+                    <>
+                      : <s class="font-normal opacity-40">{currency}{d.harga}</s>{' '}
+                      <span class="text-coral-dark">{currency}{promoHarga('basic', d.id)}</span>
+                    </>
+                  ) : (
+                    <>: {currency}{d.harga}</>
+                  )
+                )}
               </p>
               <p class="mt-1 text-sm opacity-80">{d[sesuaiKey]}</p>
             </div>
@@ -79,8 +107,16 @@ const bookHref = localePath(locale, '/booking');
         <h3 class="text-2xl font-semibold">{f(game, 'nameKey')}</h3>
         <p class="text-sm font-semibold opacity-70">{game[durasiTetapKey]}</p>
         <p class="mt-4 font-display text-[2.75rem] leading-none font-bold">
-          {currency}{game.harga}
+          {promoGame !== null && <s class="mr-2 text-2xl opacity-40">{currency}{game.harga}</s>}
+          <span class:list={[promoGame !== null && 'text-coral-dark']}>
+            {currency}{promoGame ?? game.harga}
+          </span>
         </p>
+        {promo && (
+          <span class="mt-2 w-fit rounded-full bg-coral px-3 py-1 text-xs font-bold tracking-wide text-white">
+            {t.booking.promoBadge}
+          </span>
+        )}
         <p class="mt-3 text-sm opacity-80">{game[sesuaiKey]}</p>
         <ul class="mt-5 flex-1 space-y-2.5 text-[15px]">
           {f(game, 'termasukKey').map((item) => (
