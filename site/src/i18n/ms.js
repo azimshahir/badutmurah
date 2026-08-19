@@ -78,7 +78,7 @@ export default {
       {
         emoji: '📍',
         q: 'Kawasan mana yang anda cover?',
-        a: 'Seluruh KL & Selangor tanpa caj tambahan. Luar KL & Selangor: tambahan RM50, atau boleh bincang dulu masa booking.',
+        a: 'Seluruh Lembah Klang tanpa caj tambahan. Luar Lembah Klang: tambahan RM50, atau boleh bincang dulu masa booking.',
       },
       {
         emoji: '🏠',

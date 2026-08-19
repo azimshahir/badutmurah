@@ -49,7 +49,7 @@
 - [TODO: testimoni sebenar. JANGAN guna testimoni rekaan.]
 
 ## Section: FAQ (8 soalan)
-1. **Kawasan mana yang anda cover?** Seluruh KL & Selangor tanpa caj tambahan. Luar KL & Selangor: tambahan RM50, atau boleh bincang dulu masa booking.
+1. **Kawasan mana yang anda cover?** Seluruh Lembah Klang tanpa caj tambahan. Luar Lembah Klang: tambahan RM50, atau boleh bincang dulu masa booking.
 2. **Apa yang saya perlu sediakan?** Ruang untuk aktiviti (ruang tamu pun cukup) dan parking berdekatan. Selebihnya kami uruskan.
 3. **Kalau nak tukar tarikh macam mana?** Percuma jika dimaklumkan sekurang-kurangnya 3 hari sebelum majlis, tertakluk kepada availability. Pembatalan saat akhir: deposit tidak dikembalikan.
 4. **Balloon twisting tu untuk semua budak ke?** Ya! Stok balloon kami unlimited. Setiap kanak-kanak dapat, mak budak nak sekali pun boleh.
