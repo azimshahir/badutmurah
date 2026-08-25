@@ -169,7 +169,7 @@ export default {
     invoice: 'Invoice',
     receipt: 'Receipt',
     lockedInvoice: 'Available once your booking is confirmed',
-    lockedReceipt: 'Available once payment is recorded',
+    lockedReceipt: 'Available from the day of your event',
     billingHeading: 'Bill to',
     billingHint: 'Edit these if the document should be addressed differently, e.g. to a company.',
     billNama: 'Name',

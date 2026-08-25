@@ -32,9 +32,20 @@ Kedua-dua perlukan header `X-Webhook-Secret` (secret sama dengan `/api/website-l
 
 | Jenis | Nombor | Bila tersedia |
 |---|---|---|
-| Quotation | `Q-YYYY-NNNN` | Sentiasa |
-| Invoice | `INV-YYYY-NNNN` | Status `confirmed` ke atas |
-| Receipt | `BJ-YYYY-NNNN` (= Bill No) | Selepas bayaran direkod |
+| Quotation | `Q-YY-NNNN` | Sentiasa |
+| Invoice | `INV-YY-NNNN` | Status `confirmed` ke atas |
+| Receipt | `BJ-YY-NNNN` (= Bill No) | Bayaran direkod **ATAU** tarikh majlis sudah tiba |
+
+`YY` ialah dua digit tahun (2026 → `26`), contoh `Q-26-0001`. Nombor pendek supaya muat
+dalam kotak "… No." pada artwork tanpa perlu mengecil.
+
+**Resit pada hari majlis:** dalam praktik Jim selalu terima bayaran pada hari majlis tetapi
+tidak sempat merekodnya dalam Hermes, jadi resit terkunci walaupun customer sudah bayar.
+Sebagai jalan tengah, resit dibuka apabila tarikh majlis tiba — walaupun `payment` masih
+kosong. `bill_no` dijana pada saat itu jika belum ada.
+
+Perbandingan tarikh mesti guna **waktu Malaysia (UTC+8)**, bukan UTC. Kalau guna UTC, resit
+kekal terkunci sehingga 8 pagi waktu tempatan pada hari majlis.
 
 Nombor dijana **sekali** oleh Hermes dan disimpan — buka dokumen sama sepuluh kali, nombor kekal.
 Bill No hanya wujud selepas bayaran, sebab itu quotation dan invoice ada siri sendiri.

@@ -16,19 +16,33 @@ const d = t.documents;
 
 <div id="doc-sheet" hidden class="doc-wrap mt-8">
   <div id="doc-page" class="doc-page" data-doc="page">
-    <span class="fit s-base" data-doc="bill-nama" style="left:12.8%;top:11.0%;width:18.0%"></span>
-    <span class="fit s-base" data-doc="no" style="left:47.0%;top:11.0%;width:11.5%"></span>
-    <span class="wrap s-base" data-doc="bill-alamat" style="left:24.6%;top:19.05%;width:32%"></span>
+    <!-- Box interiors measured off the artwork: Name 5.73–31.13%, No. 32.58–57.98%,
+         with their printed labels ending at 12.26% and 43.79%. -->
+    <span class="fit s-base" data-doc="bill-nama" style="left:13.06%;top:11.03%;width:17.4%"></span>
+    <!-- The "… No.:" label is a different width per type, so the script sets
+         this span's left/width to clear whichever label is printed. -->
+    <span class="fit s-base" data-doc="no" style="top:11.09%"></span>
 
-    <span class="fit s-base" data-doc="lokasi" style="left:18.6%;top:54.9%;width:40%"></span>
-    <span class="fit s-base" data-doc="tarikh" style="left:18.6%;top:56.9%;width:40%"></span>
-    <span class="fit s-base" data-doc="masa" style="left:18.6%;top:58.9%;width:40%"></span>
+    <!-- Address runs on its own lines under the label (baseline 17.33%), inside
+         a box ending at 28.22%. data-maxh is that free height, so a long address
+         shrinks rather than spilling past the border. -->
+    <span class="wrap s-addr" data-doc="bill-alamat" data-maxh="10.4"
+      style="left:7.26%;top:17.66%;width:48%"></span>
 
-    <span class="wrap s-note" data-doc="payment" style="left:9.5%;top:62.6%;width:48%"></span>
+    <!-- Location and Date must stay on one line: the artwork prints the next
+         label directly beneath them, so a wrapped line would collide with it.
+         Time is the last label, so it can flow down into the empty cell. -->
+    <span class="fit s-base" data-doc="lokasi" style="left:18.86%;top:55.04%;width:38%"></span>
+    <span class="fit s-base" data-doc="tarikh" style="left:18.86%;top:56.98%;width:38%"></span>
+    <span class="wrap s-base" data-doc="masa" data-maxh="6.0"
+      style="left:18.86%;top:58.92%;width:38%"></span>
 
-    <span class="mid s-amt" data-doc="rate" style="left:59.0%;top:53.0%;width:19.5%"></span>
-    <span class="mid s-amt" data-doc="amount" style="left:78.7%;top:53.0%;width:16.0%"></span>
-    <span class="mid s-total" data-doc="total" style="left:78.7%;top:74.0%;width:16.0%"></span>
+    <span class="wrap s-note" data-doc="payment" style="left:9.68%;top:65.0%;width:47%"></span>
+
+    <!-- Table columns: Detail 7.90–58.55%, Rate 58.55–78.79%, Amount 78.79–97.42% -->
+    <span class="mid s-amt" data-doc="rate" style="left:59.05%;top:53.29%;width:19.2%"></span>
+    <span class="mid s-amt" data-doc="amount" style="left:79.29%;top:53.29%;width:17.6%"></span>
+    <span class="mid s-total" data-doc="total" style="left:79.29%;top:74.80%;width:17.6%"></span>
   </div>
 </div>
 
@@ -79,6 +93,12 @@ const d = t.documents;
        page width) so values don't read as an afterthought next to them. */
     font-size: calc(var(--u) * 2.05);
     line-height: calc(var(--u) * 2.55);
+  }
+  /* Same type size as the labels, but tighter leading so a four-line address
+     (street, town, state, phone) still clears the bottom of its box. */
+  .doc-page > span.s-addr {
+    font-size: calc(var(--u) * 2.05);
+    line-height: calc(var(--u) * 2.35);
   }
   .doc-page > span.s-note {
     font-size: calc(var(--u) * 1.85);

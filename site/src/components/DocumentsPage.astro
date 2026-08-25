@@ -46,10 +46,6 @@ const pathname = localePath(locale, '/documents');
     data-label-invoice={d.invoice}
     data-label-receipt={d.receipt}
     data-label-travel={d.travelFee}
-    data-label-deposit={d.paidDeposit}
-    data-label-balance={d.paidBalance}
-    data-label-outstanding={d.outstanding}
-    data-label-settled={d.settled}
     data-wa-link={waLink}
     data-locale={locale}
   >
@@ -145,11 +141,80 @@ const pathname = localePath(locale, '/documents');
   // browser history, referrer headers or server logs.
   let phone = '';
   let selected: { lead_id: string; type: DocType } | null = null;
+  // Browsers name the "Save as PDF" file after document.title, so the rendered
+  // document's identity is kept here and swapped in just for the print.
+  let printName = '';
 
   const label = (type: DocType) =>
     ({ quotation: msg.labelQuotation!, invoice: msg.labelInvoice!, receipt: msg.labelReceipt! })[type];
 
   const money = (n: number) => `RM${Number(n).toFixed(2)}`;
+
+  // "1 hour" reads better as "/hour"; longer spans keep their number ("/2 hours")
+  const perUnit = (s: string) => s.trim().replace(/^1\s+(jam|hour)$/i, '$1');
+
+  // ---- Time normalisation -------------------------------------------------
+  // `masa` is free text the customer typed ("7PM", "10pg", "3.30 petang"), so a
+  // document would otherwise show a different format for every booking. Parse
+  // it, add the package duration, and print one house style:
+  //   10.00 a.m. - 11.00 a.m.
+  //   10.00 a.m. - 11.00 a.m. , 3.00 p.m. - 4.00 p.m.
+
+  // Minutes in "1 hour" / "1 jam 30 minit" / "1 hour 30 minutes"
+  function durationMinutes(d: string): number {
+    if (!d) return 0;
+    const s = d.toLowerCase();
+    const h = s.match(/(\d+)\s*(jam|hour)/);
+    // plural must be allowed: "30 minutes" has no word boundary after "minute"
+    const m = s.match(/(\d+)\s*(?:minit|minutes?|mins?)\b/);
+    return (h ? +h[1] * 60 : 0) + (m ? +m[1] : 0);
+  }
+
+  // One clock time -> minutes past midnight, or null when it can't be read
+  function parseClock(raw: string): number | null {
+    const s = raw.toLowerCase().replace(/\s+/g, '');
+    const m = s.match(/^(\d{1,2})(?:[.:](\d{2}))?(.*)$/);
+    if (!m) return null;
+    let h = +m[1];
+    const min = m[2] ? +m[2] : 0;
+    if (h > 23 || min > 59) return null;
+
+    const suffix = (m[3] || '').replace(/\./g, '');
+    let pm: boolean | null = null;
+    if (/^(am|pagi|pg)/.test(suffix)) pm = false;
+    else if (/^(pm|petang|ptg|tengahari|tgahari|tgh)/.test(suffix)) pm = true;
+    else if (/^(malam|mlm)/.test(suffix)) pm = h === 12 ? false : true; // "12 malam" = midnight
+
+    if (pm === null) {
+      if (h >= 13) return h * 60 + min; // already 24-hour
+      return null; // ambiguous — better to leave the customer's text alone
+    }
+    if (pm && h < 12) h += 12;
+    if (!pm && h === 12) h = 0;
+    return h * 60 + min;
+  }
+
+  function clockLabel(mins: number): string {
+    const t = ((mins % 1440) + 1440) % 1440;
+    const h24 = Math.floor(t / 60);
+    const h12 = h24 % 12 || 12;
+    const mm = String(t % 60).padStart(2, '0');
+    return `${h12}.${mm} ${h24 < 12 ? 'a.m.' : 'p.m.'}`;
+  }
+
+  function formatMasa(raw: string, durasi: string): string {
+    if (!raw) return '';
+    const sessions = raw.split(/\s*(?:[+&,/]|\bdan\b|\band\b)\s*/i).filter(Boolean);
+    const span = durationMinutes(durasi);
+    const parts: string[] = [];
+    for (const s of sessions) {
+      const start = parseClock(s);
+      if (start === null) return raw; // unreadable — never invent a time
+      parts.push(span > 0 ? `${clockLabel(start)} - ${clockLabel(start + span)}` : clockLabel(start));
+    }
+    // One session per line — two ranges on a single line runs past the cell
+    return parts.join('\n');
+  }
 
   const el = (sel: string) => sheet.querySelector<HTMLElement>(`[data-doc="${sel}"]`)!;
 
@@ -168,7 +233,33 @@ const pathname = localePath(locale, '/documents');
     unavailable: msg.msgErrorUnavailable,
   };
 
+  // Sample data for local previewing — `astro dev` doesn't run Pages Functions,
+  // so /api/documents is unreachable here. import.meta.env.DEV is false during
+  // `npm run build`, so this whole block is stripped from the production bundle.
+  const DEMO_PHONE = '0111111111';
+  function demo(payload: any) {
+    if (!import.meta.env.DEV || payload.phone !== DEMO_PHONE) return null;
+    if (payload.action === 'list') {
+      return { ok: true, bookings: [{
+        lead_id: 'demo', tarikh: '2026-08-14', pakej: 'Basic Package',
+        status: 'completed', available: TYPES,
+      }] };
+    }
+    const paid = { deposit: { amount: 100, date: '20 Jul 2026' }, balance: { amount: 260, date: '14 Aug 2026' }, outstanding: 0 };
+    return { ok: true, document: {
+      type: payload.type,
+      doc_no: { quotation: 'Q-26-0005', invoice: 'INV-26-0003', receipt: 'BJ-26-0007' }[payload.type as DocType],
+      billing: payload.billing,
+      event: { tarikh: '14 August 2026', masa: '10.00 pagi + 3.00 petang', lokasi: 'Taman Meru, Klang', durasi: '1 hour' },
+      items: [{ desc: 'Clown Appearance with Balloon Sculpture', qty: '1 hour', rate: 180, amount: 360 }],
+      travel_fee: 0, total: 360, deposit_required: 100,
+      payment: payload.type === 'quotation' ? {} : paid,
+    } };
+  }
+
   async function post(payload: Record<string, unknown>) {
+    const sample = demo(payload);
+    if (sample) return sample;
     const res = await fetch('/api/documents', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -331,37 +422,45 @@ const pathname = localePath(locale, '/documents');
     // Each type has its own artwork (the title and "… No." label are printed in it)
     page.style.backgroundImage = `url("/images/doc-${type}.webp")`;
 
-    // The artwork has one address box and no phone/email slots, so those go in
-    // the same box on their own lines.
-    const addressLines = [b.alamat, b.phone, b.email].filter(Boolean).join('\n');
+    // Only the address is printed. Phone and email are still collected and kept
+    // in Hermes for Jim, but the artwork's box only has room for ~4 lines and
+    // padding it out forced the whole block to shrink to stay inside the border.
+    const addressLines = b.alamat ?? '';
 
     el('bill-nama').textContent = b.nama ?? '';
     el('bill-alamat').textContent = addressLines;
-    el('no').textContent = doc.doc_no ?? '';
+    // Each artwork prints a different "… No.:" label, so start the value just
+    // past whichever one this type uses and run to the box edge (57.4%).
+    const labelEnd: Record<DocType, number> = { quotation: 46.29, invoice: 43.79, receipt: 44.27 };
+    const noLeft = labelEnd[type] + 0.8;
+    const noEl = el('no');
+    noEl.style.left = `${noLeft}%`;
+    noEl.style.width = `${57.4 - noLeft}%`;
+    noEl.textContent = doc.doc_no ?? '';
+
+    printName = `[${label(type)}] badutmurah.my (${doc.doc_no ?? ''})`;
 
     el('lokasi').textContent = ev.lokasi ?? '';
     el('tarikh').textContent = ev.tarikh ?? '';
-    el('masa').textContent = ev.masa ?? '';
+    el('masa').textContent = formatMasa(ev.masa ?? '', ev.durasi || doc.items?.[0]?.qty || '');
 
     // One row only, per the artwork: rate is the package rate, amount folds in
     // travel so the column still adds up to the printed Total.
     const items = doc.items ?? [];
     const itemsTotal = items.reduce((sum: number, i: any) => sum + (i.amount ?? 0), 0);
     const travel = doc.travel_fee ?? 0;
-    el('rate').textContent = items[0]?.rate != null ? money(items[0].rate) : '';
+    // Rate is a UNIT price ("RM180/hour"), not the line total — a customer who
+    // books two separate hours should be able to see how the amount was reached.
+    const unit = items[0]?.qty || ev.durasi || '';
+    el('rate').textContent =
+      items[0]?.rate != null ? `${money(items[0].rate)}${unit ? `/${perUnit(unit)}` : ''}` : '';
     el('amount').textContent = money(itemsTotal + travel);
     el('total').textContent = money(doc.total ?? itemsTotal + travel);
 
-    // Free space under Time carries the travel line and any payment record
+    // Free space under Time. Payment history is deliberately not printed — the
+    // document type and its number already say where the booking stands.
     const notes: string[] = [];
     if (travel) notes.push(`${msg.labelTravel}: ${money(travel)}`);
-    const p = doc.payment ?? {};
-    if (type !== 'quotation') {
-      if (p.deposit?.amount) notes.push(`${msg.labelDeposit}: ${money(p.deposit.amount)}${p.deposit.date ? ` (${p.deposit.date})` : ''}`);
-      if (p.balance?.amount) notes.push(`${msg.labelBalance}: ${money(p.balance.amount)}${p.balance.date ? ` (${p.balance.date})` : ''}`);
-      if (p.outstanding != null && p.outstanding > 0) notes.push(`${msg.labelOutstanding}: ${money(p.outstanding)}`);
-      else if (p.outstanding != null) notes.push(msg.labelSettled!);
-    }
     el('payment').textContent = notes.join('\n');
 
     sheet.hidden = false;
@@ -384,6 +483,19 @@ const pathname = localePath(locale, '/documents');
         node.style.fontSize = `${size}px`;
       }
     }
+
+    // Wrapping blocks (the address) are bounded by the height of their box
+    const pageH = page.getBoundingClientRect().height;
+    for (const node of page.querySelectorAll<HTMLElement>('[data-maxh]')) {
+      node.style.fontSize = '';
+      const maxH = (parseFloat(node.dataset.maxh!) / 100) * pageH;
+      const base = parseFloat(getComputedStyle(node).fontSize);
+      let size = base;
+      while (node.scrollHeight > maxH && size > base * 0.6) {
+        size -= base * 0.05;
+        node.style.fontSize = `${size}px`;
+      }
+    }
   }
 
   // Re-fit after a resize, since the sheet and its type scale with the viewport
@@ -391,5 +503,14 @@ const pathname = localePath(locale, '/documents');
     if (!sheet.hidden) shrinkToFit();
   });
 
-  printBtn.addEventListener('click', () => window.print());
+  // Restore on afterprint rather than straight after print() — the dialog is
+  // async, and the title has to still be in place when the browser reads it.
+  const pageTitle = document.title;
+  window.addEventListener('afterprint', () => {
+    document.title = pageTitle;
+  });
+  printBtn.addEventListener('click', () => {
+    if (printName) document.title = printName;
+    window.print();
+  });
 </script>

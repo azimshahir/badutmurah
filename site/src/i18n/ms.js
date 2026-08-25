@@ -169,7 +169,7 @@ export default {
     invoice: 'Invois',
     receipt: 'Resit',
     lockedInvoice: 'Tersedia selepas booking disahkan',
-    lockedReceipt: 'Tersedia selepas pembayaran direkod',
+    lockedReceipt: 'Tersedia pada hari majlis anda',
     billingHeading: 'Bil kepada',
     billingHint: 'Edit jika dokumen perlu dialamatkan berbeza, contohnya kepada syarikat.',
     billNama: 'Nama',
