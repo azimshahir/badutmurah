@@ -29,7 +29,7 @@
           "id": "2jam",
           "durasi": "2 jam",
           "durasi_en": "2 hours",
-          "harga": 400,
+          "harga": 450,
           "sesuai": "Sesuai untuk shopping mall, festival events.",
           "sesuai_en": "Suitable for shopping malls, festival events."
         },
@@ -72,13 +72,13 @@
   "promo": {
     "id": "ogos-merdeka-2026",
     "aktif": true,
-    "bulan": "2026-08",
+    "bulan": ["2026-08", "2026-09"],
     "harga": {
       "basic": {
         "1jam": 180,
         "2jam": 300
       },
-      "meriah": 250
+      "meriah": 300
     }
   },
   "travel": {

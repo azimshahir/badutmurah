@@ -83,7 +83,11 @@ async function forwardToVps(env, payload) {
 // Re-derived here from pricing.json — the price shown by the browser is never trusted.
 function promoHarga(pakejId, durasiId, tarikh) {
   const promo = pricing.promo;
-  if (!promo?.aktif || !tarikh.startsWith(promo.bulan)) return null;
+  if (!promo?.aktif) return null;
+  // `bulan` covers a promo that may span several months — accept a single
+  // string too so an older pricing.json shape still works.
+  const bulanList = Array.isArray(promo.bulan) ? promo.bulan : [promo.bulan];
+  if (!bulanList.some((b) => tarikh.startsWith(b))) return null;
   const entry = promo.harga?.[pakejId];
   if (entry == null) return null;
   return typeof entry === 'number' ? entry : (entry[durasiId] ?? null);
