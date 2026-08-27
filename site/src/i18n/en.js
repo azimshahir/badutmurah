@@ -201,6 +201,7 @@ export default {
     itemDate: 'Date',
     itemTime: 'Time',
     travelFee: 'Transportation fee',
+    priceOnRequest: 'Price to be discussed',
     total: 'TOTAL',
     paymentTerms: 'PAYMENT TERMS',
     paymentDetails: 'PAYMENT DETAILS',

@@ -201,6 +201,7 @@ export default {
     itemDate: 'Tarikh',
     itemTime: 'Masa',
     travelFee: 'Caj perjalanan',
+    priceOnRequest: 'Harga kena bincang',
     total: 'JUMLAH',
     paymentTerms: 'TERMA PEMBAYARAN',
     paymentDetails: 'BUTIRAN PEMBAYARAN',

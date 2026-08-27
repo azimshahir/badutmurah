@@ -46,6 +46,7 @@ const pathname = localePath(locale, '/documents');
     data-label-invoice={d.invoice}
     data-label-receipt={d.receipt}
     data-label-travel={d.travelFee}
+    data-msg-price-on-request={d.priceOnRequest}
     data-wa-link={waLink}
     data-locale={locale}
   >
@@ -449,13 +450,25 @@ const pathname = localePath(locale, '/documents');
     const items = doc.items ?? [];
     const itemsTotal = items.reduce((sum: number, i: any) => sum + (i.amount ?? 0), 0);
     const travel = doc.travel_fee ?? 0;
-    // Rate is a UNIT price ("RM180/hour"), not the line total — a customer who
-    // books two separate hours should be able to see how the amount was reached.
-    const unit = items[0]?.qty || ev.durasi || '';
-    el('rate').textContent =
-      items[0]?.rate != null ? `${money(items[0].rate)}${unit ? `/${perUnit(unit)}` : ''}` : '';
-    el('amount').textContent = money(itemsTotal + travel);
-    el('total').textContent = money(doc.total ?? itemsTotal + travel);
+    const total = doc.total ?? itemsTotal + travel;
+
+    // Hermes is the single source of truth for price (it computes from
+    // pricing.json + the lead's real package/promo data). `price_pending` is
+    // an explicit flag it sends only for genuinely unpriced packages (e.g.
+    // "more than 3 hours") — never inferred here from total being 0/falsy,
+    // since a real booking can legitimately have a 0 travel fee etc.
+    if (!doc.price_pending) {
+      // Rate is a UNIT price ("RM180/hour"), not the line total — a customer
+      // who books two separate hours should see how the amount was reached.
+      const unit = perUnit(items[0]?.qty || ev.durasi || '');
+      el('rate').textContent = items[0]?.rate ? `${money(items[0].rate)}${unit ? `/${unit}` : ''}` : '';
+      el('amount').textContent = money(itemsTotal + travel);
+      el('total').textContent = money(total);
+    } else {
+      el('rate').textContent = '';
+      el('amount').textContent = msg.msgPriceOnRequest!;
+      el('total').textContent = msg.msgPriceOnRequest!;
+    }
 
     // Free space under Time. Payment history is deliberately not printed — the
     // document type and its number already say where the booking stands.

@@ -39,10 +39,12 @@ const d = t.documents;
 
     <span class="wrap s-note" data-doc="payment" style="left:9.68%;top:65.0%;width:47%"></span>
 
-    <!-- Table columns: Detail 7.90–58.55%, Rate 58.55–78.79%, Amount 78.79–97.42% -->
-    <span class="mid s-amt" data-doc="rate" style="left:59.05%;top:53.29%;width:19.2%"></span>
-    <span class="mid s-amt" data-doc="amount" style="left:79.29%;top:53.29%;width:17.6%"></span>
-    <span class="mid s-total" data-doc="total" style="left:79.29%;top:74.80%;width:17.6%"></span>
+    <!-- Table columns: Detail 7.90–58.55%, Rate 58.55–78.79%, Amount 78.79–97.42%.
+         "fit" lets unusually long content (e.g. a custom-quote label) shrink
+         instead of spilling into the next column. -->
+    <span class="mid s-amt fit" data-doc="rate" style="left:59.05%;top:53.29%;width:19.2%"></span>
+    <span class="mid s-amt fit" data-doc="amount" style="left:79.29%;top:53.29%;width:17.6%"></span>
+    <span class="mid s-total fit" data-doc="total" style="left:79.29%;top:74.80%;width:17.6%"></span>
   </div>
 </div>
 
