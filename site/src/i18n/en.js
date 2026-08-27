@@ -78,7 +78,7 @@ export default {
       {
         emoji: '📍',
         q: 'Which areas do you cover?',
-        a: 'All of KL & Selangor at no extra charge. Outside KL & Selangor: add RM50, or discuss with us when booking.',
+        a: 'Within Klang Valley: free. Outside Klang Valley: add RM30. Outside KL & Selangor: add RM50, discuss with us when booking.',
       },
       {
         emoji: '🏠',
