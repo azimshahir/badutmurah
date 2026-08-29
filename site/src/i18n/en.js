@@ -137,6 +137,8 @@ export default {
     promoWas: 'normal price',
     pilihPakej: 'Choose a package',
     pilihDurasi: 'Choose duration',
+    pilihPrize: 'Choose prize value',
+    prizeOptions: 'Prize options: {options}',
     moreThan3: 'More than 3 hours',
     moreThan3Note: 'Price to be discussed. We will confirm with you after booking.',
     lokasi: 'Event area',

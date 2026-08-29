@@ -137,6 +137,8 @@ export default {
     promoWas: 'harga asal',
     pilihPakej: 'Pilih pakej',
     pilihDurasi: 'Pilih tempoh',
+    pilihPrize: 'Pilih nilai prize',
+    prizeOptions: 'Pilihan prize: {options}',
     moreThan3: 'Lebih 3 jam',
     moreThan3Note: 'Harga kena bincang dulu. Kami akan confirm dengan anda selepas booking.',
     lokasi: 'Kawasan majlis',

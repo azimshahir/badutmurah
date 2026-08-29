@@ -131,6 +131,13 @@ export async function onRequestPost({ request, env }) {
   if (!pakejDef) return bad('Pakej tak sah');
   if (!pakejDef.durasi_tetap && !data.durasi) return bad('Field wajib tiada: durasi');
 
+  let prize = null;
+  if (pakejDef.prize_options) {
+    if (typeof data.prize !== 'string' || !data.prize.trim()) return bad('Field wajib tiada: prize');
+    if (!pakejDef.prize_options.map(String).includes(data.prize)) return bad('Prize tak sah');
+    prize = Number(data.prize);
+  }
+
   const resolved = resolvePackage(data.pakej, data.durasi);
   if (!resolved) return bad('Pakej/durasi tak sah');
 
@@ -147,6 +154,11 @@ export async function onRequestPost({ request, env }) {
   // simply carries the promo price when the event falls in the promo month.
   const harga = promoHarga(data.pakej, data.durasi, data.tarikh) ?? resolved.harga;
 
+  // Keep the explicit field for relay support and mirror it into notes so the
+  // current notification pipeline still shows the selection.
+  const nota = data.nota?.trim() ?? '';
+  const relayNota = prize === null ? nota : `${nota}${nota ? '\n\n' : ''}Prize: RM${prize}`;
+
   // Booking succeeds only once jim-relay accepts the lead — it feeds the VPS
   // YAML + Linux watcher pipeline that sends the single owner notification.
   const relayOk = await forwardToVps(env, {
@@ -155,9 +167,10 @@ export async function onRequestPost({ request, env }) {
     tarikh: data.tarikh,
     masa: data.masa.trim(),
     pakej: data.pakej,
-    durasi: data.durasi ?? null,
+    durasi: pakejDef.durasi_tetap ? null : data.durasi,
+    ...(prize === null ? {} : { prize }),
     lokasi: data.lokasi.trim(),
-    nota: data.nota?.trim() ?? '',
+    nota: relayNota,
     harga,
     website: '',
   });

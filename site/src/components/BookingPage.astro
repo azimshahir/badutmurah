@@ -148,6 +148,19 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
         )}
       </fieldset>
 
+      <!-- Prize value: only shown/required for Game Package -->
+      <fieldset id="prize-fieldset" hidden>
+        <legend class="mb-2 font-semibold">{t.booking.pilihPrize}</legend>
+        <div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
+          {game.prize_options.map((amount) => (
+            <label class="prize-radio cursor-pointer rounded-2xl border-2 border-navy/15 bg-cream p-4 text-center has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
+              <input type="radio" name="prize" value={amount} class="sr-only" />
+              <span class="font-display font-bold">{money(amount)}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
       <!-- Duration: only shown/required for Basic Package -->
       <fieldset id="durasi-fieldset" hidden>
         <legend class="mb-2 font-semibold">{t.booking.pilihDurasi}</legend>
@@ -250,6 +263,7 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
   const successBox = document.getElementById('booking-success') as HTMLDivElement;
   const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
   const durasiFieldset = document.getElementById('durasi-fieldset') as HTMLFieldSetElement;
+  const prizeFieldset = document.getElementById('prize-fieldset') as HTMLFieldSetElement;
   const notaField = document.getElementById('nota') as HTMLTextAreaElement;
   const msg = form.dataset;
 
@@ -278,11 +292,13 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
     }
   }
 
-  // Show duration options only when Basic Package is chosen; require durasi accordingly
+  // Show and require only the package-specific options.
   const durasiInputs = form.querySelectorAll<HTMLInputElement>('input[name="durasi"]');
+  const prizeInputs = form.querySelectorAll<HTMLInputElement>('input[name="prize"]');
   form.querySelectorAll<HTMLInputElement>('input[name="pakej"]').forEach((radio) => {
     radio.addEventListener('change', () => {
       const isBasic = radio.value === 'basic' && radio.checked;
+      const isGame = radio.value === 'meriah' && radio.checked;
       if (isBasic) {
         durasiFieldset.hidden = false;
         durasiInputs.forEach((d) => (d.required = true));
@@ -291,6 +307,17 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
         durasiInputs.forEach((d) => {
           d.required = false;
           d.checked = false;
+        });
+      }
+
+      if (isGame) {
+        prizeFieldset.hidden = false;
+        prizeInputs.forEach((p) => (p.required = true));
+      } else if (radio.checked) {
+        prizeFieldset.hidden = true;
+        prizeInputs.forEach((p) => {
+          p.required = false;
+          p.checked = false;
         });
       }
     });

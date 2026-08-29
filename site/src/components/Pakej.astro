@@ -28,6 +28,7 @@ const promoHarga = (pakejId, durasiId) => {
 };
 const promoBasicFirst = promoHarga('basic', basic.durasi[0].id);
 const promoGame = promoHarga('meriah');
+const gamePrizeOptions = game.prize_options.map((amount) => `${currency}${amount}`).join(', ');
 ---
 
 <section id="pakej" class:list={['scroll-mt-28', !standalone && 'py-16 md:py-24']}>
@@ -118,6 +119,7 @@ const promoGame = promoHarga('meriah');
           </span>
         )}
         <p class="mt-3 text-sm opacity-80">{game[sesuaiKey]}</p>
+        <p class="mt-2 text-sm font-semibold">{t.booking.prizeOptions.replace('{options}', gamePrizeOptions)}</p>
         <ul class="mt-5 flex-1 space-y-2.5 text-[15px]">
           {f(game, 'termasukKey').map((item) => (
             <li class="flex gap-2">
