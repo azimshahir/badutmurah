@@ -1,97 +1,118 @@
 {
-  "currency": "RM",
-  "pakej": [
+ "currency": "RM",
+ "pakej": [
+  {
+   "id": "basic",
+   "nama": "Basic Package",
+   "nama_en": "Basic Package",
+   "popular": false,
+   "termasuk": [
+    "Badut profesional (10 tahun pengalaman)",
+    "Unlimited balloon twisting untuk semua kanak-kanak",
+    "Interaksi & lawak jenaka sepanjang sesi"
+   ],
+   "termasuk_en": [
+    "Professional clown (10 years of experience)",
+    "Unlimited balloon twisting for all the kids",
+    "Interaction & jokes throughout the session"
+   ],
+   "durasi": [
     {
-      "id": "basic",
-      "nama": "Basic Package",
-      "nama_en": "Basic Package",
-      "popular": false,
-      "termasuk": [
-        "Badut profesional (10 tahun pengalaman)",
-        "Unlimited balloon twisting untuk semua kanak-kanak",
-        "Interaksi & lawak jenaka sepanjang sesi"
-      ],
-      "termasuk_en": [
-        "Professional clown (10 years of experience)",
-        "Unlimited balloon twisting for all the kids",
-        "Interaction & jokes throughout the session"
-      ],
-      "durasi": [
-        {
-          "id": "1jam",
-          "durasi": "1 jam",
-          "durasi_en": "1 hour",
-          "harga": 250,
-          "sesuai": "Sesuai untuk birthday party, event syarikat, event sekolah, majlis kecil.",
-          "sesuai_en": "Suitable for birthday parties, company events, school events, small events."
-        },
-        {
-          "id": "2jam",
-          "durasi": "2 jam",
-          "durasi_en": "2 hours",
-          "harga": 450,
-          "sesuai": "Sesuai untuk shopping mall, festival events.",
-          "sesuai_en": "Suitable for shopping malls, festival events."
-        },
-        {
-          "id": "3jam-lebih",
-          "durasi": "Lebih 3 jam",
-          "durasi_en": "More than 3 hours",
-          "harga": null,
-          "sesuai": "Harga kena bincang dulu. WhatsApp kami untuk quotation.",
-          "sesuai_en": "Price to be discussed. WhatsApp us for a quotation."
-        }
-      ]
+     "id": "1jam",
+     "durasi": "1 jam",
+     "durasi_en": "1 hour",
+     "harga": 250,
+     "sesuai": "Sesuai untuk birthday party, event syarikat, event sekolah, majlis kecil.",
+     "sesuai_en": "Suitable for birthday parties, company events, school events, small events."
     },
     {
-      "id": "meriah",
-      "nama": "Game Package",
-      "nama_en": "Game Package",
-      "durasi_tetap": "1 jam 30 minit",
-      "durasi_tetap_en": "1 hour 30 minutes",
-      "harga": 400,
-      "prize_options": [20, 50, 100, 200, 500],
-      "popular": true,
-      "label": "Paling Popular",
-      "label_en": "Most Popular",
-      "sesuai": "Pilihan paling popular untuk birthday party.",
-      "sesuai_en": "The most popular pick for birthday parties.",
-      "termasuk": [
-        "Badut profesional (10 tahun pengalaman)",
-        "Unlimited balloon twisting untuk semua kanak-kanak",
-        "Games & aktiviti interaktif (musical chair & banyak lagi)",
-        "Sesi paling rancak, kanak-kanak takkan duduk diam!"
-      ],
-      "termasuk_en": [
-        "Professional clown (10 years of experience)",
-        "Unlimited balloon twisting for all the kids",
-        "Games & interactive activities (musical chairs & more)",
-        "The liveliest session, the kids won't sit still!"
-      ]
+     "id": "2jam",
+     "durasi": "2 jam",
+     "durasi_en": "2 hours",
+     "harga": 450,
+     "sesuai": "Sesuai untuk shopping mall, festival events.",
+     "sesuai_en": "Suitable for shopping malls, festival events."
+    },
+    {
+     "id": "3jam-lebih",
+     "durasi": "Lebih 3 jam",
+     "durasi_en": "More than 3 hours",
+     "harga": null,
+     "sesuai": "Harga kena bincang dulu. WhatsApp kami untuk quotation.",
+     "sesuai_en": "Price to be discussed. WhatsApp us for a quotation."
     }
-  ],
-  "promo": {
-    "id": "ogos-merdeka-2026",
-    "aktif": true,
-    "bulan": ["2026-08", "2026-09"],
-    "harga": {
-      "basic": {
-        "1jam": 180,
-        "2jam": 300
-      },
-      "meriah": 280
-    }
+   ]
   },
-  "travel": {
-    "nota": "Harga pakej termasuk perjalanan ke seluruh KL & Selangor.",
-    "zon": [
-      { "kawasan": "Kuala Lumpur & Selangor", "caj": 0, "label": "Percuma" },
-      { "kawasan": "Luar KL & Selangor", "caj": 50, "label": "+RM50 atau bincang masa booking" }
-    ]
-  },
-  "deposit": {
-    "jumlah": 100,
-    "nota": "Deposit RM100 untuk kunci tarikh. Baki dibayar selepas persembahan (cash / transfer / DuitNow).",
-    "polisi_reschedule": "Tukar tarikh percuma jika dimaklumkan 3 hari awal. Deposit tidak dikembalikan untuk pembatalan saat akhir."
+  {
+   "id": "meriah",
+   "nama": "Game Package",
+   "nama_en": "Game Package",
+   "durasi_tetap": "1 jam 30 minit",
+   "durasi_tetap_en": "1 hour 30 minutes",
+   "harga": 400,
+   "prize_options": [
+    20,
+    50,
+    100,
+    200,
+    500
+   ],
+   "popular": true,
+   "label": "Paling Popular",
+   "label_en": "Most Popular",
+   "sesuai": "Pilihan paling popular untuk birthday party.",
+   "sesuai_en": "The most popular pick for birthday parties.",
+   "termasuk": [
+    "Badut profesional (10 tahun pengalaman)",
+    "Unlimited balloon twisting untuk semua kanak-kanak",
+    "Games & aktiviti interaktif (musical chair & banyak lagi)",
+    "Sesi paling rancak, kanak-kanak takkan duduk diam!"
+   ],
+   "termasuk_en": [
+    "Professional clown (10 years of experience)",
+    "Unlimited balloon twisting for all the kids",
+    "Games & interactive activities (musical chairs & more)",
+    "The liveliest session, the kids won't sit still!"
+   ],
+   "hadiah_options": [
+    "sendiri_atau_tak_perlu",
+    "tolong_belikan"
+   ]
   }
+ ],
+ "promo": {
+  "id": "ogos-merdeka-2026",
+  "aktif": true,
+  "bulan": [
+   "2026-08",
+   "2026-09"
+  ],
+  "harga": {
+   "basic": {
+    "1jam": 180,
+    "2jam": 300
+   },
+   "meriah": 280
+  }
+ },
+ "travel": {
+  "nota": "Harga pakej termasuk perjalanan ke seluruh KL & Selangor.",
+  "zon": [
+   {
+    "kawasan": "Kuala Lumpur & Selangor",
+    "caj": 0,
+    "label": "Percuma"
+   },
+   {
+    "kawasan": "Luar KL & Selangor",
+    "caj": 50,
+    "label": "+RM50 atau bincang masa booking"
+   }
+  ]
+ },
+ "deposit": {
+  "jumlah": 100,
+  "nota": "Deposit RM100 untuk kunci tarikh. Baki dibayar selepas persembahan (cash / transfer / DuitNow).",
+  "polisi_reschedule": "Tukar tarikh percuma jika dimaklumkan 3 hari awal. Deposit tidak dikembalikan untuk pembatalan saat akhir."
+ }
 }

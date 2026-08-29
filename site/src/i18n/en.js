@@ -139,6 +139,11 @@ export default {
     pilihDurasi: 'Choose duration',
     pilihPrize: 'Choose prize value',
     prizeOptions: 'Prize options: {options}',
+    pilihHadiah: 'Choose a prize option',
+    hadiahOptions: {
+      sendiri_atau_tak_perlu: 'I’ll provide the prizes / No prizes needed',
+      tolong_belikan: 'Please buy the prizes for me',
+    },
     moreThan3: 'More than 3 hours',
     moreThan3Note: 'Price to be discussed. We will confirm with you after booking.',
     lokasi: 'Event area',

@@ -132,10 +132,18 @@ export async function onRequestPost({ request, env }) {
   if (!pakejDef.durasi_tetap && !data.durasi) return bad('Field wajib tiada: durasi');
 
   let prize = null;
+  let hadiah = null;
+  if (pakejDef.hadiah_options) {
+    if (typeof data.hadiah !== 'string' || !data.hadiah.trim()) return bad('Field wajib tiada: hadiah');
+    if (!pakejDef.hadiah_options.includes(data.hadiah)) return bad('Pilihan hadiah tak sah');
+    hadiah = data.hadiah;
+  }
   if (pakejDef.prize_options) {
-    if (typeof data.prize !== 'string' || !data.prize.trim()) return bad('Field wajib tiada: prize');
-    if (!pakejDef.prize_options.map(String).includes(data.prize)) return bad('Prize tak sah');
-    prize = Number(data.prize);
+    if (hadiah === 'tolong_belikan') {
+      if (typeof data.prize !== 'string' || !data.prize.trim()) return bad('Field wajib tiada: prize');
+      if (!pakejDef.prize_options.map(String).includes(data.prize)) return bad('Prize tak sah');
+      prize = Number(data.prize);
+    }
   }
 
   const resolved = resolvePackage(data.pakej, data.durasi);
@@ -157,7 +165,9 @@ export async function onRequestPost({ request, env }) {
   // Keep the explicit field for relay support and mirror it into notes so the
   // current notification pipeline still shows the selection.
   const nota = data.nota?.trim() ?? '';
-  const relayNota = prize === null ? nota : `${nota}${nota ? '\n\n' : ''}Prize: RM${prize}`;
+  let relayNota = nota;
+  if (hadiah !== null) relayNota = `${nota}${nota ? '\n\n' : ''}Hadiah: ${hadiah === 'tolong_belikan' ? 'Tolong belikan' : 'Sediakan sendiri / Tak perlu'}`;
+  if (prize !== null) relayNota = `${relayNota}${relayNota ? '\n\n' : ''}Prize: RM${prize}`;
 
   // Booking succeeds only once jim-relay accepts the lead — it feeds the VPS
   // YAML + Linux watcher pipeline that sends the single owner notification.
@@ -168,6 +178,7 @@ export async function onRequestPost({ request, env }) {
     masa: data.masa.trim(),
     pakej: data.pakej,
     durasi: pakejDef.durasi_tetap ? null : data.durasi,
+    ...(hadiah === null ? {} : { hadiah }),
     ...(prize === null ? {} : { prize }),
     lokasi: data.lokasi.trim(),
     nota: relayNota,

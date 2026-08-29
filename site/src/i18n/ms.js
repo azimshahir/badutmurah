@@ -139,6 +139,11 @@ export default {
     pilihDurasi: 'Pilih tempoh',
     pilihPrize: 'Pilih nilai prize',
     prizeOptions: 'Pilihan prize: {options}',
+    pilihHadiah: 'Pilih pilihan hadiah',
+    hadiahOptions: {
+      sendiri_atau_tak_perlu: 'Saya sediakan hadiah sendiri / Tak perlu hadiah',
+      tolong_belikan: 'Tolong belikan hadiah untuk saya',
+    },
     moreThan3: 'Lebih 3 jam',
     moreThan3Note: 'Harga kena bincang dulu. Kami akan confirm dengan anda selepas booking.',
     lokasi: 'Kawasan majlis',

@@ -20,6 +20,7 @@ const nameKey = t.pakej.nameKey;
 
 const basic = pakej.find((p) => p.id === 'basic');
 const game = pakej.find((p) => p.id === 'meriah');
+const hadiahOptions = (game?.hadiah_options ?? []).map((id) => ({ id, label: t.booking.hadiahOptions?.[id] ?? id }));
 
 // August 2026 promo. All prices come from pricing.json — never hardcode here.
 const promo = pricing.promo?.aktif ? pricing.promo : null;
@@ -148,7 +149,20 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
         )}
       </fieldset>
 
-      <!-- Prize value: only shown/required for Game Package -->
+      <!-- Prize arrangement: only shown/required for Game Package -->
+      <fieldset id="hadiah-fieldset" hidden>
+        <legend class="mb-2 font-semibold">{t.booking.pilihHadiah}</legend>
+        <div class="space-y-2">
+          {hadiahOptions.map((option) => (
+            <label class="flex cursor-pointer items-center gap-3 rounded-2xl border-2 border-navy/15 bg-cream p-4 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
+              <input type="radio" name="hadiah" value={option.id} class="sr-only" />
+              <span class="font-display font-semibold">{option.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <!-- Prize value: shown only when customer chooses "tolong_belikan" -->
       <fieldset id="prize-fieldset" hidden>
         <legend class="mb-2 font-semibold">{t.booking.pilihPrize}</legend>
         <div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
@@ -264,6 +278,7 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
   const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
   const durasiFieldset = document.getElementById('durasi-fieldset') as HTMLFieldSetElement;
   const prizeFieldset = document.getElementById('prize-fieldset') as HTMLFieldSetElement;
+  const hadiahFieldset = document.getElementById('hadiah-fieldset') as HTMLFieldSetElement;
   const notaField = document.getElementById('nota') as HTMLTextAreaElement;
   const msg = form.dataset;
 
@@ -295,6 +310,24 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
   // Show and require only the package-specific options.
   const durasiInputs = form.querySelectorAll<HTMLInputElement>('input[name="durasi"]');
   const prizeInputs = form.querySelectorAll<HTMLInputElement>('input[name="prize"]');
+  const hadiahInputs = form.querySelectorAll<HTMLInputElement>('input[name="hadiah"]');
+
+  // Show prize value only when customer picks "tolong_belikan".
+  const syncPrizeForHadiah = () => {
+    const chosen = form.querySelector<HTMLInputElement>('input[name="hadiah"]:checked');
+    if (chosen?.value === 'tolong_belikan') {
+      prizeFieldset.hidden = false;
+      prizeInputs.forEach((p) => (p.required = true));
+    } else {
+      prizeFieldset.hidden = true;
+      prizeInputs.forEach((p) => {
+        p.required = false;
+        p.checked = false;
+      });
+    }
+  };
+  hadiahInputs.forEach((h) => h.addEventListener('change', syncPrizeForHadiah));
+
   form.querySelectorAll<HTMLInputElement>('input[name="pakej"]').forEach((radio) => {
     radio.addEventListener('change', () => {
       const isBasic = radio.value === 'basic' && radio.checked;
@@ -311,15 +344,22 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
       }
 
       if (isGame) {
-        prizeFieldset.hidden = false;
-        prizeInputs.forEach((p) => (p.required = true));
+        hadiahFieldset.hidden = false;
+        hadiahInputs.forEach((h) => (h.required = true));
       } else if (radio.checked) {
+        hadiahFieldset.hidden = true;
+        hadiahInputs.forEach((h) => {
+          h.required = false;
+          h.checked = false;
+        });
         prizeFieldset.hidden = true;
         prizeInputs.forEach((p) => {
           p.required = false;
           p.checked = false;
         });
       }
+      // Untuk Game, prize hanya muncul bila "tolong_belikan" dipilih.
+      if (isGame) syncPrizeForHadiah();
     });
   });
 
