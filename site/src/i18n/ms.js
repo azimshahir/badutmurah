@@ -139,7 +139,7 @@ export default {
     pilihDurasi: 'Pilih tempoh',
     pilihPrize: 'Pilih nilai prize',
     prizeOptions: 'Pilihan prize: {options}',
-    pilihHadiah: 'Pilih pilihan hadiah',
+    pilihHadiah: 'Macam mana hadiah untuk sesi games nak disediakan?',
     hadiahOptions: {
       sendiri_atau_tak_perlu: 'Saya sediakan hadiah sendiri / Tak perlu hadiah',
       tolong_belikan: 'Tolong belikan hadiah untuk saya',

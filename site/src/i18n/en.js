@@ -139,7 +139,7 @@ export default {
     pilihDurasi: 'Choose duration',
     pilihPrize: 'Choose prize value',
     prizeOptions: 'Prize options: {options}',
-    pilihHadiah: 'Choose a prize option',
+    pilihHadiah: 'How would you like to arrange the prizes for the game session?',
     hadiahOptions: {
       sendiri_atau_tak_perlu: 'I’ll provide the prizes / No prizes needed',
       tolong_belikan: 'Please buy the prizes for me',

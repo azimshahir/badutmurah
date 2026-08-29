@@ -66,6 +66,7 @@
 - **Tip masa (bubble bawah field Masa):** 💡 Tips: book slot Jim 30 minit – 1 jam lepas majlis bermula, supaya semua tetamu dah sampai dan boleh enjoy sekali.
 - **Placeholder lokasi:** cth: Seksyen 13, Shah Alam
 - **Tip lokasi (bubble bawah field Kawasan majlis):** 📍 Tulis seksyen / taman / lorong — tak perlu alamat penuh. Kami confirm lokasi tepat nanti masa WhatsApp.
+- **Soalan hadiah Game Package:** Macam mana hadiah untuk sesi games nak disediakan?
 - **Butang:** Hantar Booking
 - **Success:** Booking diterima! 🎈 Kami akan WhatsApp anda dalam masa 1 jam untuk confirm. Terima kasih!
 - **Error:** Alamak, ada masalah teknikal. Sila cuba lagi atau WhatsApp kami terus.
