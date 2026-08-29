@@ -81,12 +81,11 @@
   }
  ],
  "promo": {
-  "id": "ogos-merdeka-2026",
-  "aktif": true,
-  "bulan": [
-   "2026-08",
-   "2026-09"
-  ],
+   "id": "sept-hari-malaysia-2026",
+   "aktif": true,
+   "bulan": [
+     "2026-09"
+   ],
   "harga": {
    "basic": {
     "1jam": 180,
