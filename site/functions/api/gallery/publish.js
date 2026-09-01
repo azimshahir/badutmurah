@@ -2,7 +2,7 @@
 // published (shown in the public gallery) or unpublish it.
 //
 // Auth: Bearer token in `Authorization` header against MEDIA_UPLOAD_TOKEN.
-// Body: { filename: "abc.jpg", published: true|false }
+// Body: { filename: "abc.jpg", published: true|false, gallery_month: "2026-08" }
 //
 // Returns the updated metadata. The file itself is never deleted here — a
 // published image that is later unpublished stays on /media/social/<name> so
@@ -44,8 +44,12 @@ export async function onRequestPost({ request, env }) {
   }
   const filename = String(body.filename || '').trim();
   const published = body.published === true;
+  const requestedMonth = String(body.gallery_month || '').trim();
   if (!/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(filename)) {
     return bad('invalid_filename');
+  }
+  if (published && !/^\d{4}-(0[1-9]|1[0-2])$/.test(requestedMonth)) {
+    return bad('invalid_gallery_month');
   }
 
   // File must exist
@@ -55,10 +59,11 @@ export async function onRequestPost({ request, env }) {
   }
 
   // Update metadata (keep created_at if present)
-  let meta = { published, created_at: new Date().toISOString() };
+  let meta = { published, created_at: new Date().toISOString(), gallery_month: requestedMonth || null };
   try {
     const existing = JSON.parse(await env.MEDIA_KV.get(`meta/${filename}`));
     if (existing && existing.created_at) meta.created_at = existing.created_at;
+    if (!requestedMonth && existing && existing.gallery_month) meta.gallery_month = existing.gallery_month;
   } catch {
     /* first publish — no existing meta */
   }
@@ -70,6 +75,7 @@ export async function onRequestPost({ request, env }) {
     ok: true,
     filename,
     published,
+    gallery_month: meta.gallery_month,
     url: `https://badutmurah.my/media/social/${filename}`,
   });
 }

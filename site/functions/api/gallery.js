@@ -3,7 +3,7 @@
 // Reads metadata records stored under `meta/<name>`; returns only entries with
 // `published: true`. Social-uploaded files (published: false) never appear.
 //
-// Response: { ok: true, images: [{ name, url, created_at }] }
+// Response: { ok: true, images: [{ name, url, created_at, gallery_month }] }
 
 const LIST_LIMIT = 1000;
 
@@ -25,6 +25,7 @@ export async function onRequestGet({ env }) {
           name,
           url: `https://badutmurah.my/media/social/${name}`,
           created_at: meta.created_at || null,
+          gallery_month: meta.gallery_month || String(meta.created_at || '').slice(0, 7) || null,
         });
       }
     }
