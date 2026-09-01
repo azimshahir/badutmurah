@@ -4,11 +4,19 @@ pages_build_output_dir = "./dist"
 compatibility_date = "2026-07-07"
 compatibility_flags = ["global_fetch_private_origin"]
 
+[[kv_namespaces]]
+binding = "MEDIA_KV"
+id = "22dc4168127241828788c399985c8369"
+
 [[services]]
 binding = "RELAY"
 service = "jim-relay"
 
 [env.production]
+
+[[env.production.kv_namespaces]]
+binding = "MEDIA_KV"
+id = "22dc4168127241828788c399985c8369"
 
 [[env.production.services]]
 binding = "RELAY"
