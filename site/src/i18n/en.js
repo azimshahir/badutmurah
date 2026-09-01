@@ -15,6 +15,7 @@ export default {
     home: 'Home',
     ourClown: 'Our Clown',
     pakej: 'Package',
+    gallery: 'Gallery',
     edutainment: 'Edutainment Project',
     edutainmentTag: 'Click here to see cool things!',
     jimClown: 'Jim The Clown',
@@ -67,6 +68,10 @@ export default {
   gallery: {
     heading: 'Happy Moments',
     sub: 'Some of the events we have brightened up.',
+    metaTitle: 'Gallery | Badut Jim, badutmurah.my',
+    metaDescription: 'Photos from Badut Jim events across KL & Selangor — birthday parties, corporate events and more.',
+    loading: 'Loading photos...',
+    empty: 'No photos yet. Check back soon!',
   },
   testimoni: {
     heading: 'What Parents Say',

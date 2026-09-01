@@ -15,6 +15,7 @@ export default {
     home: 'Home',
     ourClown: 'Badut Kami',
     pakej: 'Pakej',
+    gallery: 'Gallery',
     edutainment: 'Projek Edutainment',
     edutainmentTag: 'Klik sini tengok benda best!',
     jimClown: 'Jim The Clown',
@@ -67,6 +68,10 @@ export default {
   gallery: {
     heading: 'Detik-Detik Ceria',
     sub: 'Sebahagian daripada majlis yang pernah kami serikan.',
+    metaTitle: 'Gallery | Badut Jim, badutmurah.my',
+    metaDescription: 'Gambar-gambar majlis Badut Jim di seluruh KL & Selangor — birthday party, majlis korporat dan banyak lagi.',
+    loading: 'Memuatkan gambar...',
+    empty: 'Tiada gambar lagi. Datang semula nanti!',
   },
   testimoni: {
     heading: 'Apa Kata Ibu Bapa',
