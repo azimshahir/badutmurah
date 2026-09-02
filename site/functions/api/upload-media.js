@@ -11,7 +11,8 @@
 //    the Pages Functions runtime.
 //  - Generates a unique, non-overwriting filename (timestamp + random + ext).
 //  - Stores bytes in MEDIA_KV under `social/<name>` + metadata under
-//    `meta/<name>` with { published: false }.
+//    `meta/<name>` with { published: false }. MP4 bytes and metadata expire
+//    automatically after seven days; images remain until explicitly managed.
 //    Social-uploaded files do NOT appear in the public gallery until marked
 //    published via the admin publish endpoint.
 //  - Returns the stable public URL https://badutmurah.my/media/social/<name>.
@@ -27,6 +28,7 @@ const ALLOWED = {
 
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
 const MAX_VIDEO_BYTES = 20 * 1024 * 1024;
+const VIDEO_EXPIRATION_TTL_SECONDS = 7 * 24 * 60 * 60;
 
 export function onRequestGet() {
   return new Response('Method Not Allowed', { status: 405, headers: { Allow: 'POST' } });
@@ -224,11 +226,16 @@ export async function onRequestPost({ request, env }) {
 
   // ---- store ----
   try {
+    const expiry = realType === 'video/mp4'
+      ? { expirationTtl: VIDEO_EXPIRATION_TTL_SECONDS }
+      : {};
     await env.MEDIA_KV.put(`social/${name}`, cleaned, {
       metadata: { contentType: realType },
+      ...expiry,
     });
     await env.MEDIA_KV.put(`meta/${name}`, JSON.stringify({ published: false, created_at: new Date().toISOString() }), {
       metadata: { contentType: 'application/json' },
+      ...expiry,
     });
   } catch (err) {
     return bad(`storage failed: ${err?.message || 'unknown error'}`, 500);
@@ -241,6 +248,7 @@ export async function onRequestPost({ request, env }) {
     content_type: realType,
     size: cleaned.byteLength,
     published: false,
+    expires_in_seconds: realType === 'video/mp4' ? VIDEO_EXPIRATION_TTL_SECONDS : null,
     note: 'File is stored for social publishing and is NOT shown in the public gallery.',
   });
 }
