@@ -11,6 +11,7 @@ const MIME = {
   jpeg: 'image/jpeg',
   png: 'image/png',
   webp: 'image/webp',
+  mp4: 'video/mp4',
 };
 
 export async function onRequestGet({ env, params }) {

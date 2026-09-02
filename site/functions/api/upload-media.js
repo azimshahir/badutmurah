@@ -4,7 +4,7 @@
 // the MEDIA_UPLOAD_TOKEN secret (set in Cloudflare dashboard / API).
 //
 // Behaviour:
-//  - Accepts image/jpeg, image/png, image/webp only (header check).
+//  - Accepts image/jpeg, image/png, image/webp and video/mp4 (header check).
 //  - Validates the real file format via magic bytes (not just the header).
 //  - Strips EXIF/GPS metadata chunks from the bytes (JPEG APP1/APP13, PNG
 //    eXIf, WebP EXIF) — no external image library needed, so this works in
@@ -16,15 +16,17 @@
 //    published via the admin publish endpoint.
 //  - Returns the stable public URL https://badutmurah.my/media/social/<name>.
 //
-// Limits: 10 MB body cap.
+// Limits: 10 MiB per image and 20 MiB per MP4 (below the KV value limit).
 
 const ALLOWED = {
   'image/jpeg': 'jpg',
   'image/png': 'png',
   'image/webp': 'webp',
+  'video/mp4': 'mp4',
 };
 
-const MAX_BYTES = 10 * 1024 * 1024;
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+const MAX_VIDEO_BYTES = 20 * 1024 * 1024;
 
 export function onRequestGet() {
   return new Response('Method Not Allowed', { status: 405, headers: { Allow: 'POST' } });
@@ -62,6 +64,16 @@ export function detectFormat(bytes) {
     bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50
   ) {
     return 'image/webp';
+  }
+  // ISO Base Media File Format. Require an MP4-compatible major brand and
+  // reject QuickTime's `qt  ` brand so a renamed MOV is not accepted.
+  if (
+    bytes.length >= 12 &&
+    bytes[4] === 0x66 && bytes[5] === 0x74 && bytes[6] === 0x79 && bytes[7] === 0x70
+  ) {
+    const brand = String.fromCharCode(bytes[8], bytes[9], bytes[10], bytes[11]);
+    const mp4Brands = new Set(['isom', 'iso2', 'iso3', 'iso4', 'iso5', 'iso6', 'mp41', 'mp42', 'avc1', 'M4V ']);
+    if (mp4Brands.has(brand)) return 'video/mp4';
   }
   return null;
 }
@@ -176,10 +188,11 @@ export async function onRequestPost({ request, env }) {
   // ---- content-type header check ----
   const contentType = (request.headers.get('Content-Type') || '').split(';')[0].trim().toLowerCase();
   if (!ALLOWED[contentType]) {
-    return bad(`unsupported content type: ${contentType || '(none)'}. Allowed: image/jpeg, image/png, image/webp`);
+    return bad(`unsupported content type: ${contentType || '(none)'}. Allowed: image/jpeg, image/png, image/webp, video/mp4`);
   }
+  const maxBytes = contentType === 'video/mp4' ? MAX_VIDEO_BYTES : MAX_IMAGE_BYTES;
   const length = Number(request.headers.get('Content-Length') || '0');
-  if (length > MAX_BYTES) return bad('file too large (max 10 MB)', 413);
+  if (length > maxBytes) return bad(`file too large (max ${maxBytes / 1024 / 1024} MiB)`, 413);
 
   // ---- read body ----
   let buf;
@@ -190,11 +203,11 @@ export async function onRequestPost({ request, env }) {
   }
   const bytes = new Uint8Array(buf);
   if (bytes.byteLength === 0) return bad('empty file');
-  if (bytes.byteLength > MAX_BYTES) return bad('file too large (max 10 MB)', 413);
+  if (bytes.byteLength > maxBytes) return bad(`file too large (max ${maxBytes / 1024 / 1024} MiB)`, 413);
 
   // ---- validate real format (magic bytes) ----
   const realType = detectFormat(bytes);
-  if (!realType) return bad('invalid image: not a JPEG, PNG or WebP file');
+  if (!realType) return bad('invalid media: not a JPEG, PNG, WebP or supported MP4 file');
   if (realType !== contentType) {
     return bad(`content-type (${contentType}) does not match file format (${realType})`);
   }
