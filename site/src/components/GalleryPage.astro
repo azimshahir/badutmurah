@@ -13,11 +13,11 @@ const pathname = localePath(locale, '/gallery');
 
 <Layout locale={locale} title={t.gallery.metaTitle} description={t.gallery.metaDescription} pathname={pathname}>
   <Navbar locale={locale} pathname={pathname} />
-  <main class="mx-auto max-w-[1100px] px-5 py-14 md:py-20">
-    <h1 class="squiggle mx-auto w-fit text-center text-4xl font-bold md:text-5xl">{t.gallery.heading}</h1>
-    <p class="mx-auto mt-4 max-w-xl text-center text-lg opacity-90">{t.gallery.sub}</p>
+  <main class="mx-auto max-w-[1100px] px-4 py-10 sm:px-5 sm:py-14 md:py-20">
+    <h1 class="squiggle mx-auto w-fit text-center text-3xl font-bold sm:text-4xl md:text-5xl">{t.gallery.heading}</h1>
+    <p class="mx-auto mt-4 max-w-xl text-center text-base opacity-90 sm:text-lg">{t.gallery.sub}</p>
 
-    <div id="gallery-root" class="mt-14 space-y-14">
+    <div id="gallery-root" class="mt-10 space-y-10 sm:mt-14 sm:space-y-14">
       <p class="w-full text-center opacity-70" data-state="loading">{t.gallery.loading}</p>
     </div>
 
@@ -71,15 +71,15 @@ const pathname = localePath(locale, '/gallery');
       section.setAttribute('aria-labelledby', `gallery-${key}`);
       const heading = document.createElement('h2');
       heading.id = `gallery-${key}`;
-      heading.className = 'mb-7 text-center text-2xl font-bold text-navy md:text-3xl';
+      heading.className = 'mb-5 text-center text-xl font-bold text-navy sm:mb-7 sm:text-2xl md:text-3xl';
       heading.textContent = monthLabel(key) || key;
       section.appendChild(heading);
 
       const monthGrid = document.createElement('div');
-      monthGrid.className = 'flex flex-wrap items-start justify-center gap-5 md:gap-7';
+      monthGrid.className = 'grid grid-cols-2 items-start gap-3 sm:flex sm:flex-wrap sm:justify-center sm:gap-5 md:gap-7';
       for (const img of groups.get(key)) {
         const figure = document.createElement('figure');
-        figure.className = 'polaroid w-[46%] rounded-sm sm:w-56';
+        figure.className = 'polaroid w-full rounded-sm sm:w-56';
         const picture = document.createElement('img');
         picture.src = img.url;
         picture.alt = '';

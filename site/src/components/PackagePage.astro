@@ -14,10 +14,10 @@ const pathname = localePath(locale, '/package');
 
 <Layout locale={locale} title={t.pakej.heading + ' | badutmurah.my'} description={t.pakej.sub} pathname={pathname}>
   <Navbar locale={locale} pathname={pathname} />
-  <main class="py-14 md:py-20">
-    <div class="mx-auto max-w-[900px] px-5">
-      <h1 class="squiggle mx-auto w-fit text-center text-4xl font-bold md:text-5xl">{t.pakej.heading}</h1>
-      <p class="mx-auto mt-4 max-w-xl text-center text-lg opacity-90">{t.pakej.sub}</p>
+  <main class="py-10 sm:py-14 md:py-20">
+    <div class="mx-auto max-w-[900px] px-4 sm:px-5">
+      <h1 class="squiggle mx-auto w-fit text-center text-3xl font-bold sm:text-4xl md:text-5xl">{t.pakej.heading}</h1>
+      <p class="mx-auto mt-4 max-w-xl text-center text-base opacity-90 sm:text-lg">{t.pakej.sub}</p>
     </div>
     <Pakej locale={locale} standalone={true} />
   </main>

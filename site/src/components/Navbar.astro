@@ -16,7 +16,7 @@ const isEdu = pathname.endsWith('/edutainment');
 ---
 
 <nav class="sticky top-0 z-40 bg-white/80 shadow-sm backdrop-blur-md">
-  <div class="mx-auto flex max-w-[1240px] items-center justify-between gap-2 px-4 py-3 md:gap-4 md:px-5">
+  <div class="mx-auto flex max-w-[1240px] items-center justify-between gap-2 px-4 py-2.5 md:gap-4 md:px-5 md:py-3">
     <a href={p('/')} class="flex min-w-0 shrink-0 items-center gap-1.5 md:mr-8 md:gap-2">
       <img src="/images/logo-mascot.png" alt="" width="512" height="410" class="logo-emoji h-7 w-auto shrink-0 sm:h-8 md:h-10" aria-hidden="true" />
       <Wordmark class="h-5 w-auto shrink-0 sm:h-6 md:h-8" />
@@ -87,7 +87,7 @@ const isEdu = pathname.endsWith('/edutainment');
       <button
         id="nav-toggle"
         type="button"
-        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-navy/15 lg:hidden"
+        class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-navy/15 lg:hidden"
         aria-expanded="false"
         aria-controls="mobile-menu"
         aria-label={locale === 'en' ? 'Open menu' : 'Buka menu'}
@@ -100,30 +100,30 @@ const isEdu = pathname.endsWith('/edutainment');
   </div>
 
   <!-- Mobile dropdown panel: stacked full-width links, no overflow risk -->
-  <div id="mobile-menu" class="hidden border-t border-navy/5 px-4 py-3 lg:hidden">
+  <div id="mobile-menu" class="hidden max-h-[calc(100dvh-64px)] overflow-y-auto border-t border-navy/5 px-4 py-2.5 lg:hidden">
     <div class="flex flex-col gap-1 text-base font-semibold">
       <a
         href={p('/booking')}
-        class="pop gradient-pink mb-1 rounded-full px-4 py-3 text-center font-display font-bold text-white shadow-lg shadow-coral/30"
+        class="pop gradient-pink mb-1 flex min-h-11 items-center justify-center rounded-full px-4 py-2.5 text-center font-display font-bold text-white shadow-lg shadow-coral/30"
       >
         ⭐ {t.nav.book}
       </a>
-      <a href={p('/')} class="rounded-xl px-3 py-2.5 hover:bg-cream hover:text-coral-dark" aria-current={isHome ? 'page' : undefined}>{t.nav.home}</a>
-      <a href={p('/our-clown')} class="rounded-xl px-3 py-2.5 hover:bg-cream hover:text-coral-dark" aria-current={isClown ? 'page' : undefined}>
+      <a href={p('/')} class="flex min-h-11 items-center rounded-xl px-3 py-2 hover:bg-cream hover:text-coral-dark" aria-current={isHome ? 'page' : undefined}>{t.nav.home}</a>
+      <a href={p('/our-clown')} class="flex min-h-11 items-center rounded-xl px-3 py-2 hover:bg-cream hover:text-coral-dark" aria-current={isClown ? 'page' : undefined}>
         🤡 {t.nav.jimClown}
       </a>
-      <a href={p('/package')} class="rounded-xl px-3 py-2.5 hover:bg-cream hover:text-coral-dark">{t.nav.pakej}</a>
-      <a href={p('/gallery')} class="rounded-xl px-3 py-2.5 hover:bg-cream hover:text-coral-dark">{t.nav.gallery}</a>
+      <a href={p('/package')} class="flex min-h-11 items-center rounded-xl px-3 py-2 hover:bg-cream hover:text-coral-dark">{t.nav.pakej}</a>
+      <a href={p('/gallery')} class="flex min-h-11 items-center rounded-xl px-3 py-2 hover:bg-cream hover:text-coral-dark">{t.nav.gallery}</a>
       <a
         href={p('/edutainment')}
-        class="wiggle mt-1 rounded-full bg-gradient-to-r from-sunny to-coral/70 px-4 py-2.5 text-center font-display font-bold text-navy"
+        class="wiggle mt-1 flex min-h-11 items-center justify-center rounded-full bg-gradient-to-r from-sunny to-coral/70 px-4 py-2 text-center font-display font-bold text-navy"
         aria-current={isEdu ? 'page' : undefined}
       >
         ✨ {t.nav.edutainmentTag}
       </a>
       <a
         href={altHref}
-        class="mt-2 rounded-xl border-2 border-navy/15 px-3 py-2.5 text-center hover:border-coral hover:text-coral-dark"
+        class="mt-2 flex min-h-11 items-center justify-center rounded-xl border-2 border-navy/15 px-3 py-2 text-center hover:border-coral hover:text-coral-dark"
       >
         🌐 {locale === 'en' ? 'Bahasa Malaysia' : 'English'}
       </a>

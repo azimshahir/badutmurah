@@ -40,7 +40,7 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
 
 <Layout locale={locale} title={t.booking.heading + ' | badutmurah.my'} description={t.booking.sub} pathname={pathname}>
   <Navbar locale={locale} pathname={pathname} />
-  <main class="mx-auto max-w-[680px] px-5 py-14 md:py-20">
+  <main class="mx-auto max-w-[680px] px-4 py-10 pb-24 sm:px-5 sm:py-14 sm:pb-20 md:py-20">
     <h1 class="squiggle mx-auto w-fit text-center text-3xl font-bold md:text-4xl">{t.booking.heading}</h1>
     <p class="mx-auto mt-4 max-w-lg text-center opacity-90">{t.booking.sub}</p>
 
@@ -51,7 +51,7 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
     <form
       id="booking-form"
       class:list={[
-        'mt-6 space-y-5 rounded-[40px] border border-navy/5 bg-white p-6 shadow-2xl md:p-10',
+        'mt-6 space-y-4 rounded-[28px] border border-navy/5 bg-white p-4 shadow-2xl sm:space-y-5 sm:rounded-[40px] sm:p-6 md:p-10',
         // Promo prices show up front; the script reverts them if a non-August
         // date is picked. Set server-side so there's no flash of normal prices.
         promo && 'promo-active',
@@ -71,9 +71,9 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
       data-currency={currency}
     >
       <!-- Clown: fixed, not a dropdown (only one clown for now) -->
-      <div class="flex items-center justify-between rounded-2xl bg-cream px-4 py-3.5">
+      <div class="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-cream px-3.5 py-3 sm:rounded-2xl sm:px-4 sm:py-3.5">
         <span class="font-semibold">{t.booking.clownLabel}</span>
-        <span class="flex items-center gap-2 font-display font-bold">
+        <span class="flex items-center gap-2 text-right font-display font-bold">
           <img src="/images/logo-mascot.png" alt="" width="512" height="410" class="h-7 w-auto" aria-hidden="true" />
           {t.booking.clownValue}
         </span>
@@ -82,13 +82,13 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
       <div>
         <label for="nama" class="mb-1.5 block font-semibold">{t.booking.nama}</label>
         <input type="text" id="nama" name="nama" required autocomplete="name"
-          class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+          class="min-h-12 w-full rounded-xl border-none bg-navy/5 px-4 py-3 outline-none transition focus:ring-2 focus:ring-coral" />
       </div>
 
       <div>
         <label for="phone" class="mb-1.5 block font-semibold">{t.booking.phone}</label>
         <input type="tel" id="phone" name="phone" required inputmode="tel" autocomplete="tel" placeholder="01X-XXXXXXX"
-          class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+          class="min-h-12 w-full rounded-xl border-none bg-navy/5 px-4 py-3 outline-none transition focus:ring-2 focus:ring-coral" />
       </div>
 
       <div>
@@ -96,12 +96,12 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
           <div>
             <label for="tarikh" class="mb-1.5 block font-semibold">{t.booking.tarikh}</label>
             <input type="date" id="tarikh" name="tarikh" required
-              class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+              class="min-h-12 w-full rounded-xl border-none bg-navy/5 px-3 py-3 outline-none transition focus:ring-2 focus:ring-coral sm:px-4" />
           </div>
           <div>
             <label for="masa" class="mb-1.5 block font-semibold">{t.booking.masa}</label>
             <input type="text" id="masa" name="masa" required placeholder={t.booking.masaPlaceholder}
-              class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+              class="min-h-12 w-full rounded-xl border-none bg-navy/5 px-4 py-3 outline-none transition focus:ring-2 focus:ring-coral" />
             <p class="mt-1 text-xs opacity-60">{t.booking.masaHint}</p>
           </div>
         </div>
@@ -115,7 +115,7 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
       <fieldset>
         <legend class="mb-2 font-semibold">{t.booking.pilihPakej}</legend>
         <div class="grid gap-3 sm:grid-cols-2">
-          <label class="pakej-radio cursor-pointer rounded-2xl border-2 border-navy/15 bg-cream p-4 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
+          <label class="pakej-radio min-h-20 cursor-pointer rounded-xl border-2 border-navy/15 bg-cream p-3.5 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral sm:rounded-2xl sm:p-4">
             <input type="radio" name="pakej" value="basic" required class="sr-only" />
             <span class="block font-display font-semibold">{basic[nameKey]}</span>
             <span class="promo-off block text-sm opacity-70">{basicRange}</span>
@@ -127,7 +127,7 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
               </span>
             )}
           </label>
-          <label class="pakej-radio cursor-pointer rounded-2xl border-2 border-navy/15 bg-cream p-4 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
+          <label class="pakej-radio min-h-20 cursor-pointer rounded-xl border-2 border-navy/15 bg-cream p-3.5 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral sm:rounded-2xl sm:p-4">
             <input type="radio" name="pakej" value="meriah" required class="sr-only"
               data-harga={game.harga} data-promo-harga={promoHarga('meriah')} />
             <span class="block font-display font-semibold">{game[nameKey]}</span>
@@ -154,7 +154,7 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
         <legend class="mb-2 font-semibold">{t.booking.pilihHadiah}</legend>
         <div class="space-y-2">
           {hadiahOptions.map((option) => (
-            <label class="flex cursor-pointer items-center gap-3 rounded-2xl border-2 border-navy/15 bg-cream p-4 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
+            <label class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border-2 border-navy/15 bg-cream p-3.5 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral sm:rounded-2xl sm:p-4">
               <input type="radio" name="hadiah" value={option.id} class="sr-only" />
               <span class="font-display font-semibold">{option.label}</span>
             </label>
@@ -167,7 +167,7 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
         <legend class="mb-2 font-semibold">{t.booking.pilihPrize}</legend>
         <div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
           {game.prize_options.map((amount) => (
-            <label class="prize-radio cursor-pointer rounded-2xl border-2 border-navy/15 bg-cream p-4 text-center has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
+            <label class="prize-radio flex min-h-12 cursor-pointer items-center justify-center rounded-xl border-2 border-navy/15 bg-cream p-3 text-center has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral sm:rounded-2xl sm:p-4">
               <input type="radio" name="prize" value={amount} class="sr-only" />
               <span class="font-display font-bold">{money(amount)}</span>
             </label>
@@ -181,7 +181,7 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
         <div class="space-y-2">
           {
             basic.durasi.map((d) => (
-              <label class="durasi-radio flex cursor-pointer items-center justify-between gap-3 rounded-2xl border-2 border-navy/15 bg-cream p-4 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral">
+              <label class="durasi-radio flex min-h-14 cursor-pointer flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-xl border-2 border-navy/15 bg-cream p-3.5 has-checked:border-coral has-checked:bg-coral/5 has-focus-visible:outline-3 has-focus-visible:outline-coral sm:flex-nowrap sm:rounded-2xl sm:p-4">
                 <span class="min-w-0">
                   <input type="radio" name="durasi" value={d.id} class="sr-only"
                     data-harga={d.harga} data-promo-harga={promoHarga('basic', d.id)} />
@@ -189,7 +189,7 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
                   <span class="block text-xs opacity-70">{d[sesuaiKey]}</span>
                 </span>
                 {d.harga !== null && (
-                  <span class="shrink-0 font-display font-bold whitespace-nowrap">
+                  <span class="ml-auto shrink-0 font-display font-bold whitespace-nowrap">
                     <span class:list={[promoHarga('basic', d.id) !== null && 'promo-off']}>{money(d.harga)}</span>
                     {promoHarga('basic', d.id) !== null && (
                       <span class="promo-on">
@@ -208,7 +208,7 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
       <div>
         <label for="lokasi" class="mb-1.5 block font-semibold">{t.booking.lokasi}</label>
         <input type="text" id="lokasi" name="lokasi" required placeholder={t.booking.lokasiPlaceholder}
-          class="w-full rounded-xl border-none bg-navy/5 px-4 py-3.5 outline-none transition focus:ring-2 focus:ring-coral" />
+          class="min-h-12 w-full rounded-xl border-none bg-navy/5 px-4 py-3 outline-none transition focus:ring-2 focus:ring-coral" />
         <p class="mt-2 flex gap-2 rounded-xl bg-coral/10 px-3 py-2.5 text-xs leading-relaxed">
           <span aria-hidden="true">📍</span><span>{t.booking.lokasiTip}</span>
         </p>
@@ -220,9 +220,9 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
         </label>
         <div class="relative">
           <textarea id="nota" name="nota" rows="5"
-            class="w-full rounded-xl border-none bg-navy/5 py-3.5 pr-24 pl-4 outline-none transition focus:ring-2 focus:ring-coral"></textarea>
+            class="w-full rounded-xl border-none bg-navy/5 py-3 pr-24 pl-4 outline-none transition focus:ring-2 focus:ring-coral"></textarea>
           <button type="button" id="nota-clear" hidden
-            class="absolute top-3 right-3 rounded-full bg-navy/10 px-3 py-1 text-xs font-semibold transition hover:bg-navy/20">
+            class="absolute top-2 right-2 flex min-h-11 items-center rounded-full bg-navy/10 px-3 py-1 text-xs font-semibold transition hover:bg-navy/20 sm:top-3 sm:right-3 sm:min-h-0">
             {t.booking.notaClear}
           </button>
         </div>
@@ -240,7 +240,7 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
         <button
           type="submit"
           id="submit-btn"
-          class="pop gradient-pink flex-1 rounded-full px-7 py-4 font-display text-xl font-bold text-white shadow-xl shadow-coral/30 disabled:opacity-60"
+          class="pop gradient-pink min-h-12 flex-1 rounded-full px-5 py-3.5 font-display text-lg font-bold text-white shadow-xl shadow-coral/30 disabled:opacity-60 sm:px-7 sm:py-4 sm:text-xl"
         >
           {t.booking.hantar}
         </button>
@@ -249,14 +249,14 @@ const basicPromoRange = promo ? range(basicDurasi.map((d) => promoHarga('basic',
           href={waLink}
           target="_blank"
           rel="noopener"
-          class="pop gradient-green flex-1 rounded-full px-7 py-4 text-center font-display text-xl font-bold text-white shadow-xl shadow-mint/40"
+          class="pop gradient-green min-h-12 flex-1 rounded-full px-5 py-3.5 text-center font-display text-lg font-bold text-white shadow-xl shadow-mint/40 sm:px-7 sm:py-4 sm:text-xl"
         >
           {t.booking.whatsappInstead}
         </a>
       </div>
     </form>
 
-    <div id="booking-success" hidden class="mt-10 rounded-3xl bg-mint/15 p-8 text-center">
+    <div id="booking-success" hidden class="mt-10 rounded-2xl bg-mint/15 p-6 text-center sm:rounded-3xl sm:p-8">
       <p class="text-xl font-semibold">{t.booking.success}</p>
     </div>
   </main>
