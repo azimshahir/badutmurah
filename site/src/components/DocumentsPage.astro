@@ -267,10 +267,20 @@ const pathname = localePath(locale, '/documents');
       }] };
     }
     const paid = { deposit: { amount: 100, date: '20 Jul 2026' }, balance: { amount: 260, date: '14 Aug 2026' }, outstanding: 0 };
+    // Mirrors Hermes's real contract: an empty field falls back to the
+    // booking's own record, so the local demo can exercise the same
+    // auto-prefill the customer sees against the live API.
+    const sent = (payload.billing ?? {}) as Record<string, string>;
+    const billing = {
+      nama: sent.nama || 'Demo Customer',
+      phone: sent.phone || DEMO_PHONE,
+      alamat: sent.alamat || 'Taman Meru, Klang',
+      email: sent.email || '',
+    };
     return { ok: true, document: {
       type: payload.type,
       doc_no: { quotation: 'Q-26-0005', invoice: 'INV-26-0003', receipt: 'BJ-26-0007' }[payload.type as DocType],
-      billing: payload.billing,
+      billing,
       event: { tarikh: '14 August 2026', masa: '10.00 pagi + 3.00 petang', lokasi: 'Taman Meru, Klang', durasi: '1 hour' },
       items: [{ desc: 'Clown Appearance with Balloon Sculpture', qty: '1 hour', rate: 180, amount: 360 }],
       travel_fee: 0, total: 360, deposit_required: 100,
@@ -379,13 +389,28 @@ const pathname = localePath(locale, '/documents');
   }
 
   // ---- Step 2: prefill the bill-to block, then generate ----
-  function chooseDocument(booking: any, type: DocType) {
+  async function chooseDocument(booking: any, type: DocType) {
     selected = { lead_id: booking.lead_id, type };
     billingBox.hidden = false;
     sheet.hidden = true;
     docActions.hidden = true;
     errorBox.hidden = true;
     billingBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Prefill the bill-to fields with the customer's real name/phone from
+    // the booking (WhatsApp or /booking) straight away, so they see their own
+    // details rather than blank inputs they'd otherwise have to type into
+    // themselves. A silent "issue" call with no billing override — Hermes
+    // returns its own defaults from the booking record; this is idempotent
+    // (same doc_no every time), so it's safe to call again when they press
+    // Generate below.
+    try {
+      const { document: doc } = await post({ action: 'issue', phone, lead_id: booking.lead_id, type, billing: {} });
+      if (selected?.lead_id === booking.lead_id && selected.type === type) fillBilling(doc.billing);
+    } catch {
+      // Not fatal — fields just stay blank and the customer can type their
+      // own details when they press Generate.
+    }
   }
 
   backBtn.addEventListener('click', () => {
