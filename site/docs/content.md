@@ -57,6 +57,7 @@
 6. **Berapa awal saya perlu book?** Seawal yang boleh! Tarikh popular (cuti sekolah, hujung minggu) cepat penuh. First come first served, deposit RM100 kunci tarikh anda. *(baru, draf)*
 7. **Macam mana nak bayar deposit?** Deposit RM100 melalui transfer atau DuitNow selepas kami confirm availability. Baki dibayar selepas persembahan, cash atau transfer. *(baru, draf)*
 8. **Ada servis lain selain badut?** Ada! Puppet show, magic show, face painting, mascot dan party games. Tengok page Projek Edutainment kami atau WhatsApp untuk tanya. *(baru, draf)*
+9. **Hadiah untuk games macam mana?** Untuk Game Package, pilih sama ada anda sediakan hadiah sendiri / tak perlu hadiah, atau kami belikan untuk anda. Kalau pilih kami belikan, ada pilihan nilai hadiah RM20 hingga RM500. *(baru)*
 
 ## Section: Booking Form
 - **Heading:** Book Sekarang
@@ -65,6 +66,7 @@
 - **Tip masa (bubble bawah field Masa):** 💡 Tips: book slot Jim 30 minit – 1 jam lepas majlis bermula, supaya semua tetamu dah sampai dan boleh enjoy sekali.
 - **Placeholder lokasi:** cth: Seksyen 13, Shah Alam
 - **Tip lokasi (bubble bawah field Kawasan majlis):** 📍 Tulis seksyen / taman / lorong — tak perlu alamat penuh. Kami confirm lokasi tepat nanti masa WhatsApp.
+- **Soalan hadiah Game Package:** Macam mana hadiah untuk sesi games nak disediakan?
 - **Butang:** Hantar Booking
 - **Success:** Booking diterima! 🎈 Kami akan WhatsApp anda dalam masa 1 jam untuk confirm. Terima kasih!
 - **Error:** Alamak, ada masalah teknikal. Sila cuba lagi atau WhatsApp kami terus.

@@ -60,16 +60,20 @@ h1, h2, h3 {
 .lift {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.lift:hover {
-  transform: translateY(-3px);
+@media (hover: hover) {
+  .lift:hover {
+    transform: translateY(-3px);
+  }
 }
 
 /* Subtle card tilt */
 .tilt {
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.tilt:hover {
-  transform: translateY(-4px) rotate(-0.6deg);
+@media (hover: hover) {
+  .tilt:hover {
+    transform: translateY(-4px) rotate(-0.6deg);
+  }
 }
 
 /* Polaroid photo frames: white border, straighten + zoom on hover */
@@ -83,10 +87,12 @@ h1, h2, h3 {
 .polaroid:nth-child(even) {
   transform: rotate(2.5deg);
 }
-.polaroid:hover {
-  transform: scale(1.05) rotate(0deg);
-  box-shadow: 0 10px 20px -4px rgb(0 0 0 / 0.18);
-  z-index: 10;
+@media (hover: hover) {
+  .polaroid:hover {
+    transform: scale(1.05) rotate(0deg);
+    box-shadow: 0 10px 20px -4px rgb(0 0 0 / 0.18);
+    z-index: 10;
+  }
 }
 
 /* Nav links: pink underline slides in on hover */
@@ -117,9 +123,11 @@ h1, h2, h3 {
 .pop {
   transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
 }
-.pop:hover {
-  transform: translateY(-2px) scale(1.03);
-  filter: brightness(1.05);
+@media (hover: hover) {
+  .pop:hover {
+    transform: translateY(-2px) scale(1.03);
+    filter: brightness(1.05);
+  }
 }
 .pop:active {
   transform: translateY(0) scale(0.96);
@@ -177,6 +185,22 @@ a:hover > .logo-emoji {
 .wiggle {
   display: inline-block;
   animation: wiggle 5s ease-in-out infinite;
+}
+
+@media (max-width: 639px) {
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .squiggle {
+    background-size: 96px 8px;
+    padding-bottom: 11px;
+  }
+
+  .polaroid {
+    padding: 6px 6px 16px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

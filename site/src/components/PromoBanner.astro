@@ -23,7 +23,7 @@ const parts = promo
     ]
   : [];
 const alt = promo
-  ? `August Merdeka Sale — harga promosi untuk event 1-31 Ogos 2026. ${parts.join('. ')}.`
+  ? `Hari Malaysia Sale — harga promosi untuk event September 2026. ${parts.join('. ')}.`
   : '';
 ---
 
@@ -33,15 +33,15 @@ const alt = promo
       {href ? (
         <a href={href} class="block rounded-2xl transition hover:opacity-95">
           <picture>
-            <source media="(min-width: 640px)" srcset="/images/promo-ogos.webp" width="1600" height="397" />
-            <img src="/images/promo-ogos-mobile.webp" alt={alt} width="940" height="512"
+            <source media="(min-width: 640px)" srcset="/images/promo-sept.jpg" width="1600" height="397" />
+            <img src="/images/promo-sept-mobile.jpg" alt={alt} width="940" height="512"
               loading={eager ? 'eager' : 'lazy'} decoding="async" class="w-full rounded-2xl" />
           </picture>
         </a>
       ) : (
         <picture>
-          <source media="(min-width: 640px)" srcset="/images/promo-ogos.webp" width="1600" height="397" />
-          <img src="/images/promo-ogos-mobile.webp" alt={alt} width="940" height="512"
+          <source media="(min-width: 640px)" srcset="/images/promo-sept.jpg" width="1600" height="397" />
+          <img src="/images/promo-sept-mobile.jpg" alt={alt} width="940" height="512"
             loading={eager ? 'eager' : 'lazy'} decoding="async" class="w-full rounded-2xl" />
         </picture>
       )}

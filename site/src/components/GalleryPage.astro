@@ -1,0 +1,101 @@
+---
+// Public gallery page — loads published images from /api/gallery at runtime.
+import Layout from '../layouts/Layout.astro';
+import Navbar from './Navbar.astro';
+import Footer from './Footer.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+import { getT, localePath } from '../i18n/index.js';
+
+const { locale = 'en' } = Astro.props;
+const t = getT(locale);
+const pathname = localePath(locale, '/gallery');
+---
+
+<Layout locale={locale} title={t.gallery.metaTitle} description={t.gallery.metaDescription} pathname={pathname}>
+  <Navbar locale={locale} pathname={pathname} />
+  <main class="mx-auto max-w-[1100px] px-4 py-10 sm:px-5 sm:py-14 md:py-20">
+    <h1 class="squiggle mx-auto w-fit text-center text-3xl font-bold sm:text-4xl md:text-5xl">{t.gallery.heading}</h1>
+    <p class="mx-auto mt-4 max-w-xl text-center text-base opacity-90 sm:text-lg">{t.gallery.sub}</p>
+
+    <div id="gallery-root" class="mt-10 space-y-10 sm:mt-14 sm:space-y-14">
+      <p class="w-full text-center opacity-70" data-state="loading">{t.gallery.loading}</p>
+    </div>
+
+    <p class="mt-12 text-center text-sm opacity-60" data-state="empty" hidden>
+      {t.gallery.empty}
+    </p>
+  </main>
+  <Footer locale={locale} />
+  <WhatsAppButton locale={locale} />
+</Layout>
+
+<script>
+  const root = document.getElementById('gallery-root');
+  const emptyEl = document.querySelector('[data-state="empty"]');
+  const locale = document.documentElement.lang === 'ms' ? 'ms-MY' : 'en-MY';
+
+  function monthLabel(key) {
+    if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(key || '')) return '';
+    const [year, month] = key.split('-').map(Number);
+    return new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' })
+      .format(new Date(Date.UTC(year, month - 1, 1)));
+  }
+
+  async function load() {
+    let images = [];
+    try {
+      const res = await fetch('/api/gallery');
+      const data = await res.json();
+      if (data.ok) images = data.images || [];
+    } catch {
+      images = [];
+    }
+
+    if (root) root.innerHTML = '';
+    if (images.length === 0) {
+      if (root) root.innerHTML = '<p class="w-full text-center opacity-70"></p>';
+      if (emptyEl) emptyEl.hidden = false;
+      return;
+    }
+    if (emptyEl) emptyEl.hidden = true;
+
+    const groups = new Map();
+    for (const img of images) {
+      const key = img.gallery_month || String(img.created_at || '').slice(0, 7) || 'unknown';
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(img);
+    }
+    const fragment = document.createDocumentFragment();
+    for (const key of [...groups.keys()].sort().reverse()) {
+      const section = document.createElement('section');
+      section.setAttribute('aria-labelledby', `gallery-${key}`);
+      const heading = document.createElement('h2');
+      heading.id = `gallery-${key}`;
+      heading.className = 'mb-5 text-center text-xl font-bold text-navy sm:mb-7 sm:text-2xl md:text-3xl';
+      heading.textContent = monthLabel(key) || key;
+      section.appendChild(heading);
+
+      const monthGrid = document.createElement('div');
+      monthGrid.className = 'grid grid-cols-2 items-start gap-3 sm:flex sm:flex-wrap sm:justify-center sm:gap-5 md:gap-7';
+      for (const img of groups.get(key)) {
+        const figure = document.createElement('figure');
+        figure.className = 'polaroid w-full rounded-sm sm:w-56';
+        const picture = document.createElement('img');
+        picture.src = img.url;
+        picture.alt = '';
+        picture.loading = 'lazy';
+        picture.decoding = 'async';
+        picture.width = 400;
+        picture.height = 300;
+        picture.className = 'aspect-[4/3] w-full object-cover';
+        figure.appendChild(picture);
+        monthGrid.appendChild(figure);
+      }
+      section.appendChild(monthGrid);
+      fragment.appendChild(section);
+    }
+    root?.appendChild(fragment);
+  }
+
+  load();
+</script>
