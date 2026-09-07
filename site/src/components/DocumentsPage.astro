@@ -437,8 +437,12 @@ const pathname = localePath(locale, '/documents');
     const ev = doc.event ?? {};
     const b = doc.billing ?? {};
 
-    // Each type has its own artwork (the title and "… No." label are printed in it)
-    page.style.backgroundImage = `url("/images/doc-${type}.webp")`;
+    // Each type has its own artwork (the title and "… No." label are printed in it).
+    // A content-hash query string (baked in at build time, see DocumentSheet.astro)
+    // makes every re-export a brand new URL, so neither the browser nor
+    // Cloudflare's edge cache can ever serve a stale copy after one.
+    const artworkVer = page.dataset[`v${type.charAt(0).toUpperCase()}${type.slice(1)}`] ?? '';
+    page.style.backgroundImage = `url("/images/doc-${type}.webp?v=${artworkVer}")`;
 
     // Only the address is printed. Phone and email are still collected and kept
     // in Hermes for Jim, but the artwork's box only has room for ~4 lines and
