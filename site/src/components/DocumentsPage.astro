@@ -217,6 +217,23 @@ const pathname = localePath(locale, '/documents');
     return parts.join('\n');
   }
 
+  // ---- Date formatting -----------------------------------------------------
+  // Hermes sends the event date as plain ISO ("2026-09-05"); print it in the
+  // house style instead ("05 September 2026"), localised to the page language.
+  const BULAN_EN = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
+  const BULAN_MS = ['Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun',
+    'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember'];
+
+  function formatTarikh(raw: string): string {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec((raw ?? '').trim());
+    if (!match) return raw ?? ''; // unrecognised format — never invent a date
+    const [, y, m, dd] = match;
+    const bulan = (msg.locale === 'ms' ? BULAN_MS : BULAN_EN)[Number(m) - 1];
+    if (!bulan) return raw;
+    return `${dd} ${bulan} ${y}`;
+  }
+
   const el = (sel: string) => sheet.querySelector<HTMLElement>(`[data-doc="${sel}"]`)!;
 
   function showError(text: string) {
@@ -321,7 +338,7 @@ const pathname = localePath(locale, '/documents');
 
       const head = document.createElement('p');
       head.className = 'font-display font-bold';
-      head.textContent = `${b.tarikh} — ${b.pakej}`;
+      head.textContent = `${formatTarikh(b.tarikh)} — ${b.pakej}`;
       card.append(head);
 
       const row = document.createElement('div');
@@ -442,7 +459,7 @@ const pathname = localePath(locale, '/documents');
     printName = `[${label(type)}] badutmurah.my (${doc.doc_no ?? ''})`;
 
     el('lokasi').textContent = ev.lokasi ?? '';
-    el('tarikh').textContent = ev.tarikh ?? '';
+    el('tarikh').textContent = formatTarikh(ev.tarikh ?? '');
     el('masa').textContent = formatMasa(ev.masa ?? '', ev.durasi || doc.items?.[0]?.qty || '');
 
     // One row only, per the artwork: rate is the package rate, amount folds in
