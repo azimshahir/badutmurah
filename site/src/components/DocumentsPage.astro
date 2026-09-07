@@ -30,6 +30,7 @@ const pathname = localePath(locale, '/documents');
     data-msg-search={d.search}
     data-msg-generating={d.generating}
     data-msg-generate={d.generate}
+    data-msg-generating-pdf={d.generatingPdf}
     data-msg-error={d.errorGeneric}
     data-msg-error-suffix={d.errorSuffix}
     data-msg-error-wa={d.errorWhatsapp}
@@ -131,7 +132,9 @@ const pathname = localePath(locale, '/documents');
   const billingBox = document.getElementById('billing') as HTMLElement;
   const generateBtn = document.getElementById('generate-btn') as HTMLButtonElement;
   const backBtn = document.getElementById('back-btn') as HTMLButtonElement;
+  const docActions = document.getElementById('doc-actions') as HTMLElement;
   const printBtn = document.getElementById('print-btn') as HTMLButtonElement;
+  const downloadBtn = document.getElementById('download-btn') as HTMLButtonElement;
   const sheet = document.getElementById('doc-sheet') as HTMLElement;
   const page = document.getElementById('doc-page') as HTMLElement;
 
@@ -295,7 +298,7 @@ const pathname = localePath(locale, '/documents');
     bookingsBox.hidden = true;
     billingBox.hidden = true;
     sheet.hidden = true;
-    printBtn.hidden = true;
+    docActions.hidden = true;
 
     const raw = phoneInput.value.replace(/[\s-]/g, '');
     if (!/^01[0-9]{8,9}$/.test(raw)) {
@@ -380,7 +383,7 @@ const pathname = localePath(locale, '/documents');
     selected = { lead_id: booking.lead_id, type };
     billingBox.hidden = false;
     sheet.hidden = true;
-    printBtn.hidden = true;
+    docActions.hidden = true;
     errorBox.hidden = true;
     billingBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -388,7 +391,7 @@ const pathname = localePath(locale, '/documents');
   backBtn.addEventListener('click', () => {
     billingBox.hidden = true;
     sheet.hidden = true;
-    printBtn.hidden = true;
+    docActions.hidden = true;
     bookingsBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
@@ -498,7 +501,7 @@ const pathname = localePath(locale, '/documents');
     el('payment').textContent = notes.join('\n');
 
     sheet.hidden = false;
-    printBtn.hidden = false;
+    docActions.hidden = false;
     shrinkToFit();
     sheet.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -546,5 +549,53 @@ const pathname = localePath(locale, '/documents');
   printBtn.addEventListener('click', () => {
     if (printName) document.title = printName;
     window.print();
+  });
+
+  // Real one-click download (no system dialog): rasterise the sheet and embed
+  // it in an actual PDF file via html2canvas + jsPDF, loaded on demand so
+  // visitors who only ever click "Print" never pay for this bundle.
+  downloadBtn.addEventListener('click', async () => {
+    const originalLabel = downloadBtn.textContent;
+    downloadBtn.disabled = true;
+    downloadBtn.textContent = msg.msgGeneratingPdf!;
+
+    // Render off-screen at a fixed, print-quality width — capturing the sheet
+    // at whatever narrow width a phone happens to be showing would bake a
+    // blurry, low-res image into the PDF.
+    const prevPosition = sheet.style.position;
+    const prevLeft = sheet.style.left;
+    const prevWidth = page.style.width;
+    sheet.style.position = 'fixed';
+    sheet.style.left = '-9999px';
+    page.style.width = '1200px';
+    shrinkToFit();
+
+    try {
+      const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+        import('html2canvas'),
+        import('jspdf'),
+      ]);
+      const canvas = await html2canvas(page, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      const imgData = canvas.toDataURL('image/jpeg', 0.92);
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      // Fit the artwork's own aspect ratio inside the A4 page rather than
+      // stretching it to fill — same "contain" behaviour as the print CSS.
+      const ratio = canvas.height / canvas.width;
+      let w = pageWidth, h = w * ratio;
+      if (h > pageHeight) { h = pageHeight; w = h / ratio; }
+      pdf.addImage(imgData, 'JPEG', (pageWidth - w) / 2, (pageHeight - h) / 2, w, h);
+      pdf.save(`${printName || 'document'}.pdf`);
+    } catch {
+      showError(msg.msgError!);
+    } finally {
+      sheet.style.position = prevPosition;
+      sheet.style.left = prevLeft;
+      page.style.width = prevWidth;
+      shrinkToFit();
+      downloadBtn.disabled = false;
+      downloadBtn.textContent = originalLabel;
+    }
   });
 </script>

@@ -73,14 +73,20 @@ const versions = {
          instead of spilling into the next column. -->
     <span class="mid s-amt fit" data-doc="rate" style="left:59.05%;top:53.29%;width:19.2%"></span>
     <span class="mid s-amt fit" data-doc="amount" style="left:79.29%;top:53.29%;width:15.6%"></span>
-    <span class="mid s-total fit" data-doc="total" style="left:79.29%;top:74.80%;width:15.6%"></span>
+    <span class="mid s-total fit" data-doc="total" style="left:79.29%;top:73.18%;width:15.6%"></span>
   </div>
 </div>
 
-<button type="button" id="print-btn" hidden
-  class="pop gradient-green mt-6 w-full rounded-full px-7 py-4 font-display text-xl font-bold text-white shadow-xl shadow-mint/40">
-  {d.print}
-</button>
+<div id="doc-actions" hidden class="mt-6 flex flex-col gap-3 sm:flex-row">
+  <button type="button" id="download-btn"
+    class="pop gradient-green flex-1 rounded-full px-7 py-4 font-display text-xl font-bold text-white shadow-xl shadow-mint/40 disabled:opacity-60">
+    {d.downloadPdf}
+  </button>
+  <button type="button" id="print-btn"
+    class="pop flex-1 rounded-full border-2 border-navy/10 px-7 py-4 font-display text-xl font-bold transition hover:bg-cream">
+    {d.print}
+  </button>
+</div>
 
 <style>
   .doc-wrap {
@@ -142,20 +148,27 @@ const versions = {
   .doc-page > span.s-total {
     font-size: calc(var(--u) * 2.4);
     line-height: calc(var(--u) * 3);
+    font-weight: 700; /* matches the bold "Total" label printed beside it */
   }
 
   @media print {
-    :global(body *) {
-      visibility: hidden;
+    /* display:none (not visibility:hidden) so hidden siblings stop taking up
+       layout height — visibility alone still let their height push the page
+       total past one A4 sheet, printing a blank second page. */
+    :global(body > *) {
+      display: none !important;
     }
     /* :global is required — these values are written by JS at runtime and so
        never carry Astro's scope attribute. Scoped selectors would hide them and
        print a blank template. */
-    :global(#doc-sheet),
-    :global(#doc-sheet *) {
-      visibility: visible;
+    :global(main) {
+      display: block !important;
+    }
+    :global(main > *) {
+      display: none !important;
     }
     :global(#doc-sheet) {
+      display: block !important;
       position: absolute;
       top: 0;
       left: 0;
