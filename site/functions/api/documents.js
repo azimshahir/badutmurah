@@ -86,15 +86,13 @@ export async function onRequestPost({ request, env }) {
     if (!leadId) return bad('bad_request');
     if (!TYPES.includes(body.type)) return bad('bad_request');
 
-    const b = body.billing ?? {};
-    const billing = {
-      nama: field(b.nama, 120),
-      alamat: field(b.alamat, 300),
-      phone: field(b.phone, 30),
-      email: field(b.email, 120),
-    };
-    if (!billing.nama) return bad('bad_name');
-    if (!billing.phone) return bad('bad_name');
+    const b = body.billing && typeof body.billing === 'object' && !Array.isArray(body.billing)
+      ? body.billing
+      : {};
+    const billing = {};
+    for (const [key, max] of Object.entries({ nama: 120, alamat: 300, phone: 30, email: 120 })) {
+      if (Object.hasOwn(b, key)) billing[key] = field(b[key], max);
+    }
 
     const { status, data } = await callRelay(env, '/api/document-issue', {
       phone,
