@@ -1,5 +1,5 @@
 ---
-// August promo banner. Renders nothing when pricing.json has promo.aktif = false,
+// Owner-supplied October promo artwork. Renders nothing when pricing.json has promo.aktif = false,
 // so ending the promo removes it from every page in one edit.
 // Pass href to make it clickable (homepage); omit on /booking itself.
 // The wide artwork renders text at ~6px on a phone, so narrow screens get a
@@ -23,7 +23,7 @@ const parts = promo
     ]
   : [];
 const alt = promo
-  ? `Hari Malaysia Sale — harga promosi untuk event September 2026. ${parts.join('. ')}.`
+  ? `October Promo. ${parts.join('. ')}.`
   : '';
 ---
 
@@ -33,15 +33,15 @@ const alt = promo
       {href ? (
         <a href={href} class="block rounded-2xl transition hover:opacity-95">
           <picture>
-            <source media="(min-width: 640px)" srcset="/images/promo-sept.jpg" width="1600" height="397" />
-            <img src="/images/promo-sept-mobile.jpg" alt={alt} width="940" height="512"
+            <source media="(min-width: 640px)" srcset="/images/promo-october-2026.jpg" width="1024" height="339" />
+            <img src="/images/promo-october-2026-mobile.jpg" alt={alt} width="445" height="339"
               loading={eager ? 'eager' : 'lazy'} decoding="async" class="w-full rounded-2xl" />
           </picture>
         </a>
       ) : (
         <picture>
-          <source media="(min-width: 640px)" srcset="/images/promo-sept.jpg" width="1600" height="397" />
-          <img src="/images/promo-sept-mobile.jpg" alt={alt} width="940" height="512"
+          <source media="(min-width: 640px)" srcset="/images/promo-october-2026.jpg" width="1024" height="339" />
+          <img src="/images/promo-october-2026-mobile.jpg" alt={alt} width="445" height="339"
             loading={eager ? 'eager' : 'lazy'} decoding="async" class="w-full rounded-2xl" />
         </picture>
       )}
