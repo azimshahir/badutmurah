@@ -136,7 +136,7 @@ export default {
     masaTip: "Tip: book Jim's slot 30 minutes – 1 hour after your event starts, so everyone's arrived and can enjoy the show together.",
     promoTitle: '🎉 HARI MALAYSIA DEAL — Book now for September 2026 events!',
     promoSub: 'Promo pricing for September 2026 events only',
-    promoBadge: 'PROMO SEPT',
+    promoBadge: 'PROMO OCTOBER',
     promoNote: 'September promo — prices return to normal in October 2026.',
     promoNotaLine: 'September Hari Malaysia Deal applied',
     promoWas: 'normal price',

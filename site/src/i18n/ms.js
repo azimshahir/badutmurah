@@ -136,7 +136,7 @@ export default {
     masaTip: 'Tips: book slot Jim 30 minit – 1 jam lepas majlis bermula, supaya semua tetamu dah sampai dan boleh enjoy sekali.',
     promoTitle: '🎉 HARI MALAYSIA DEAL — Book untuk event September 2026!',
     promoSub: 'Harga promosi untuk event September 2026 sahaja',
-    promoBadge: 'PROMO SEPT',
+    promoBadge: 'PROMO OCTOBER',
     promoNote: 'Promosi September — harga akan kembali asal Oktober 2026.',
     promoNotaLine: 'Promosi September Hari Malaysia Deal applied',
     promoWas: 'harga asal',
