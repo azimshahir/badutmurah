@@ -167,6 +167,7 @@ const pathname = localePath(locale, '/documents');
   // Minutes in "1 hour" / "1 jam 30 minit" / "1 hour 30 minutes"
   function durationMinutes(d: string): number {
     if (!d) return 0;
+    if (/lebih|more than|custom|tentative/i.test(d)) return 0;
     const s = d.toLowerCase();
     const h = s.match(/(\d+)\s*(jam|hour)/);
     // plural must be allowed: "30 minutes" has no word boundary after "minute"
@@ -190,7 +191,7 @@ const pathname = localePath(locale, '/documents');
     else if (/^(malam|mlm)/.test(suffix)) pm = h === 12 ? false : true; // "12 malam" = midnight
 
     if (pm === null) {
-      if (h >= 13) return h * 60 + min; // already 24-hour
+      if (/^\d{1,2}:\d{2}$/.test(raw.trim()) || h >= 13) return h * 60 + min; // stored HH:MM is 24-hour
       return null; // ambiguous — better to leave the customer's text alone
     }
     if (pm && h < 12) h += 12;
@@ -212,6 +213,14 @@ const pathname = localePath(locale, '/documents');
     const span = durationMinutes(durasi);
     const parts: string[] = [];
     for (const s of sessions) {
+      const range = s.split(/\s*(?:-|–|—|\bto\b|\bhingga\b)\s*/i);
+      if (range.length === 2) {
+        const a = parseClock(range[0]);
+        const b = parseClock(range[1]);
+        if (a === null || b === null) return raw;
+        parts.push(`${clockLabel(a)} - ${clockLabel(b)}`);
+        continue;
+      }
       const start = parseClock(s);
       if (start === null) return raw; // unreadable — never invent a time
       parts.push(span > 0 ? `${clockLabel(start)} - ${clockLabel(start + span)}` : clockLabel(start));
@@ -232,7 +241,7 @@ const pathname = localePath(locale, '/documents');
     const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec((raw ?? '').trim());
     if (!match) return raw ?? ''; // unrecognised format — never invent a date
     const [, y, m, dd] = match;
-    const bulan = (msg.locale === 'ms' ? BULAN_MS : BULAN_EN)[Number(m) - 1];
+    const bulan = BULAN_EN[Number(m) - 1];
     if (!bulan) return raw;
     return `${dd} ${bulan} ${y}`;
   }
@@ -491,6 +500,11 @@ const pathname = localePath(locale, '/documents');
     printName = `[${label(type)}] badutmurah.my (${doc.doc_no ?? ''})`;
 
     el('lokasi').textContent = ev.lokasi ?? '';
+    const service = doc.items?.[0]?.desc ?? '';
+    el('description').textContent = /games|game|meriah/i.test(service + ' ' + (ev.pakej ?? ''))
+      ? 'Unlimited balloon sculpture + Games Activities'
+      : /balloon|basic/i.test(service + ' ' + (ev.pakej ?? ''))
+        ? 'Unlimited balloon sculpture' : service;
     el('tarikh').textContent = formatTarikh(ev.tarikh ?? '');
     el('masa').textContent = formatMasa(ev.masa ?? '', ev.durasi || doc.items?.[0]?.qty || '');
 
