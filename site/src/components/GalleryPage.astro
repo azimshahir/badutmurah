@@ -42,13 +42,16 @@ const pathname = localePath(locale, '/gallery');
   }
 
   async function load() {
-    let images = [];
+    let images = [{
+      url: '/images/owner-1ea1ca9b33a1f52c9b9c47792e6d0885b10cdec861d8e5fa3eb26e222b107eb5.jpg',
+      gallery_month: '2026-10',
+    }];
     try {
       const res = await fetch('/api/gallery');
       const data = await res.json();
-      if (data.ok) images = data.images || [];
+      if (data.ok) images = [...images, ...(data.images || [])];
     } catch {
-      images = [];
+      // Keep the local October image visible if the gallery API is unavailable.
     }
 
     if (root) root.innerHTML = '';
